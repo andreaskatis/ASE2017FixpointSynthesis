@@ -1,0 +1,6 @@
+*.log
+tmp/document.aux
+out/document.pdf
+*.gz
+.texlipse
+*.project
