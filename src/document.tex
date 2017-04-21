@@ -1,6 +1,85 @@
 %%This is a very basic article template.
 %%There is just one section and two subsections.
-\documentclass{article}
+\documentclass[10pt,conference]{IEEEtran}
+
+
+%To fix ``fi'' encoding
+\usepackage{cmap}
+
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{courier}
+\usepackage{algorithmicx}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage[]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{placeins}
+\usepackage{amsmath,amssymb}
+\usepackage{xspace}
+\usepackage[font=footnotesize]{caption}
+\captionsetup[table]{skip=10pt}
+%to solve the hyperref problem of jumping to wrong places
+%\usepackage[all]{hypcap}
+\usepackage[framemethod=TikZ]{mdframed}
+
+\usepackage{fancyvrb}
+\usepackage{relsize}
+\graphicspath{{images/}}
+\usepackage[ruled,shortend,linesnumbered,algo2e]{algorithm2e}  % algo2e = use \begin{algorithm2e}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{framed}
+
+
+\newcommand{\aeval}{\textsc{AE-VAL}\xspace}
+\newcommand{\jkind}{\textsc{JKind}\xspace}
+
+\newcommand{\jkindsynt}{\textsc{JSyn}\xspace} % working name, feel free to
+% rename it
+\newcommand{\lustrev}{\textsc{LustreV6}\xspace}
+
+\newcommand{\isSat}{\textsc{isSat}\xspace}
+\newcommand{\isUnSat}{\textsc{isUnsat}\xspace}
+
+\renewcommand{\labelitemi}{\tiny$\blacksquare$}
+
+\newcommand{\andreas}[1]{\textcolor{blue}{Andreas: #1}}
+\newcommand{\mike}[1]{\textcolor{red}{Mike: #1}}
+\newcommand{\andrew}[1]{\textcolor{green}{Andrew: #1}}
+\newcommand{\john}[1]{\textcolor{orange}{John: #1}}
+\newcommand{\grigory}[1]{\textcolor{brown}{Grigory: #1}}
+\newcommand{\arie}[1]{\textcolor{purple}{[Arie: #1]}}
+
+
+\newcommand{\realizable}{\textsc{realizable}}
+\newcommand{\unrealizable}{\textsc{unrealizable}}
+\newcommand{\skolems}{\textit{Skolem}}
+\newcommand{\init}{\textit{Init}}
+\newcommand{\isValid}{\textsc{isValid}\xspace}
+\newcommand{\isInvalid}{\textsc{isInvalid}\xspace}
+%\newcommand{\isSat}{\textsc{isSat}\xspace}
+\newcommand{\isUnsat}{\textsc{isUnsat}\xspace}
+
+
+\newcounter{template}
+\newenvironment{template}[1][htb]
+  {
+   \begin{algorithm2e}[#1]%
+   \SetAlgorithmName{Template}
+  }{\end{algorithm2e}}
+
+\newenvironment{requirement}
+{\vspace{0.05in}
+ \begin{mdframed}[roundcorner=10pt,backgroundcolor=gray!20]}
+{\end{mdframed}}
+
+
 
 \begin{document}
 
@@ -78,5 +157,94 @@ this subset to refine $F(s,i,s')$, in the following way:
   process. Eventually, a fixpoint is reached where we get a valid answer and
   extract a Skolem relation that can always provide safe transitions.
 \end{itemize}
+
+
+
+\begin{algorithm2e}
+\SetAlgoSkip{}
+\SetKwFor{For}{for}{do}{}
+\KwOut{$Result: \{\realizable, \unrealizable\}$, 
+%\textcolor{red}{\init: state},
+\skolems: Skolem Function for implementation or cex
+}
+\BlankLine
+$\skolems \gets \langle \rangle$; \\
+%$InitResult \gets $\sc{Sat?}$(G_I)$; \\
+% \uIf(\label{alg:initState}){$(\isUnsat(InitResult))$}
+% 	{%
+% 		\Return
+% 		\unrealizable, $\emptyset$, $\langle \rangle$;%
+% 	}
+%\textcolor{red}{$\init \gets InitResult.model$;} \\
+$F(s) \gets true$;\\	
+\For{$(i \gets 0; true; i \gets i + 1)$}{
+$\phi \gets \forall s,i. F(s) \land A(i) \Rightarrow \exists s'. G_{T}(s,i,s')
+\land F(s')$;
+\\
+\uIf(\label{alg:returnSat}){$(\isValid(\phi))$}
+{
+	$\skolems.Add(\phi.\skolems)$;\\
+	\uIf(){$G_{I}(s) \land F(s) \neq false$}
+	{
+	\Return \realizable, %\textcolor{red}{\init},
+	 \skolems;
+	}\uElse(){
+	 \Return \unrealizable;
+	}
+}
+\uElse
+	{%
+		$Q(s,i) \gets \phi.validSubset$;\\
+		\uIf{$Q(s,i) = false$}{
+			\Return \unrealizable;
+		}
+		$\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(i) \land \lnot
+		Q(s,i)$;\\
+		\uIf(\label{alg:returnSat}){$(\isValid(\phi'))$}
+		{
+			$\skolems.Add(\phi'.\skolems)$;\\			
+			\Return \unrealizable, \skolems;
+		}\uElse{
+			$W(s) \gets \phi'.validSubset$;\\
+			$F(s) = F(s) \land \lnot W(s)$;
+		}
+}
+}
+\caption{Validity-Guided Synthesis}
+\label{alg:synthesis}
+\end{algorithm2e}
+
+% \end{minipage}
+% \hspace{-0.8cm}
+% \begin{minipage}[t]{0.38\textwidth}
+% \scalebox{.8}{
+% \begin{template}[H]
+% \SetAlgoSkip{}
+% \SetKwFor{While}{forever}{do}{}
+% \BlankLine
+%   \textsc{assign\_Init()};
+% 
+% \BlankLine
+%   \textsc{read\_inputs()}\; 		
+%   \textsc{Skolems}[0]()\;
+%   $\ldots$\\
+%   \textsc{read\_inputs()}\;
+%   \textsc{Skolems}[k-1]()\;
+% 
+% \BlankLine
+% 
+% \While{}{
+%  \textsc{read\_inputs()}\;
+%  \textsc{Skolems}[k]()\;
+%  \textsc{update\_history()};
+% }
+% \caption{Structure of an implementation}
+% \label{alg:synt}
+% \end{template}}
+% \end{minipage}
+%\caption{Synthesis algorithm and structure of implementations}
+%\label{fig:synthalg}
+
+
 
 \end{document}
