@@ -114,7 +114,8 @@ satisfies the assumptions.
 If $\phi$ is not true for every possible assignment of the universally
 quantified variables, \aeval provides an exact subset of $F(s) \land A(s,i)$, namely
 $Q(s,i)$, which, if plugged in the original left-hand side of $\phi$, makes the
-resulting formula valid. We call $Q(s,i)$ a \textit{region of validity}.
+resulting formula valid. We will refer to such subsets as \textit{regions of
+validity}.
 
 At this point, one could falsely assume that replacing $F(s) \land A(s,i)$ with
 $Q(s,i)$ is sufficient to solve our problem, and use the resulting witness as a
@@ -148,18 +149,78 @@ W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
 describes the set of viable states, or reach the case where $F(s) = false$, and
 declare our contract to be unrealizable.
 
-As a final remark, \aeval's effectiveness in providing witnesses to the
+\aeval's effectiveness in providing witnesses to the
 satisfiability of $\forall\exists$ formulas is also exploited in terms of the
 tool providing concrete counterexamples to unrealizable contracts, using line 19
 in Algorithm~\ref{alg:synthesis}. In this particular case, if $\phi'$ is a valid
 formula, we can extract a witness that can be essentially used as a test case to
-prove the current specification unrealizable. The witness contains certain
-assignments to input variables, for which the condition of viability does not
+demonstrate the specification's unrealizability. The witness contains
+certain assignments to input variables, for which the condition of viability does not
 hold, for any state. We leave the specifics regarding the meaning and usability
 of such counterexamples as potential future work.
 
+From the previous, it is straightforward to show that
+Algorithm~\ref{alg:synthesis} is complete, since it either terminates by
+constructing a fixpoint, or when the computed region of validity is the empty
+set \textit{false}. To prove its soundness regarding results, we require a
+proof that the algorithm always computes a fixpoint, containing only state
+variable assignments that lead to the satisfiability of $\forall\exists$
+formulas that follow the form of Equation~\ref{eq:viable}. To achieve this, we
+use the infamous fixed point theorem that was first stated by Alfred Tarski
+in~\cite{tarski1955lattice}.
 
-\begin{algorithm2e}[t!]
+\begin{lemma} Consider the system
+$\mathfrak{U} = \langle S, T \rangle$. With $S$, we denote the set of
+subsets of the orignal state space, such that each subset contains assignments that lead to the
+satisfiability of Equation~\ref{eq:viable}. By $T$, we refer to the
+transition relation between any two states, that establishes a partial order
+on $S$. Then $\mathfrak{U}$ is a complete lattice, where every subset $B \subseteq
+S$ has a greatest lower bound $GLB(B) = \cap B$  and a least upper bound $LUB(B)
+= \cup B$.
+\label{lem:lattice}
+\end{lemma}
+\begin{proof}
+Considering the partial order that is established by T, it is straightforward
+to show that all subsets $B$ of $S$ contain a $GLB$ and a $LUB$. These are
+respectively, the states which have no preceeding state in $B$ other than
+possible ones in the $GLB$, and the states from which we take a transition into
+a new state that's either in the LUB, or outside of $B$. For the special case
+where $B = S$, we have that $GLB(S) = false$ and $LUB(S) = true$.
+\end{proof}
+
+\begin{lemma} Algorithm~\ref{alg:synthesis} is a monotonic function on $S$ to
+$S$.
+\label{lem:monotonicity}
+\end{lemma}
+\begin{proof}
+The algorithm recursively reduces $S$, attempting to reach a fixed point
+at which $S$ only contains state assignments that lead to the satisfiability of
+Equation~\ref{eq:viable}. As such, it can be considered as an isotone function
+$f$, where, for every pair $(B,A)$ with $B \subseteq A \subseteq S$, we have that
+$f(B) \subseteq f(A)$.
+\end{proof}
+
+\begin{theorem}[Soundness of Fixpoint]
+The set $P$ of all fixpoints in Algorithm~\ref{alg:synthesis} is non
+empty, and the system $\langle P, T \rangle$ is a complete lattice.
+\label{thm:fixpoint}
+\end{theorem}
+\begin{proof}
+The proof relies on Theorem 1 in~\cite{tarski1955lattice}. Considering
+Lemmas~\ref{lem:lattice} and~\ref{lem:monotonicity}, we satisfy the first two
+conditions of Tarski's theorem. Finally, when the specification is realizable, a
+fixpoint is reached by Algorithm~\ref{alg:synthesis}, since each consecutive
+attempt to further refine $F(s)$ results in the same set. Therefore, the set $P$
+of all fixpoints in Algorithm~\ref{alg:synthesis} contains a $GLB$ as well as an
+$LUB$.
+
+Since all three conditions of Tarski's Fixed Point theorem are satisfied by our
+solution, we can conclude that $P$ is a non empty set, while the system
+$\langle P, T \rangle$ is a complete lattice, as it contains a $LUB$, which is
+the solution to a realizable contract, while $GLB = false$, and corresponds to
+the solution for an unrealizable contract.
+\end{proof}
+\begin{algorithm2e}[]
 \SetAlgoSkip{}
 \SetKwFor{For}{for}{do}{}
 \KwOut{$Result: \{\realizable, \unrealizable\}$, 
