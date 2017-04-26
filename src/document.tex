@@ -47,6 +47,9 @@
 \newcommand{\isSat}{\textsc{isSat}\xspace}
 \newcommand{\isUnSat}{\textsc{isUnsat}\xspace}
 
+\newcommand{\viable}{{\mathsf {Viable}}}
+
+
 \renewcommand{\labelitemi}{\tiny$\blacksquare$}
 
 \newcommand{\andreas}[1]{\textcolor{blue}{Andreas: #1}}
@@ -55,7 +58,7 @@
 \newcommand{\john}[1]{\textcolor{orange}{John: #1}}
 \newcommand{\grigory}[1]{\textcolor{brown}{Grigory: #1}}
 \newcommand{\arie}[1]{\textcolor{purple}{[Arie: #1]}}
-
+\newcommand{\huajun}[1]{\textcolor{yellow}{[Huajun: #1]}}
 
 \newcommand{\realizable}{\textsc{realizable}}
 \newcommand{\unrealizable}{\textsc{unrealizable}}
@@ -82,169 +85,38 @@
 
 
 \begin{document}
+\title{Validity Guided Synthesis from Assume-Guarantee Contracts}
+\maketitle
 
+\begin{abstract}
+Automated synthesis of programs using only system specification is one of
+the most popular and well explored subjects in formal verification. A variety of
+approaches have been proposed in the recent years, through inductive and
+functional synthesis, while template-based and counterexample-guided techniques
+have been proved useful towards extending the applicability of such algorithms
+to solving difficult problems. In this paper, we propose a novel approach to
+program synthesis, which is based on the validity of a $\forall\exists$-formula.
+The approach is inspired from similar techniques that effectively construct
+inductive invariants, like Property Directed Reachability, in the sense that the
+problem space is recursively refined, with the goal being the discovery of a
+fixpont that effectively describes a region of safe states. If such a fixpoint
+is found, we construct a witness that can be directly transformed into an
+implementation using mainstream programming languages, like C. We implemented
+this algorithm in the \jkind model checker, and excersised it against contracts
+written using the Lustre specification language. Experimental results show how
+the new algorithm improves upon previous work on synthesizing programs from k-inductive proofs of
+realizability, yielding better performance as well as soundness for ``unrealizable'' results.
+\end{abstract}
 
-\section{Validity-Guided Synthesis from Assume-Guarantee Contracts}
+\input{intro}
+\input{synthesis}
+\input{aeval}
+\input{impl}
+\input{results}
+\input{related}
+\input{conclusion}
 
-\subsection{Preliminaries}
-(Text from CAV submission)
-We describe a system using the disjoint sets $state$ and $inputs$.
-Formally, an \emph{implementation} is a \emph{transition system}
-described by an initial state predicate $I(s)$ of type $state \to
-bool$ and by a transition relation $T(s,i,s')$ of type $state \to
-inputs \to state \to bool$.
-
-An Assume-Guarantee (AG) contract can be formally defined by a set of
-\emph{assumptions} and a set of \emph{guarantees}. The
-\emph{assumptions}, $A: state \rightarrow inputs \rightarrow bool$,
-impose constraints over the inputs which may be modal in terms of the
-previous state. The \emph{guarantees} $G$ consist of two separate
-subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
-inputs \rightarrow state \rightarrow bool$, where $G_I$ defines the
-set of valid initial states, and $G_T$ specifies the properties that
-need to be met during each new transition between two states. Internally, the transition relation contains an input variable
-\textit{init}, which handles which subset of the guarantees the state should
-satisfy. As such, if $init = true$, the skolem function provides a transition to
-an initial state, where $G_I$ needs to hold. If $init = false$ the new state has
-to satisfy $G_T$. Note that we do not necessarily expect that a contract would
-be defined over all variables in the transition system, but we do not make any
-distinction between internal state variables and outputs in the
-formalism. This way, we can use state variables to (in some cases)
-simplify specification of guarantees.
-
-\subsection{Approach}
-
-The main idea of the algorithm is to use over- and underapproximations to
-find a fixpoint of states, in which the system can safely use
-the transition relation without violating the contract. Due to AE-VAL's
-machinery, we are able to finally extract a Skolem Function $S_k$ that describes an implementation.
-
-Initially, $F(s, i, s')$ covers pairs of states for which, for any $i$
-satisfying the assumptions, $T(s,i,s') \land A(s',i)$ is true. Assuming that the
-consistency check passes, i.e. there exist $s, i ,s'$ for which $T(s,i,s') \land
-A(s',i)$ is true, we ask AE-VAL whether the formula $\forall s,i,s'. F(s,i,s') \Rightarrow \exists s''.
-F(s,i,s'') \land G(s'')$ is valid. States $s$ can be considered as
-states in the state space $F$, that do not need to comply with the contract.
-Also, notice the difference in using $s'$ and $s''$ in the previous formula. State $s'$ is essentially, a throw-away state, which is only used to
-capture the state space of interest. On the other hand, $s''$ is used to find
-witness states that satisfy both the transition from $s$, as well as the
-contract assumptions and guarantees. If the formula is valid, we can safely
-extract a skolem function that always provides a safe transition. This case is
-exactly the same with the case where a k-inductive proof is generated using only the inductive step (see ExtendCheck in CAV paper).
-
-Alternatively, AE-VAL will return with a ``non-valid'' answer. In addition to
-this, a subset, named $Q(s,i,s')$ is also generated, for which the formula
-$\forall s,i. Q(s,i,s') \Rightarrow \exists s''. F(s,i,s'') \land G(s'')$ is
-valid. It is important to keep in mind that we do not want to restrict the input
-variables any more than the constraints imposed by the assumptions, something
-that may happen during the creation of Q(s,i,s'). Nevertheless, we can still use
-this subset to refine $F(s,i,s')$, in the following way:
-
-\begin{itemize}
-  \item Define $R(s,s') = true$. Examine the validity of $\forall s,s'. R(s,s')
-  \Rightarrow \exists i. T(s,i,s') \land \lnot Q(s,i,s')$. If the formula is
-  valid, the contract cannot be realizable, as for every state pair $s, s'$,
-  there are inputs for which we are essentially moving out of the valid region
-  $Q$. On the other hand, if AE-VAL returns ``non-valid'' we receive a valid
-  subset of $R(s,s')$, namely $W(s,s')$.
-  \item By definition, we now have that $\forall s,s'. W(s,s') \Rightarrow
-  \exists i. T(s,i,s') \land \lnot Q(s,i,s')$. The set $W(s,s')$ effectively
-  describes a region of states for which the contract is violated, and therefore will have to be blocked from the
-  resulting set that describes the system's ``good'' states. Thus, we refine
-  $F(s,i,s') \equiv F(s,i,s') \land \lnot W(s,s')$.
-  \item We plug the refined $F(s,i,s')$ in the original formula, along with
-  $F(s,i,s'')$ for the right hand side of the implication, and reiterate the
-  process. Eventually, a fixpoint is reached where we get a valid answer and
-  extract a Skolem relation that can always provide safe transitions.
-\end{itemize}
-
-
-
-\begin{algorithm2e}
-\SetAlgoSkip{}
-\SetKwFor{For}{for}{do}{}
-\KwOut{$Result: \{\realizable, \unrealizable\}$, 
-%\textcolor{red}{\init: state},
-\skolems: Skolem Function for implementation or cex
-}
-\BlankLine
-$\skolems \gets \langle \rangle$; \\
-%$InitResult \gets $\sc{Sat?}$(G_I)$; \\
-% \uIf(\label{alg:initState}){$(\isUnsat(InitResult))$}
-% 	{%
-% 		\Return
-% 		\unrealizable, $\emptyset$, $\langle \rangle$;%
-% 	}
-%\textcolor{red}{$\init \gets InitResult.model$;} \\
-$F(s) \gets true$;\\	
-\For{$(i \gets 0; true; i \gets i + 1)$}{
-$\phi \gets \forall s,i. F(s) \land A(i) \Rightarrow \exists s'. G_{T}(s,i,s')
-\land F(s')$;
-\\
-\uIf(\label{alg:returnSat}){$(\isValid(\phi))$}
-{
-	$\skolems.Add(\phi.\skolems)$;\\
-	\uIf(){$G_{I}(s) \land F(s) \neq false$}
-	{
-	\Return \realizable, %\textcolor{red}{\init},
-	 \skolems;
-	}\uElse(){
-	 \Return \unrealizable;
-	}
-}
-\uElse
-	{%
-		$Q(s,i) \gets \phi.validSubset$;\\
-		\uIf{$Q(s,i) = false$}{
-			\Return \unrealizable;
-		}
-		$\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(i) \land \lnot
-		Q(s,i)$;\\
-		\uIf(\label{alg:returnSat}){$(\isValid(\phi'))$}
-		{
-			$\skolems.Add(\phi'.\skolems)$;\\			
-			\Return \unrealizable, \skolems;
-		}\uElse{
-			$W(s) \gets \phi'.validSubset$;\\
-			$F(s) = F(s) \land \lnot W(s)$;
-		}
-}
-}
-\caption{Validity-Guided Synthesis}
-\label{alg:synthesis}
-\end{algorithm2e}
-
-% \end{minipage}
-% \hspace{-0.8cm}
-% \begin{minipage}[t]{0.38\textwidth}
-% \scalebox{.8}{
-% \begin{template}[H]
-% \SetAlgoSkip{}
-% \SetKwFor{While}{forever}{do}{}
-% \BlankLine
-%   \textsc{assign\_Init()};
-% 
-% \BlankLine
-%   \textsc{read\_inputs()}\; 		
-%   \textsc{Skolems}[0]()\;
-%   $\ldots$\\
-%   \textsc{read\_inputs()}\;
-%   \textsc{Skolems}[k-1]()\;
-% 
-% \BlankLine
-% 
-% \While{}{
-%  \textsc{read\_inputs()}\;
-%  \textsc{Skolems}[k]()\;
-%  \textsc{update\_history()};
-% }
-% \caption{Structure of an implementation}
-% \label{alg:synt}
-% \end{template}}
-% \end{minipage}
-%\caption{Synthesis algorithm and structure of implementations}
-%\label{fig:synthalg}
-
-
+\bibliography{document}
+\bibliographystyle{IEEEtran}
 
 \end{document}

@@ -1,0 +1,219 @@
+\section{Validity-Guided Synthesis from Assume-Guarantee Contracts}
+\label{sec:synthesis}
+
+
+In this section we define Assume-Guarantee contracts (Sect.~\ref{sec:pre}),
+describe the validity-guided approach we take towards synthesizing
+implementations (Sect.~\ref{sec:synth}),
+and finally illustrate how it works using the popular cinderella-stepmother
+game (Sect.~\ref{sec:example}).
+%Finally, we enrich our formal definitions with an informal proof of the
+%algorithm's correctness in terms of the successfully synthesized
+%implementations.
+
+\subsection{Assume-Guarantee Contracts}
+\label{sec:pre}
+
+For the purposes of this paper, we focus our interest in a mainstream variation
+for representing system requirements, using an \textit{Assume-Guarantee
+Contract}. Requirements in this format contain two main types of constraints.
+The \emph{assumptions} of the contract restrict the possible inputs that the
+environment can provide to the system, while the \emph{guarantees} are used to
+describe what is considered a safe reaction of the system to the outside world. 
+
+A simple example is the contract with assumption $A = \{x\neq
+y\}$ and guarantee $G = \{x \leq y \Rightarrow z =
+\textit{true}, x \geq y \Rightarrow z = \textit{false}\}$. Variables
+$x$ and $y$ are the designated inputs while $z$ is the output. This is a
+well-defined contract, since by the assumption $A$, it is always the case that
+$x \neq y$, therefore at least one implementation exists, which, for example
+sets $z$ to true if $x < y$ and false otherwise. An alternative
+valid implementation could set $z$ to false if $x > y$, and true otherwise. The
+proof of existence of such an implementation is the main concept behind the
+\emph{realizability} problem, while the automated construction of a witness
+implementation is the main focus of \emph{program synthesis}.
+
+
+It is apparent that the example contract above is therefore \emph{realizable},
+and an efficient synthesis procedure would be capable of providing at least one
+implementation. Nevertheless, it is important to consider a variation of the
+example, where $A = \emptyset$. This is a practical case of an
+\emph{unrealizable} contract, as there is no feasible implementation that can
+correctly react to the environment assigning values to $x$ and $y$, such that
+$x = y$.
+
+\subsection{Formal Representation}
+\label{sec:formals}
+We use two disjoint sets, $state$ and $inputs$, to describe a system.
+A straightforward and intuitive way to represent an \emph{implementation} is by
+defining a \emph{transition system}, composed of an initial state
+predicate $I(s)$ of type $state \to bool$, as well as a transition relation
+$T(s,i,s')$ of type $state \to inputs \to state \to bool$.
+
+Combining the above, we represent an Assume-Guarantee (AG) contract using a set
+of \emph{assumptions}, $A: state \rightarrow inputs \rightarrow bool$,
+and a set of \emph{guarantees} $G$. The latter is further decomposed into two
+distinct subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
+inputs \rightarrow state \rightarrow bool$. $G_I$ defines the set of valid
+initial states, and $G_T$ contains constraints that need to be satisfied in
+every transition between two states. An important note at this point is that we
+we do not make any distinction between internal state variables and outputs in the
+formalism. This alone allows us to use state variables to (in some cases)
+simplify specification of guarantees, since we do not expect a contract
+to be always defined over all variables in the transition system.
+
+Consequently, we can formally define a realizable contract, as one for which any
+preceeding state $s$ can make a transition into a new state $s'$ that satisfies
+the guarantees, assuming valid inputs. For a system to be ever-reactive, these
+new states $s'$ should be further usable as preceeding states in a future
+transition. States like $s$ and $s'$ are defined as being \textit{viable}, if
+and only if:
+
+\begin{equation}
+\forall s,i.~ A(s, i) \land \viable(s) \Rightarrow \exists s'.~ G_T(s, i,s')
+\land \viable(s')
+\label{eq:viable}
+\end{equation}
+
+A necessary condition, finally, is that the set of viable states has to
+intersect with the set of initial states. As such, to conclude that a contract
+is realizable, we require that
+
+\begin{equation}
+\viable(s) \land G_I(s) \neq \emptyset
+\label{eq:nonempty}
+\end{equation}
+
+Therefore, the intuition behind our proposed algorithm relies on the discovery
+of a greatest fixpoint that only contains viable states.
+
+
+\subsection{Validity-Guided Synthesis from Contracts}
+\label{sec:synth}
+
+The main contribution presented in this paper, is a novel idea that effectively
+uses the information provided by \textit{regions of validity} to compute a
+greatest fixpoint of safe states. In our context, this fixpoint is not only
+usable as a proof to the realizability of a specification, but also leads to the
+construction of a witness that can be translated with a straightforward process
+into a functional and efficient implementation.
+
+The algorithm~\ref{alg:synthesis} shows this validity-guided technique.
+We initialize the process by defining the fixpoint $F(s)$ to be equal to $true$.
+Eventually, the algorithm attempts to converge to such a fixpoint $F(s)$ that
+only contains viable states, considering Equation~\ref{eq:viable}. We therefore
+construct the formula $\phi$, and provide it as an input to \aeval, an efficient
+Skolemizer for $\forall\exists$ formulas. \aeval is particularly focused on
+determining the validity of $\phi$. If the formula is valid, then a witness
+\textit{Skolem} is constructed, containing valid assignments to the
+existentially quantified variables of $\phi$. In the context of viability, this
+witness is capable of providing viable states that can be used as a safe
+reaction, considering the precedence of a viable state and an input that
+satisfies the assumptions.
+
+If $\phi$ is not true for every possible assignment of the universally
+quantified variables, \aeval provides an exact subset of $F(s) \land A(s,i)$, namely
+$Q(s,i)$, which, if plugged in the original left-hand side of $\phi$, makes the
+resulting formula valid. We call $Q(s,i)$ a \textit{region of validity}.
+
+At this point, one could falsely assume that replacing $F(s) \land A(s,i)$ with
+$Q(s,i)$ is sufficient to solve our problem, and use the resulting witness as a
+candidate implementation. This is not the case however, as $Q(s,i)$ is a subset
+of both state and input variables. As such, it may contain further constraints
+over the contract's inputs. This would lead to implementations that only
+consider a subset of the original assumptions of the contract, with no
+pre-defined strategy for the rest of the originally valid inputs.
+Fortunately, we can exploit \aeval's capability of providing regions of validity
+towards eliminating this issue.
+
+The main concept to properly refine $F(s)$, is to extract a region of validity
+that only involves constraints over state variables. To achieve this, we ask for
+the validity of the formula $\phi' \gets \forall s. F(s) \Rightarrow \exists
+i. A(s,i) \land \lnot Q(s,i)$. If $\phi'$ is a valid formula, then for any
+assignment of the state variables $s$, we have a valid input (i.e. that
+satisfies the assumptions), for which the states are taken outside of the region
+of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
+safe in this context. On the other hand, if $phi'$ is not valid, \aeval computes
+a new region of validity, namely $W(s)$. The new region is a strict subset of
+$F(s)$, is described using constraints over state variables only, and entails
+the existence of unsafe states in $F(s)$, considering valid inputs.
+
+Having this new region of validity, we can finally refine $F(s)$, by conjucting
+to it the negation of $W(s)$. Despite the fact that we now have a refined
+candidate fixpoint, we are not yet done, as $\lnot W(s)$ is not an exact region
+of validity, with respect to $Q(s,i)$. As such there might still be states in
+$Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
+process by repeating the top-level \aeval query, with $F(s) = F(s) \land \lnot
+W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
+describes the set of viable states, or reach the case where $F(s) = false$, and
+declare our contract to be unrealizable.
+
+As a final remark, \aeval's effectiveness in providing witnesses to the
+satisfiability of $\forall\exists$ formulas is also exploited in terms of the
+tool providing concrete counterexamples to unrealizable contracts, using line 19
+in Algorithm~\ref{alg:synthesis}. In this particular case, if $\phi'$ is a valid
+formula, we can extract a witness that can be essentially used as a test case to
+prove the current specification unrealizable. The witness contains certain
+assignments to input variables, for which the condition of viability does not
+hold, for any state. We leave the specifics regarding the meaning and usability
+of such counterexamples as potential future work.
+
+
+\begin{algorithm2e}[t!]
+\SetAlgoSkip{}
+\SetKwFor{For}{for}{do}{}
+\KwOut{$Result: \{\realizable, \unrealizable\}$, 
+%\textcolor{red}{\init: state},
+\skolems: Skolem Function for implementation or cex
+}
+\BlankLine
+$\skolems \gets null$; \\
+%$InitResult \gets $\sc{Sat?}$(G_I)$; \\
+% \uIf(\label{alg:initState}){$(\isUnsat(InitResult))$}
+% 	{%
+% 		\Return
+% 		\unrealizable, $\emptyset$, $\langle \rangle$;%
+% 	}
+%\textcolor{red}{$\init \gets InitResult.model$;} \\
+$F(s) \gets true$;\\	
+\While{true}{
+$\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'. G_{T}(s,i,s')
+\land F(s')$;
+\\
+$aevalResult \gets \aeval(\phi)$;\\
+\uIf(\label{alg:returnSat}){$(\isValid(aevalResult))$}
+{
+	$\skolems \gets (aevalResult.\skolems)$;\\
+	\uIf(){$G_{I}(s) \land F(s) \neq false$}
+	{
+	\Return \realizable, %\textcolor{red}{\init},
+	 \skolems;
+	}\uElse(){
+	 \Return \unrealizable;
+	}
+}
+\uElse
+	{%
+		$Q(s,i) \gets aevalResult.validSubset$;\\
+		\uIf{$Q(s,i) = false$}{
+			\Return \unrealizable;
+		}
+		$\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
+		Q(s,i)$;\\
+		$aevalResult' \gets \aeval(\phi')$;\\		
+		\uIf(\label{alg:returnSat}){$(\isValid(aevalResult'))$}
+		{
+			$\skolems \gets (aevalResult'.\skolems)$;\\			
+			\Return \unrealizable, \skolems;
+		}\uElse{
+			$W(s) \gets aevalResult'.validSubset$;\\
+			$F(s) = F(s) \land \lnot W(s)$;
+		}
+}
+}
+\caption{Validity-Guided Synthesis}
+\label{alg:synthesis}
+\end{algorithm2e}
+
+\subsection{An Illustrative Example}
+\label{sec:example}
