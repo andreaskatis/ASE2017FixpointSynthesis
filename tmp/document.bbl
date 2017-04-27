@@ -91,4 +91,19 @@ A.~Tarski \emph{et~al.}, ``A lattice-theoretical fixpoint theorem and its
   applications,'' \emph{Pacific journal of Mathematics}, vol.~5, no.~2, pp.
   285--309, 1955.
 
+\bibitem{jkind}
+A.~Gacek, ``{JK}ind -- an infinite-state model checker for safety properties in
+  {Lustre},'' \url{http://loonwerks.com/tools/jkind.html}, 2016.
+
+\bibitem{lustrev6}
+\BIBentryALTinterwordspacing
+E.~Jahier, P.~Raymond, and N.~Halbwachs, ``{The Lustre V6 Reference Manual}.''
+  [Online]. Available: \url{http://www-verimag.imag.fr/Lustre-V6.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{NFM2012:CoGaMiWhLaLu}
+D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha,
+  ``Compositional verification of architectural models,'' in \emph{NFM}.\hskip
+  1em plus 0.5em minus 0.4em\relax Springer-Verlag, 2012, pp. 126--140.
+
 \end{thebibliography}

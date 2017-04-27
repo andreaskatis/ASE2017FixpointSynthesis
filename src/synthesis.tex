@@ -91,6 +91,62 @@ of a greatest fixpoint that only contains viable states.
 \subsection{Validity-Guided Synthesis from Contracts}
 \label{sec:synth}
 
+\begin{algorithm2e}[t]
+\SetAlgoSkip{}
+\SetKwFor{For}{for}{do}{}
+\KwOut{$Result: \{\realizable, \unrealizable\}$, 
+%\textcolor{red}{\init: state},
+\skolems: Skolem Function for implementation or cex
+}
+\BlankLine
+$\skolems \gets null$; \\
+%$InitResult \gets $\sc{Sat?}$(G_I)$; \\
+% \uIf(\label{alg:initState}){$(\isUnsat(InitResult))$}
+% 	{%
+% 		\Return
+% 		\unrealizable, $\emptyset$, $\langle \rangle$;%
+% 	}
+%\textcolor{red}{$\init \gets InitResult.model$;} \\
+$F(s) \gets true$;\\	
+\While{true}{
+$\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'. G_{T}(s,i,s')
+\land F(s')$;
+\\
+$aevalResult \gets \aeval(\phi)$;\\
+\uIf(\label{alg:returnSat}){$(\isValid(aevalResult))$}
+{
+	$\skolems \gets (aevalResult.\skolems)$;\\
+	\uIf(){$G_{I}(s) \land F(s) \neq false$}
+	{
+	\Return \realizable, %\textcolor{red}{\init},
+	 \skolems;
+	}\uElse(){
+	 \Return \unrealizable;
+	}
+}
+\uElse
+	{%
+		$Q(s,i) \gets aevalResult.validSubset$;\\
+		\uIf{$Q(s,i) = false$}{
+			\Return \unrealizable;
+		}
+		$\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
+		Q(s,i)$;\\
+		$aevalResult' \gets \aeval(\phi')$;\\		
+		\uIf(\label{alg:returnSat}){$(\isValid(aevalResult'))$}
+		{
+			$\skolems \gets (aevalResult'.\skolems)$;\\			
+			\Return \unrealizable, \skolems;
+		}\uElse{
+			$W(s) \gets aevalResult'.validSubset$;\\
+			$F(s) = F(s) \land \lnot W(s)$;
+		}
+}
+}
+\caption{Validity-Guided Synthesis}
+\label{alg:synthesis}
+\end{algorithm2e}
+
 The main contribution presented in this paper, is a novel idea that effectively
 uses the information provided by \textit{regions of validity} to compute a
 greatest fixpoint of safe states. In our context, this fixpoint is not only
@@ -98,7 +154,7 @@ usable as a proof to the realizability of a specification, but also leads to the
 construction of a witness that can be translated with a straightforward process
 into a functional and efficient implementation.
 
-The algorithm~\ref{alg:synthesis} shows this validity-guided technique.
+Algorithm~\ref{alg:synthesis} shows this validity-guided technique.
 We initialize the process by defining the fixpoint $F(s)$ to be equal to $true$.
 Eventually, the algorithm attempts to converge to such a fixpoint $F(s)$ that
 only contains viable states, considering Equation~\ref{eq:viable}. We therefore
@@ -175,17 +231,17 @@ subsets of the orignal state space, such that each subset contains assignments t
 satisfiability of Equation~\ref{eq:viable}. By $T$, we refer to the
 transition relation between any two states, that establishes a partial order
 on $S$. Then $\mathfrak{U}$ is a complete lattice, where every subset $B \subseteq
-S$ has a greatest lower bound $GLB(B) = \cap B$  and a least upper bound $LUB(B)
-= \cup B$.
+S$ has a greatest lower bound  $\glb = \cap B$  and a least upper
+bound $\lub = \cup B$.
 \label{lem:lattice}
 \end{lemma}
 \begin{proof}
 Considering the partial order that is established by T, it is straightforward
-to show that all subsets $B$ of $S$ contain a $GLB$ and a $LUB$. These are
-respectively, the states which have no preceeding state in $B$ other than
-possible ones in the $GLB$, and the states from which we take a transition into
-a new state that's either in the LUB, or outside of $B$. For the special case
-where $B = S$, we have that $GLB(S) = false$ and $LUB(S) = true$.
+to show that all subsets $B$ of $S$ contain a \glb and a \lub. These
+are respectively, the states which have no preceeding state in $B$ other than
+possible ones in the \glb, and the states from which we take a transition into
+a new state that's either in the \lub, or outside of $B$. For the special case
+where $B = S$, we have that $\glb = false$ and $\lub = true$.
 \end{proof}
 
 \begin{lemma} Algorithm~\ref{alg:synthesis} is a monotonic function on $S$ to
@@ -208,73 +264,20 @@ empty, and the system $\langle P, T \rangle$ is a complete lattice.
 \begin{proof}
 The proof relies on Theorem 1 in~\cite{tarski1955lattice}. Considering
 Lemmas~\ref{lem:lattice} and~\ref{lem:monotonicity}, we satisfy the first two
-conditions of Tarski's theorem. Finally, when the specification is realizable, a
+conditions of Tarski's theorem. When the specification is realizable, a
 fixpoint is reached by Algorithm~\ref{alg:synthesis}, since each consecutive
-attempt to further refine $F(s)$ results in the same set. Therefore, the set $P$
-of all fixpoints in Algorithm~\ref{alg:synthesis} contains a $GLB$ as well as an
-$LUB$.
+attempt to further refine $F(s)$ results in the same set. On the other hand, if
+the specification is unrealizable, the algorithm returns the fixpoint $F(s) = false$. Therefore, the
+set $P$ of all fixpoints in Algorithm~\ref{alg:synthesis} contains at least two
+fixpoints.
 
 Since all three conditions of Tarski's Fixed Point theorem are satisfied by our
 solution, we can conclude that $P$ is a non empty set, while the system
-$\langle P, T \rangle$ is a complete lattice, as it contains a $LUB$, which is
-the solution to a realizable contract, while $GLB = false$, and corresponds to
+$\langle P, T \rangle$ is a complete lattice, as it contains a \lub, which is
+the solution to a realizable contract, while $\glb = false$, and corresponds to
 the solution for an unrealizable contract.
 \end{proof}
-\begin{algorithm2e}[]
-\SetAlgoSkip{}
-\SetKwFor{For}{for}{do}{}
-\KwOut{$Result: \{\realizable, \unrealizable\}$, 
-%\textcolor{red}{\init: state},
-\skolems: Skolem Function for implementation or cex
-}
-\BlankLine
-$\skolems \gets null$; \\
-%$InitResult \gets $\sc{Sat?}$(G_I)$; \\
-% \uIf(\label{alg:initState}){$(\isUnsat(InitResult))$}
-% 	{%
-% 		\Return
-% 		\unrealizable, $\emptyset$, $\langle \rangle$;%
-% 	}
-%\textcolor{red}{$\init \gets InitResult.model$;} \\
-$F(s) \gets true$;\\	
-\While{true}{
-$\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'. G_{T}(s,i,s')
-\land F(s')$;
-\\
-$aevalResult \gets \aeval(\phi)$;\\
-\uIf(\label{alg:returnSat}){$(\isValid(aevalResult))$}
-{
-	$\skolems \gets (aevalResult.\skolems)$;\\
-	\uIf(){$G_{I}(s) \land F(s) \neq false$}
-	{
-	\Return \realizable, %\textcolor{red}{\init},
-	 \skolems;
-	}\uElse(){
-	 \Return \unrealizable;
-	}
-}
-\uElse
-	{%
-		$Q(s,i) \gets aevalResult.validSubset$;\\
-		\uIf{$Q(s,i) = false$}{
-			\Return \unrealizable;
-		}
-		$\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
-		Q(s,i)$;\\
-		$aevalResult' \gets \aeval(\phi')$;\\		
-		\uIf(\label{alg:returnSat}){$(\isValid(aevalResult'))$}
-		{
-			$\skolems \gets (aevalResult'.\skolems)$;\\			
-			\Return \unrealizable, \skolems;
-		}\uElse{
-			$W(s) \gets aevalResult'.validSubset$;\\
-			$F(s) = F(s) \land \lnot W(s)$;
-		}
-}
-}
-\caption{Validity-Guided Synthesis}
-\label{alg:synthesis}
-\end{algorithm2e}
+
 
 \subsection{An Illustrative Example}
 \label{sec:example}
