@@ -91,6 +91,12 @@ A.~Tarski \emph{et~al.}, ``A lattice-theoretical fixpoint theorem and its
   applications,'' \emph{Pacific journal of Mathematics}, vol.~5, no.~2, pp.
   285--309, 1955.
 
+\bibitem{bodlaender2012cinderella}
+M.~H.~L. Bodlaender, C.~A. Hurkens, V.~J. Kusters, F.~Staals, G.~J. Woeginger,
+  and H.~Zantema, ``Cinderella versus the wicked stepmother,'' in \emph{IFIP
+  International Conference on Theoretical Computer Science}.\hskip 1em plus
+  0.5em minus 0.4em\relax Springer, 2012, pp. 57--71.
+
 \bibitem{jkind}
 A.~Gacek, ``{JK}ind -- an infinite-state model checker for safety properties in
   {Lustre},'' \url{http://loonwerks.com/tools/jkind.html}, 2016.
@@ -105,5 +111,70 @@ E.~Jahier, P.~Raymond, and N.~Halbwachs, ``{The Lustre V6 Reference Manual}.''
 D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha,
   ``Compositional verification of architectural models,'' in \emph{NFM}.\hskip
   1em plus 0.5em minus 0.4em\relax Springer-Verlag, 2012, pp. 126--140.
+
+\bibitem{DBLP:conf/popl/PnueliR89}
+A.~Pnueli and R.~Rosner, ``On the synthesis of a reactive module,'' in
+  \emph{POPL}.\hskip 1em plus 0.5em minus 0.4em\relax {ACM} Press, 1989, pp.
+  179--190.
+
+\bibitem{Klein10}
+U.~Klein and A.~Pnueli, ``Revisiting {S}ynthesis of {GR}(1) {S}pecifications,''
+  \emph{HVC}, pp. 161--181, 2010.
+
+\bibitem{ehlers2010symbolic}
+R.~Ehlers, ``Symbolic bounded synthesis,'' in \emph{CAV}.\hskip 1em plus 0.5em
+  minus 0.4em\relax Springer, 2010, pp. 365--379.
+
+\bibitem{cheng2016structural}
+C.-H. Cheng, Y.~Hamza, and H.~Ruess, ``Structural synthesis for gxw
+  specifications,'' in \emph{CAV}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer, 2016, pp. 95--117.
+
+\bibitem{Bohy12}
+A.~Bohy, V.~Bruy{\`{e}}re, E.~Filiot, N.~Jin, and J.~Raskin, ``Acacia+, a tool
+  for {LTL} {S}ynthesis,'' in \emph{CAV}, 2012, pp. 652--657.
+
+\bibitem{Tini03}
+S.~Tini and A.~Maggiolo-Schettini, ``Compositional {S}ynthesis of {G}eneralized
+  {M}ealy {M}achines,'' \emph{Fundamenta Informaticae}, vol.~60, no. 1-4, pp.
+  367--382, 2003.
+
+\bibitem{monmege2016real}
+B.~Monmege, T.~Brihaye, M.~Esti{\'e}venart, H.-M. Ho, G.~G. ULB, and
+  N.~Sznajder, ``Real-time synthesis is hard!'' in \emph{FORMATS}, vol.
+  9884.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2016, p. 105.
+
+\bibitem{Hamza10}
+J.~Hamza, B.~Jobstmann, and V.~Kuncak, ``Synthesis for {R}egular
+  {S}pecifications over {U}nbounded {D}omains,'' \emph{FMCAD}, pp. 101--109,
+  2010.
+
+\bibitem{Aziz95}
+A.~Aziz, F.~Balarin, R.~Braton, and A.~Sangiovanni-Vincentelli, ``Sequential
+  {S}ynthesis using {SIS},'' \emph{ICCAD}, pp. 612--617, 1995.
+
+\bibitem{Chatterjee07}
+K.~Chatterjee and T.~A. Henzinger, ``Assume-{G}uarantee {S}ynthesis,''
+  \emph{TACAS}, pp. 261--275, 2007.
+
+\bibitem{beyene2014constraint}
+T.~Beyene, S.~Chaudhuri, C.~Popeea, and A.~Rybalchenko, ``A constraint-based
+  approach to solving games on infinite graphs,'' in \emph{ACM SIGPLAN
+  Notices}, vol.~49, no.~1.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2014,
+  pp. 221--233.
+
+\bibitem{walker2014predicate}
+A.~Walker and L.~Ryzhyk, ``Predicate abstraction for reactive synthesis,'' in
+  \emph{FMCAD}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2014, pp.
+  219--226.
+
+\bibitem{komuravelli2014smt}
+A.~Komuravelli, A.~Gurfinkel, and S.~Chaki, ``Smt-based model checking for
+  recursive programs,'' in \emph{CAV}, vol. 8559.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer, 2014, pp. 17--34.
+
+\bibitem{Ghass16}
+E.~Ghassabani, A.~Gacek, and M.~W. Whalen, ``Efficient generation of inductive
+  validity cores for safety properties,'' in \emph{FSE}, 2016.
 
 \end{thebibliography}

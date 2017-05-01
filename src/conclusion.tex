@@ -1,2 +1,31 @@
-\section{Future Work and Conclusion}
+\section{Conclusion and Future Work}
 \label{sec:conclusion}
+
+In this paper, we contributed an approach to program synthesis guided by the
+proofs of realizability of Assume-Guarantee contracts.
+To check realizability, it performs k-induction-based reasoning to decide validity of a set of $\forall\exists$-formulas.
+Whenever a contract is proven realizable, it further employs the Skolemization procedure and extracts a fine-grained witness to the realizability.
+Those Skolem functions are finally encoded into a desirable implementation.
+We implemented the technique in the \jsynvg tool and evaluated it for the set
+of Lustre models of different complexity.
+The experimental results provided fruitful conclusions on the overall efficacy of the the approach.
+
+To the best of our knowledge our work is the first complete attempt on providing
+a synthesis algorithm based on the principle of k-induction using infinite
+theories. The ability to express contracts that support ideas from many
+categories of specifications, such as template-based and temporal properties,
+increases the potential applicability of this work to multiple subareas on
+synthesis research.
+
+In future work, we plan to exploit the connections of our approach with
+%eventually switch to a more efficient algorithm, where we endorse the core
+Property Directed Reachability~\cite{komuravelli2014smt} more closely. %~\cite{een2011efficient,bradley11}.
+%using efficient ways to further enhance the algorithm's performance through the
+%use of implicit abstractions~\cite{cimatti2014ic3} to further reduce the search
+%space of the algorithm.
+%This will also help our original work on realizability checking, by improving the unsoundness of our unrealizable results. 
+Another promising idea here is the use of Inductive Validity Cores (IVCs)~\cite{Ghass16}, whose main purpose is to effectively pinpoint the absolutely necessary model elements in a generated proof. We can potentially use
+the information provided by IVCs as a preprocessing tool to reduce the size of
+the original specification, and hopefully the complexity of the realizability
+proof. Finally, various optimizations can be implemented on top of both
+\aeval and \textsc{SMTLib2C} to produce smaller implementations.

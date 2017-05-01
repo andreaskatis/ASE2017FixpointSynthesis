@@ -11,7 +11,12 @@
 \usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{courier}
-\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+%--- Return lines start in a new line
+\let\oldReturn\Return
+\renewcommand{\Return}{\State\oldReturn}
+%---
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{float}
 \usepackage{hyperref}
@@ -31,7 +36,8 @@
 \usepackage{fancyvrb}
 \usepackage{relsize}
 \graphicspath{{images/}}
-\usepackage[ruled,shortend,linesnumbered,algo2e]{algorithm2e}  % algo2e = use \begin{algorithm2e}
+%\usepackage[ruled,shortend,linesnumbered,algo2e]{algorithm2e}  % algo2e = use
+% \begin{algorithm2e}
 \usepackage{float}
 \usepackage{subfig}
 \usepackage{framed}
@@ -42,8 +48,9 @@
 \newcommand{\aeval}{\textsc{AE-VAL}\xspace}
 \newcommand{\jkind}{\textsc{JKind}\xspace}
 
-\newcommand{\jkindsynt}{\textsc{JSyn}\xspace}
-\newcommand{\jkindvgsynt}{\textsc{JSyn-vg}\xspace}
+\newcommand{\jsyn}{\textsc{JSyn}\xspace}
+\newcommand{\jsynvg}{\textsc{JSyn-vg}\xspace}
+\newcommand{\smtlibtoc}{\textsc{SMTLib2C}\xspace}
 \newcommand{\lustrev}{\textsc{LustreV6}\xspace}
 
 \newcommand{\isSat}{\textsc{isSat}\xspace}
@@ -118,6 +125,10 @@ realizability, yielding better performance as well as soundness for ``unrealizab
 \input{results}
 \input{related}
 \input{conclusion}
+
+%\subsubsection*{\textbf{Acknowledgments}}
+%This work was funded by DARPA and AFRL under contract FA8750-12-9-0179 (Secure
+% Mathematically-Assured Composition of Control Models), and by NASA under contract NNA13AA21C (Compositional Verification of Flight Critical Systems), and by NSF under grant CNS-1035715 (Assuring the safety, security, and reliability of medical device cyber physical systems).
 
 \bibliography{document}
 \bibliographystyle{IEEEtran}

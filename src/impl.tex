@@ -1,13 +1,12 @@
 \section{Implementation}
 \label{sec:impl}
 
-The implementation of the algorithm was developed as an
+The implementation of the algorithm has been added as an
 unofficial feature to \jkind~\cite{jkind}, a Java implementation of the
 \textsc{KIND} model checker. \jkind already unofficially supports synthesis,
-using a k-inductive approach, named \jkindsynt. To distinct from \jkindsynt
-we named our validity-guided technique \jkindvgsynt. Specification is described
-using the Lustre language~\cite{lustrev6}, which functions as an intermediate
-representation to the Architecture Analysis and Design Language (\textsc{AADL}).
+using a k-inductive approach, named \jsyn. For clarity, we named
+our validity-guided technique \jsynvg. Specification is described using the
+Lustre language~\cite{lustrev6}, which functions as an intermediate representation to the Architecture Analysis and Design Language (\textsc{AADL}).
 The latter is a high-level specification and analysis language with which
 contracts are expressed, using the Assume-Guarantee Reasoning (\textsc{AGREE})
 framework~\cite{NFM2012:CoGaMiWhLaLu}.
@@ -15,21 +14,26 @@ framework~\cite{NFM2012:CoGaMiWhLaLu}.
 %including our synthesis algorithm is available to download at
 %https://github.com/andrewkatis/jkind-1/tree/synthesis. \aeval needs to be
 %installed separately from https://github.com/grigoryfedyukovich/aeval.}.
-During the internal process, \jkindvgsynt translates Lustre specifications to
+During the internal process, \jsynvg translates Lustre specifications to
 the SMT-LIB language, with which the $\forall\exists$ formulas, regions of
 validity, as well as the witnesses are expressed. The underlying solver that is
-used is the \aeval Skolemizer, which currently supports real (LRA) and integer
-(LIA) arithmetic, as well as their combination (LIRA).
+used is the \aeval Skolemizer, which currently supports $\forall\exists$
+formulas expressed using real (LRA) and integer (LIA) arithmetic, as well as
+their combination (LIRA).
 %
-For all valid $\forall\exists$-formulas, \jkindsynt proceeds to construct a list of
-Skolem functions using the \aeval Skolemizer.
-\aeval supports LRA  and LIA and thus provides the Skolem relation over integers and reals.%
-\footnote{For realizability checks over Linear Integer and Real
-  Arithmetic (LIRA), \jkind has an option to use \textsc{Z3} directly.}
-
-As discussed in Section~\ref{sec:realizability-synthesis}, we construct a Skolem function for each base check up to depth $k$ and one for the inductive relation at depth $k$.  What remains is to knit those functions together into an implementation in C.  The \textsc{SMTLib2C} tool performs this translation, given an input list of the original Lustre specification (to determine the I/O interface) and the Skolem functions (to define the behavior of the implementation).  The main translation task involves placing the Skolem functions into the template described in Algorithm~\ref{alg:synt}.  Each Skolem function describes a bounded history of at most depth $k$ over specification variables, so each variable is represented by an array of size $k$ in the generated program.  The tool ensures that the array indices for history variables match up properly across the successive base- and inductive-case Skolem functions.  Note that during this translation process, real
-variables in Skolem functions are defined as floats in C, which could cause 
-overflow and precision errors in the final implementation.  We will address this issue in future work.
+For realizable specification, and considering Algorithm~\ref{alg:synthesis}, we
+recursively use regions of validity to block out unsafe states from the search
+space.
+Eventually, we reach a fixpoint that is sufficient to use in order to extract
+a Skolem function that witnesses the realizability of the specification. Given
+the generated function, what remains is its translation
+into an efficient and practical implementation. To achieve this we use
+\smtlibtoc, a tool that has been specifically developed to translate
+similar \aeval Skolem functions to C implementations. The choice of C for
+the target language is not due to limitations, but mostly to provide a complete
+comparison against the previous work on \jsyn.
+The Skolem functions are simple enough to be used as an intermediate
+representation to any mainstream programming language.
 
 %In future work,
 %we intend to further improve on this, and

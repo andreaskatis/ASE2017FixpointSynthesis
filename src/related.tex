@@ -1,2 +1,41 @@
 \section{Related Work}
 \label{sec:related}
+
+Pnueli and Rosner were the
+first to involve the formal definition of a reactive system's realizability (or
+implementability), introduce the notion of a \emph{Skolem paradigm}, as well as
+describe a process to synthesize implementations for temporal
+specifications~\cite{DBLP:conf/popl/PnueliR89}.	
+
+Since then, a vast variety of techniques have been developed. Efficient
+algorithms were proposed for subsets of propositional LTL
+\cite{Klein10,ehlers2010symbolic,cheng2016structural} simple
+LTL formulas \cite{Bohy12,Tini03}, as well as other temporal
+logics \cite{monmege2016real,Hamza10}, such as SIS~\cite{Aziz95}.
+Component-based approaches have also been explored in~\cite{Chatterjee07}.
+
+Template-based approaches to
+synthesis described in~\cite{srivastava2013template,beyene2014constraint} focus on the exploration of programs that satisfy a specification that is refined after each
+iteration, following the basic principles of deductive synthesis.
+In particular, the \textsc{E-HSF} engine~\cite{beyene2014constraint}, 
+uses a predefined set of templates to search for potential Skolem
+relations and thus to solve $\forall\exists$-formulas. 
+In contrast, our synthesis algorithm is template-free.
+Enumeration, is not an optimal choice, because the Skolem functions generated from
+our benchmarks may contain 10-20 branches of the $ite$-statement. In these
+cases, an enormous number of potential shapes may exist, thus prohibiting the use of
+enumeration. 
+
+Inductive synthesis is an active area of research where the main
+goal is the generation of an inductive invariant that can be used to describe the space of programs that are guaranteed to satisfy the given specification~\cite{flener2001inductive}. This idea is mainly supported by the use of SMT solvers to guide the invariant refinement through traces that violate the requirements, known as counterexamples. Our approach differentiates from this approach by only considering the capability of constructing k-inductive proofs, with no further refinement of the problem space.
+
+A rather important contribution in the area is the recently published work by
+Ryzhyk and Walker~\cite{ryzhykdeveloping}, where they share their
+experience in developing and using a reactive synthesis tool called \textsc{Termite} for
+device drivers in an industrial environment. The driver synthesis uses
+a predicate abstraction technique~\cite{walker2014predicate} to efficiently
+cover the state space for both safety and liveness GR(1) specifications,
+leveraging the theory of fixed-size vectors. The authors follow a user-guided
+approach, that continuously interacts with the user in order to combat ambiguities in the specification.
+In contrast, our approach supports safety specifications using infinite-state,
+linear-arithmetic domains and follows a ``hands-off'', automated process.

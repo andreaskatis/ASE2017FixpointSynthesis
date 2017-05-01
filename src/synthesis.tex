@@ -91,61 +91,47 @@ of a greatest fixpoint that only contains viable states.
 \subsection{Validity-Guided Synthesis from Contracts}
 \label{sec:synth}
 
-\begin{algorithm2e}[t]
-\SetAlgoSkip{}
-\SetKwFor{For}{for}{do}{}
-\KwOut{$Result: \{\realizable, \unrealizable\}$, 
-%\textcolor{red}{\init: state},
-\skolems: Skolem Function for implementation or cex
-}
-\BlankLine
-$\skolems \gets null$; \\
-%$InitResult \gets $\sc{Sat?}$(G_I)$; \\
-% \uIf(\label{alg:initState}){$(\isUnsat(InitResult))$}
-% 	{%
-% 		\Return
-% 		\unrealizable, $\emptyset$, $\langle \rangle$;%
-% 	}
-%\textcolor{red}{$\init \gets InitResult.model$;} \\
-$F(s) \gets true$;\\	
-\While{true}{
-$\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'. G_{T}(s,i,s')
-\land F(s')$;
-\\
-$aevalResult \gets \aeval(\phi)$;\\
-\uIf(\label{alg:returnSat}){$(\isValid(aevalResult))$}
-{
-	$\skolems \gets (aevalResult.\skolems)$;\\
-	\uIf(){$G_{I}(s) \land F(s) \neq false$}
-	{
-	\Return \realizable, %\textcolor{red}{\init},
-	 \skolems;
-	}\uElse(){
-	 \Return \unrealizable;
-	}
-}
-\uElse
-	{%
-		$Q(s,i) \gets aevalResult.validSubset$;\\
-		\uIf{$Q(s,i) = false$}{
-			\Return \unrealizable;
-		}
-		$\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
-		Q(s,i)$;\\
-		$aevalResult' \gets \aeval(\phi')$;\\		
-		\uIf(\label{alg:returnSat}){$(\isValid(aevalResult'))$}
-		{
-			$\skolems \gets (aevalResult'.\skolems)$;\\			
-			\Return \unrealizable, \skolems;
-		}\uElse{
-			$W(s) \gets aevalResult'.validSubset$;\\
-			$F(s) = F(s) \land \lnot W(s)$;
-		}
-}
-}
-\caption{Validity-Guided Synthesis}
-\label{alg:synthesis}
-\end{algorithm2e}
+\begin{algorithm*}[!t]
+\footnotesize
+\caption{Validity-Guided Synthesis}\label{alg:synthesis}
+\begin{algorithmic}
+\Procedure{\jsynvg}{A : assumptions, G : guarantees}
+	\State $\skolems \gets null$;
+	\State $F(s) \gets true$;\Comment{Fixpoint of viable states}
+	\While{true}
+		\State $\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'.
+			G_{T}(s,i,s') \land F(s')$;
+		\State $aevalResult \gets \aeval(\phi)$;
+		\If{$(\isValid(aevalResult))$}
+			\State $\skolems \gets (aevalResult.\skolems)$;
+			\If{$G_{I}(s) \land F(s) \neq false$}
+				\Return \realizable, %\textcolor{red}{\init},
+		 		\skolems;
+			\Else{}
+		 		\Return \unrealizable;\Comment{Empty set of initial states}
+		 	\EndIf
+		\Else
+			\State $Q(s,i) \gets aevalResult.validSubset$;\Comment{Extract region of
+			validity $Q(s,i)$}
+			\If{$Q(s,i) = false$}
+				\Return \unrealizable;
+			\EndIf
+			\State $\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
+			Q(s,i)$;
+			\State $aevalResult' \gets \aeval(\phi')$;		
+			\If{$(\isValid(aevalResult'))$}\Comment{Check if $Q(s,i)$ contains only
+			unsafe states}
+				\State $\skolems \gets (aevalResult'.\skolems)$;			
+				\Return \unrealizable, \skolems;\Comment{Extract witnessing cex}
+			\Else{}
+				\State $W(s) \gets aevalResult'.validSubset$;
+				\State $F(s) = F(s) \land \lnot W(s)$;\Comment{Refine candidate fixpoint}
+			\EndIf
+		\EndIf
+	\EndWhile
+\EndProcedure	
+\end{algorithmic}
+\end{algorithm*}
 
 The main contribution presented in this paper, is a novel idea that effectively
 uses the information provided by \textit{regions of validity} to compute a
@@ -154,7 +140,8 @@ usable as a proof to the realizability of a specification, but also leads to the
 construction of a witness that can be translated with a straightforward process
 into a functional and efficient implementation.
 
-Algorithm~\ref{alg:synthesis} shows this validity-guided technique.
+Algorithm~\ref{alg:synthesis} shows this validity-guided technique, which we
+named \jsynvg.
 We initialize the process by defining the fixpoint $F(s)$ to be equal to $true$.
 Eventually, the algorithm attempts to converge to such a fixpoint $F(s)$ that
 only contains viable states, considering Equation~\ref{eq:viable}. We therefore
@@ -279,5 +266,192 @@ the solution for an unrealizable contract.
 \end{proof}
 
 
-\subsection{An Illustrative Example}
+\subsection{Example: The Cinderella-Stepmother Game}
 \label{sec:example}
+
+For the purposes of this paper, we will illustrate how the validity
+guided-synthesis algorithm works, using a variation of the minimum-backlog
+problem, the two player game between Cinderella and her wicked
+Stepmother, first  expressed by Bodlaender \textit{et
+al.}~\cite{bodlaender2012cinderella}.
+
+The main objective for Cinderella (i.e. the reactive system) is to keep a
+collection of buckets from overflowing with water. On the other hand,
+Cinderella's Stepmother (i.e. the system's environment), attempts to fill the
+buckets with water in such a manner that a bucket overflow must eventually
+happen.
+For the running example, we chose an instance of the game that has been
+previously used in a template-based approach to
+synthesis~\cite{beyene2014constraint}. In this instance, the game is described
+using five buckets, where each bucket can contain up to two units of water.
+Cinderella has the option to empty two adjacent buckets at each of her turns,
+while the Stepmother distributes one unit of water over all five buckets.
+
+\begin{figure}[!t]
+\centering
+ \begin{Verbatim}[fontsize=\scriptsize]
+const C = 2.0;
+
+-- empty buckets e and e+1 each round
+node game(i1,i2,i3,i4,i5: real; e: int)
+	returns (guarantee: bool);
+var
+  b1, b2, b3, b4, b5 : real;
+let
+  assert i1 >= 0.0 and i2 >= 0.0 and 
+ 	i3 >= 0.0 and i4 >= 0.0 and i5 >= 0.0;
+  assert i1 + i2 + i3 + i4 + i5 = 1.0;
+
+  b1 = 0.0 -> 
+       (if (e = 5 or e = 1) then i1 else (pre(b1) + i1)) ;
+  b2 = 0.0 -> 
+       (if (e = 1 or e = 2) then i2 else (pre(b2) + i2)) ;
+  b3 = 0.0 -> 
+       (if (e = 2 or e = 3) then i3 else (pre(b3) + i3)) ;
+  b4 = 0.0 -> 
+       (if (e = 3 or e = 4) then i4 else (pre(b4) + i4)) ;
+  b5 = 0.0 -> 
+       (if (e = 4 or e = 5) then i5 else (pre(b5) + i5)) ;
+
+  guarantee = b1 <= C and b2 <= C and b3 <= C and 
+  	    b4 <= C and b5 <= C;
+
+  --%REALIZABLE i1, i2, i3, i4, i5;
+  --%PROPERTY guarantee;
+tel;
+ \end{Verbatim}
+\caption{An Assume-Guarantee contract for the Cinderella-Stepmother game}
+\label{fg:cind}
+\end{figure}
+
+Figure~\ref{fg:cind} shows one possible interpretation of a contract designed
+for the aforementioned instance of the Cinderella-Stepmother game. The contract
+is expressed using Lustre~\cite{lustrev6}, a language
+that has been extensively used for specification as well as implementation of
+safety-critical systems, and is the kernel language in SCADE, a popular tool in
+model-based development. The contract is defined as a Lustre node, with a global
+constant $C$ denoting the bucket capacity. The node describes the game itself,
+through the problem's input and output variables. The main input is Stepmother's
+distribution of one unit of water over five different input variables,
+\textit{i1} to \textit{i5}. While the node contains a sixth input argument,
+namely $e$, this is in fact used as the output of the system that we want to
+implement, representing Cinderella's choice at each of her turns. We make an
+explicit distinction on which node arguments are the system's inputs, using the \textit{REALIZABLE} statement towards the end of the contract. The contract's
+assumptions $A$ are defined using assertions over the input variables
+\textit{i1-i5}. We assume that there can be no negative input values, and the
+sum of \textit{i1} to \textit{i5} is equal to one unit of water. The specified node
+returns the value of a boolean variable \textit{guarantee}, which corresponds to
+the contract's guarantee $G$, and is explicitly defined to be such using the
+\textit{PROPERTY} statement.
+Finally, we define what each bucket's state should be through the entire
+duration of the game, using the local variables \textit{b1} to \textit{b5}.
+Initially, each bucket is empty, and with each transition to a new state, the contents depend on
+whether Cinderella chose the specific bucket, or an adjucent one. If this is the
+case, the contents of the bucket $b_i$ become equal to the amount of water that
+Stepmother puts in the corresponding input variable $i$, during the next turn.
+If the bucket was not covered by Cinderella's choice, then its contents are
+updated by adding Stepmother's distribution to the volume of water that the
+bucket already had. The distinction between the initial state of each bucket,
+and every other state is expressed using Lustre's arrow (\texttt{->})
+operator, while variable values in previous states can be accessed using the
+\textit{pre} operation.
+The specification is fairly simple, as the objective is clear. The contract
+should only be realizable if, assuming valid inputs given by the Stepmother
+(i.e. positive values to input variables that add up to one water unit),
+Cinderella can keep reacting indefinitely, by providing outputs that satisfy the
+guarantees (i.e. she empties buckets in order to prevent overflow in Stepmother's next turn).
+We initiate our call to the procedure defined in Algorithm~\ref{alg:synthesis},
+by providing the contract in Figure~\ref{fg:cind} as input. The algorithm
+then enters an infinite loop, where it attempts to construct a fixpoint of
+viable states that can use the transition relation to new, viable states,
+while complying to the specification. Initially $F(s) = true$, and we ask \aeval for the validiity of the formula $\phi = \forall s,i. F(s) \land A(s,i) \Rightarrow \exists
+s'.G_{T}(s,i,s') \land F(s')$. Unfortunately, not every state in $F(s)$
+satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
+a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
+which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
+input variables, it might contain contraints over the inputs, which is an
+undesirable side-effect. Due to space restrictions, we are unable to show this
+in full effect, but Figure~\ref{fg:snippet} shows part of the generated
+$Q(s,i)$, in SMT-LIB format (pre-fix notation), where the input variables are
+part of the constraints. The variable \textit{\%init} is used in the underlying
+machinery as a flag to indicate whether the current state is initial or not
+(true and false, respectively).
+
+\begin{figure}[!t]
+\centering
+ \begin{Verbatim}[fontsize=\scriptsize]
+(and (or (and %init (= (+ b1 i1) 0.0)) (not %init))
+  (or (and %init (= (+ b2 i2) 0.0)) (not %init))
+  (or (and %init (= (+ b3 i3) 0.0)) (not %init))
+  (or (and %init (= i4 0.0)) (not %init))
+  (or (and %init (= i5 0.0)) (not %init))
+  (<= (+ b1 i1) 2.0)
+  (<= (+ b2 i2) 2.0)
+  (<= (+ b3 i3) 2.0)
+  (<= i4 2.0)
+  (<= i5 2.0))
+ \end{Verbatim}
+\caption{Part of the region of validity generated for the Cinderella-Stepmother
+example}
+\label{fg:snippet}
+\end{figure}  
+
+Considering the existence of undesirable constraints in $Q(s,i)$, the next step
+is to extract a region of validity that is only described using state variables.
+As such, we construct the formula $\phi' = \forall s. F(s) \Rightarrow \exists
+i. A(s,i) \land \lnot Q(s,i)$, and ask \aeval regarding its validity. According
+to \aeval, $\phi'$ is not valid, an indication that may eventually lead us to a
+proof of the contract's realizability. If $\phi'$ was valid, then every state in
+$F(s)$ is unsafe, under a specific input that satisfies the contract
+assumptions, and the specification is unrealizable. Since this is not the case,
+however, a refinement process comes at the next step. We derive $F(s) = F(s)
+\land \lnot W(s)$, where $W(s)$ is the region of validity of $\phi'$.
+
+From this point on, the algorithm reiterates the process following the steps
+explained above. For this particular example, the algorithm terminates after one
+more refinement, at depth 2. At that point, the refined version of
+$\phi$ is valid, and \aeval constructs a witness containing valid reactions to
+environment behavior. Figure~\ref{fg:witness} provides a snippet of how a
+witness looks like, after being translated to a C implementation. In general,
+the witness is described through the use of an nested if-then-else block, where the conditions are subsets of the antecedent of
+the implication in formula $\phi$, while the body contains valid assignments to
+state variables, for this particular subset.
+
+
+\begin{figure}[!t]
+\centering
+ \begin{Verbatim}[fontsize=\scriptsize]
+...
+if (((!(b1 + i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
+  e = 3.0;
+  b1 = b1 + i1;
+  b2 = b2 + i2;
+  b3 = i3;
+  b4 = i4;
+  b5 = b5 + i5;
+} else {
+  if (((!(i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
+  e = 5.0;
+  b1 = i1;
+  b2 = b2 + i2;
+  b3 = b3 + i3;
+  b4 = b4 + i4;
+  b5 = i5;
+} else {
+...
+ \end{Verbatim}
+\caption{Part of the synthesized implementation for the Cinderella-Stepmother
+example}
+\label{fg:witness}
+\end{figure}
+
+As is discussed by Beyene \textit{et al.}~\cite{beyene2014constraint}, the
+Cinderella-Stepmother is a rather challenging game, and in particular for the
+cases where $1.5 \leq C \leq 3.0$, where the problem becomes non-trivial, and
+the use of additional, non-intuitive information must be provided to the solver
+in order to construct a solution. Despite this, we were able to synthesize
+implementations for the Cinderella-Stepmother game without using any form of
+template, for any value of $C \geq 2$. This fact alone, provided us with
+solid foundations regarding the effectiveness of our approach in solving
+complex problems.
+         
