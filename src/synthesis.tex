@@ -63,7 +63,7 @@ simplify specification of guarantees, since we do not expect a contract
 to be always defined over all variables in the transition system.
 
 Consequently, we can formally define a realizable contract, as one for which any
-preceeding state $s$ can make a transition into a new state $s'$ that satisfies
+preceeding state $s$ can take a transition into a new state $s'$ that satisfies
 the guarantees, assuming valid inputs. For a system to be ever-reactive, these
 new states $s'$ should be further usable as preceeding states in a future
 transition. States like $s$ and $s'$ are defined as being \textit{viable}, if
@@ -75,8 +75,8 @@ and only if:
 \label{eq:viable}
 \end{equation}
 
-A necessary condition, finally, is that the set of viable states has to
-intersect with the set of initial states. As such, to conclude that a contract
+A necessary condition, finally, is that the set of viable states
+intersects with the set of initial states. As such, to conclude that a contract
 is realizable, we require that
 
 \begin{equation}
@@ -84,8 +84,8 @@ is realizable, we require that
 \label{eq:nonempty}
 \end{equation}
 
-Therefore, the intuition behind our proposed algorithm relies on the discovery
-of a greatest fixpoint that only contains viable states.
+The intuition behind our proposed algorithm in this paper relies on the
+discovery of a greatest fixpoint that only contains viable states.
 
 
 \subsection{Validity-Guided Synthesis from Contracts}
@@ -144,8 +144,11 @@ Algorithm~\ref{alg:synthesis} shows this validity-guided technique, which we
 named \jsynvg.
 We initialize the process by defining the fixpoint $F(s)$ to be equal to $true$.
 Eventually, the algorithm attempts to converge to such a fixpoint $F(s)$ that
-only contains viable states, considering Equation~\ref{eq:viable}. We therefore
-construct the formula $\phi$, and provide it as an input to \aeval, an efficient
+only contains viable states, considering Equation~\ref{eq:viable}
+and~\ref{eq:nonempty}.
+We therefore construct the formula $\phi = \forall s,i. F(s) \land A(s,i)
+\Rightarrow \exists s'.
+			G_{T}(s,i,s') \land F(s')$, and provide it as an input to \aeval, an efficient
 Skolemizer for $\forall\exists$ formulas. \aeval is particularly focused on
 determining the validity of $\phi$. If the formula is valid, then a witness
 \textit{Skolem} is constructed, containing valid assignments to the
@@ -172,7 +175,7 @@ towards eliminating this issue.
 
 The main concept to properly refine $F(s)$, is to extract a region of validity
 that only involves constraints over state variables. To achieve this, we ask for
-the validity of the formula $\phi' \gets \forall s. F(s) \Rightarrow \exists
+the validity of the formula $\phi' = \forall s. F(s) \Rightarrow \exists
 i. A(s,i) \land \lnot Q(s,i)$. If $\phi'$ is a valid formula, then for any
 assignment of the state variables $s$, we have a valid input (i.e. that
 satisfies the assumptions), for which the states are taken outside of the region
@@ -205,12 +208,10 @@ of such counterexamples as potential future work.
 From the previous, it is straightforward to show that
 Algorithm~\ref{alg:synthesis} is complete, since it either terminates by
 constructing a fixpoint, or when the computed region of validity is the empty
-set \textit{false}. To prove its soundness regarding results, we require a
-proof that the algorithm always computes a fixpoint, containing only state
-variable assignments that lead to the satisfiability of $\forall\exists$
-formulas that follow the form of Equation~\ref{eq:viable}. To achieve this, we
-use the infamous fixed point theorem that was first stated by Alfred Tarski
-in~\cite{tarski1955lattice}.
+set \textit{false}. To prove its soundness regarding results, we require that
+the algorithm always computes a fixpoint, containing only state variable assignments that lead to the satisfiability of $\forall\exists$
+formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
+use the fixed point theorem that was first stated by Alfred Tarski~\cite{tarski1955lattice}.
 
 \begin{lemma} Consider the system
 $\mathfrak{U} = \langle S, T \rangle$. With $S$, we denote the set of
@@ -249,8 +250,9 @@ empty, and the system $\langle P, T \rangle$ is a complete lattice.
 \label{thm:fixpoint}
 \end{theorem}
 \begin{proof}
-The proof relies on Theorem 1 in~\cite{tarski1955lattice}. Considering
-Lemmas~\ref{lem:lattice} and~\ref{lem:monotonicity}, we satisfy the first two
+The proof relies on Tarski's first theorem on fixed
+points~\cite{tarski1955lattice}.
+Considering Lemmas~\ref{lem:lattice} and~\ref{lem:monotonicity}, we satisfy the first two
 conditions of Tarski's theorem. When the specification is realizable, a
 fixpoint is reached by Algorithm~\ref{alg:synthesis}, since each consecutive
 attempt to further refine $F(s)$ results in the same set. On the other hand, if
@@ -281,8 +283,7 @@ Cinderella's Stepmother (i.e. the system's environment), attempts to fill the
 buckets with water in such a manner that a bucket overflow must eventually
 happen.
 For the running example, we chose an instance of the game that has been
-previously used in a template-based approach to
-synthesis~\cite{beyene2014constraint}. In this instance, the game is described
+previously used in template-based synthesis~\cite{beyene2014constraint}. In this instance, the game is described
 using five buckets, where each bucket can contain up to two units of water.
 Cinderella has the option to empty two adjacent buckets at each of her turns,
 while the Stepmother distributes one unit of water over all five buckets.
@@ -446,12 +447,11 @@ example}
 \end{figure}
 
 As is discussed by Beyene \textit{et al.}~\cite{beyene2014constraint}, the
-Cinderella-Stepmother is a rather challenging game, and in particular for the
-cases where $1.5 \leq C \leq 3.0$, where the problem becomes non-trivial, and
-the use of additional, non-intuitive information must be provided to the solver
-in order to construct a solution. Despite this, we were able to synthesize
-implementations for the Cinderella-Stepmother game without using any form of
-template, for any value of $C \geq 2$. This fact alone, provided us with
-solid foundations regarding the effectiveness of our approach in solving
+Cinderella-Stepmother is a rather challenging game. In particular, for the
+cases where $1.5 \leq C \leq 3.0$, the problem becomes non-trivial, and their
+proposed work showed how the use of additional, non-intuitive information is
+necessary in order to construct a solution. Despite this, we were able to
+synthesize implementations for the Cinderella-Stepmother game without using any form of template, for any value of $C \geq 2$.
+This fact alone, provided us with solid foundations regarding the effectiveness of our approach in solving
 complex problems.
          

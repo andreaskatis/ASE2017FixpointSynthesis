@@ -1,31 +1,39 @@
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
 
-In this paper, we contributed an approach to program synthesis guided by the
-proofs of realizability of Assume-Guarantee contracts.
-To check realizability, it performs k-induction-based reasoning to decide validity of a set of $\forall\exists$-formulas.
-Whenever a contract is proven realizable, it further employs the Skolemization procedure and extracts a fine-grained witness to the realizability.
-Those Skolem functions are finally encoded into a desirable implementation.
-We implemented the technique in the \jsynvg tool and evaluated it for the set
-of Lustre models of different complexity.
-The experimental results provided fruitful conclusions on the overall efficacy of the the approach.
+In this paper, we presented a novel and elegant approach towards the synthesis
+of reactive system implementations, using only the knowledge provided by the
+system specification, using linear integer and real arithmetic. The approach is
+directly inspired from previous work on Property Directed Reachability, having the objective of constructing inductive
+invariants that can be used as a proof of the specification's realizability. The
+main objective is to converge to a fixpoint by iteratively blocking subsets of
+unsafe states from the problem space. This is achieved through the continuous
+extraction of regions of validity which hint towards subsets of states that may
+lead to a candidate implementation.
 
-To the best of our knowledge our work is the first complete attempt on providing
-a synthesis algorithm based on the principle of k-induction using infinite
-theories. The ability to express contracts that support ideas from many
-categories of specifications, such as template-based and temporal properties,
-increases the potential applicability of this work to multiple subareas on
-synthesis research.
+This is the first complete attempt, to the best of our knowledge, on handling
+valid subsets of a $\forall\exists$-formula to construct a greatest fixpoint,
+while the specification is expressed using infinite theories. We were able to
+prove its effectiveness in practice, by comparing it to an already existing
+approach that focuses on constructing k-inductive proofs of realizability. The
+results showed a dramatic improvement on performance, and indicated how the
+validity-guided approach can lead to the solution of a bigger class of problems.
 
-In future work, we plan to exploit the connections of our approach with
-%eventually switch to a more efficient algorithm, where we endorse the core
-Property Directed Reachability~\cite{komuravelli2014smt} more closely. %~\cite{een2011efficient,bradley11}.
-%using efficient ways to further enhance the algorithm's performance through the
-%use of implicit abstractions~\cite{cimatti2014ic3} to further reduce the search
-%space of the algorithm.
-%This will also help our original work on realizability checking, by improving the unsoundness of our unrealizable results. 
-Another promising idea here is the use of Inductive Validity Cores (IVCs)~\cite{Ghass16}, whose main purpose is to effectively pinpoint the absolutely necessary model elements in a generated proof. We can potentially use
-the information provided by IVCs as a preprocessing tool to reduce the size of
-the original specification, and hopefully the complexity of the realizability
-proof. Finally, various optimizations can be implemented on top of both
-\aeval and \textsc{SMTLib2C} to produce smaller implementations.
+Future work in this area is rich with challenges and promising directions. The
+most interesting question is how we can possibly improve \jsynvg's
+speed ofconvergence. Without excluding techniques such as counterexample
+refinement and predicate abstraction, an potential improvement could be achieved
+through the use of a more compact transition relation. As a minor addition, we
+plan on writing an extensive proof regarding the soundness of our approach,
+preferably using a proof assistant. As for the synthesized implementations
+themselves, there are several promising concepts that can lead to further
+improvement, such as the use of Inductive Validity Cores~\cite{Ghass16}, which
+can be potenitally used to identify the core elements in a synthesized
+implementation that lead to the satisfaction of the specification. Using only
+the core elements, we can effectively reduce the size of the implementations,
+and improve their performance. Finally, a more abstract, but rather interesting
+topic of research, is how we can transition from implementations that use
+infinite types through SMT, to equivalent ones using finite representations,
+without violating the specification. This is particularly important when the
+high-end user has to define secure contracts that contain properties for memory
+allocation, representation of floats, and overflow handling.

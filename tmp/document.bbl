@@ -33,14 +33,14 @@ S.~Srivastava, S.~Gulwani, and J.~S. Foster, ``Template-based program
   Tools for Technology Transfer}, vol.~15, no. 5-6, pp. 497--518, 2013.
 
 \bibitem{flener2001inductive}
-P.~Flener and D.~Partridge, ``Inductive programming,'' \emph{ASE}, vol.~8,
-  no.~2, pp. 131--137, 2001.
+P.~Flener and D.~Partridge, ``Inductive programming,'' \emph{Automated Software
+  Engineering}, vol.~8, no.~2, pp. 131--137, 2001.
 
-\bibitem{reynoldscounterexample}
+\bibitem{reynolds2015counterexample}
 A.~Reynolds, M.~Deters, V.~Kuncak, C.~Tinelli, and C.~Barrett,
   ``Counterexample-guided quantifier instantiation for synthesis in smt,'' in
-  \emph{CAV}, vol. 9207.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2015,
-  pp. 198--216.
+  \emph{International Conference on Computer Aided Verification}.\hskip 1em
+  plus 0.5em minus 0.4em\relax Springer, 2015, pp. 198--216.
 
 \bibitem{kuncak2013functional}
 V.~Kuncak, M.~Mayer, R.~Piskac, and P.~Suter, ``Functional synthesis for linear
@@ -51,29 +51,40 @@ V.~Kuncak, M.~Mayer, R.~Piskac, and P.~Suter, ``Functional synthesis for linear
 L.~Ryzhyk, A.~Walker, J.~Keys, A.~Legg, A.~Raghunath, M.~Stumm, and M.~Vij,
   ``User-guided device driver synthesis.'' in \emph{OSDI}, 2014, pp. 661--676.
 
-\bibitem{ryzhykdeveloping}
+\bibitem{ryzhyk2016developing}
 L.~Ryzhyk and A.~Walker, ``Developing a practical reactive synthesis tool:
-  Experience and lessons learned.'' to appear at SYNT 2016.
+  Experience and lessons learned,'' \emph{arXiv preprint arXiv:1611.07624},
+  2016.
 
-\bibitem{Beyene:2014}
-\BIBentryALTinterwordspacing
+\bibitem{beyene2014constraint}
 T.~Beyene, S.~Chaudhuri, C.~Popeea, and A.~Rybalchenko, ``A constraint-based
-  approach to solving games on infinite graphs,'' in \emph{Proceedings of the
-  41st ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
-  ser. POPL '14.\hskip 1em plus 0.5em minus 0.4em\relax New York, NY, USA: ACM,
-  2014, pp. 221--233. [Online]. Available:
-  \url{http://doi.acm.org/10.1145/2535838.2535860}
-\BIBentrySTDinterwordspacing
+  approach to solving games on infinite graphs,'' in \emph{ACM SIGPLAN
+  Notices}, vol.~49, no.~1.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2014,
+  pp. 221--233.
 
-\bibitem{Katis15:Realizability}
+\bibitem{bradley2011sat}
+A.~R. Bradley, ``Sat-based model checking without unrolling,'' in
+  \emph{International Workshop on Verification, Model Checking, and Abstract
+  Interpretation}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2011, pp.
+  70--87.
+
+\bibitem{een2011efficient}
+N.~Een, A.~Mishchenko, and R.~Brayton, ``Efficient implementation of property
+  directed reachability,'' in \emph{Formal Methods in Computer-Aided Design
+  (FMCAD), 2011}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2011, pp.
+  125--134.
+
+\bibitem{gacek2015towards}
 A.~Gacek, A.~Katis, M.~W. Whalen, J.~Backes, and D.~Cofer, ``Towards
-  realizability checking of contracts using theories,'' in \emph{NFM}.\hskip
-  1em plus 0.5em minus 0.4em\relax Springer, 2015, pp. 173--187.
+  realizability checking of contracts using theories,'' in \emph{NASA Formal
+  Methods Symposium}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2015,
+  pp. 173--187.
 
 \bibitem{katis2016towards}
 A.~Katis, A.~Gacek, and M.~W. Whalen, ``Towards synthesis from assume-guarantee
   contracts involving infinite theories: a preliminary report,'' in
-  \emph{FormaliSE}.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2016, pp.
+  \emph{Formal Methods in Software Engineering (FormaliSE), 2016 IEEE/ACM 4th
+  FME Workshop on}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2016, pp.
   36--41.
 
 \bibitem{katis2016synthesis}
@@ -83,8 +94,9 @@ A.~Katis, G.~Fedyukovich, A.~Gacek, J.~Backes, A.~Gurfinkel, and M.~W. Whalen,
 
 \bibitem{fedyukovich2015automated}
 G.~Fedyukovich, A.~Gurfinkel, and N.~Sharygina, ``Automated discovery of
-  simulation between programs,'' in \emph{LPAR}.\hskip 1em plus 0.5em minus
-  0.4em\relax Springer, 2015, pp. 606--621.
+  simulation between programs,'' in \emph{Logic for Programming, Artificial
+  Intelligence, and Reasoning}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer, 2015, pp. 606--621.
 
 \bibitem{tarski1955lattice}
 A.~Tarski \emph{et~al.}, ``A lattice-theoretical fixpoint theorem and its
@@ -97,15 +109,15 @@ M.~H.~L. Bodlaender, C.~A. Hurkens, V.~J. Kusters, F.~Staals, G.~J. Woeginger,
   International Conference on Theoretical Computer Science}.\hskip 1em plus
   0.5em minus 0.4em\relax Springer, 2012, pp. 57--71.
 
-\bibitem{jkind}
-A.~Gacek, ``{JK}ind -- an infinite-state model checker for safety properties in
-  {Lustre},'' \url{http://loonwerks.com/tools/jkind.html}, 2016.
-
 \bibitem{lustrev6}
 \BIBentryALTinterwordspacing
 E.~Jahier, P.~Raymond, and N.~Halbwachs, ``{The Lustre V6 Reference Manual}.''
   [Online]. Available: \url{http://www-verimag.imag.fr/Lustre-V6.html}
 \BIBentrySTDinterwordspacing
+
+\bibitem{jkind}
+A.~Gacek, ``{JK}ind -- an infinite-state model checker for safety properties in
+  {Lustre},'' \url{http://loonwerks.com/tools/jkind.html}, 2016.
 
 \bibitem{NFM2012:CoGaMiWhLaLu}
 D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha,
@@ -157,21 +169,10 @@ A.~Aziz, F.~Balarin, R.~Braton, and A.~Sangiovanni-Vincentelli, ``Sequential
 K.~Chatterjee and T.~A. Henzinger, ``Assume-{G}uarantee {S}ynthesis,''
   \emph{TACAS}, pp. 261--275, 2007.
 
-\bibitem{beyene2014constraint}
-T.~Beyene, S.~Chaudhuri, C.~Popeea, and A.~Rybalchenko, ``A constraint-based
-  approach to solving games on infinite graphs,'' in \emph{ACM SIGPLAN
-  Notices}, vol.~49, no.~1.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2014,
-  pp. 221--233.
-
 \bibitem{walker2014predicate}
 A.~Walker and L.~Ryzhyk, ``Predicate abstraction for reactive synthesis,'' in
   \emph{FMCAD}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2014, pp.
   219--226.
-
-\bibitem{komuravelli2014smt}
-A.~Komuravelli, A.~Gurfinkel, and S.~Chaki, ``Smt-based model checking for
-  recursive programs,'' in \emph{CAV}, vol. 8559.\hskip 1em plus 0.5em minus
-  0.4em\relax Springer, 2014, pp. 17--34.
 
 \bibitem{Ghass16}
 E.~Ghassabani, A.~Gacek, and M.~W. Whalen, ``Efficient generation of inductive

@@ -32,7 +32,7 @@
 %to solve the hyperref problem of jumping to wrong places
 %\usepackage[all]{hypcap}
 \usepackage[framemethod=TikZ]{mdframed}
-
+\usepackage{booktabs}
 \usepackage{fancyvrb}
 \usepackage{relsize}
 \graphicspath{{images/}}
@@ -112,7 +112,7 @@ problem space is recursively refined, with the goal being the discovery of a
 fixpont that effectively describes a region of safe states. If such a fixpoint
 is found, we construct a witness that can be directly transformed into an
 implementation using mainstream programming languages, like C. We implemented
-this algorithm in the \jkind model checker, and excersised it against contracts
+this algorithm in the \jkind model checker, and exersised it against contracts
 written using the Lustre specification language. Experimental results show how
 the new algorithm improves upon previous work on synthesizing programs from k-inductive proofs of
 realizability, yielding better performance as well as soundness for ``unrealizable'' results.
@@ -129,8 +129,7 @@ realizability, yielding better performance as well as soundness for ``unrealizab
 %\subsubsection*{\textbf{Acknowledgments}}
 %This work was funded by DARPA and AFRL under contract FA8750-12-9-0179 (Secure
 % Mathematically-Assured Composition of Control Models), and by NASA under contract NNA13AA21C (Compositional Verification of Flight Critical Systems), and by NSF under grant CNS-1035715 (Assuring the safety, security, and reliability of medical device cyber physical systems).
-
+%\IEEEtriggeratref{11}
 \bibliography{document}
 \bibliographystyle{IEEEtran}
-
 \end{document}

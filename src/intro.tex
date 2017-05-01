@@ -3,7 +3,11 @@
 \andreas{The following paragraph is the same with the one in the ATVA paper}
 Automated synthesis research is concerned with discovering efficient algorithms to construct programs that are guaranteed to comply with predefined temporal specifications.
 This problem has been well studied for propositional specifications, especially for (subsets of) LTL~\cite{gulwani2010dimensions}.
-More recently, the problem of synthesizing programs for richer theories has been examined, including work in {\em template-based synthesis}~\cite{srivastava2013template}, which attempts to find programs that match a certain shape (the template), and {\em inductive synthesis}, which attempts to use counterexample-based refinement to solve synthesis problems~\cite{flener2001inductive}.  Such techniques have been widely used for stateless formulas over arithmetic domains~\cite{reynoldscounterexample}.
+More recently, the problem of synthesizing programs for richer theories has been
+examined, including work in {\em template-based
+synthesis}~\cite{srivastava2013template}, which attempts to find programs that
+match a certain shape (the template), and {\em inductive synthesis}, which
+attempts to use counterexample-based refinement to solve synthesis problems~\cite{flener2001inductive}.  Such techniques have been widely used for stateless formulas over arithmetic domains~\cite{reynolds2015counterexample}.
 \textit{Functional synthesis} has also been effectively used to synthesize
 subcomponents of already existing partial
 implementations~\cite{kuncak2013functional}.
@@ -15,13 +19,14 @@ that includes safety properties in linear real and integer arithmetic (LIRA),
 but remains generic enough to be extended into supporting additional theories
 in the future. This is a ``hands-off'' approach, as there is no
 requirement from the user to interact with the underlying machinery,
-unlike~\cite{ryzhyk2014user,ryzhykdeveloping}, and is capable of providing
-solutions without the guidance of templates, like in~\cite{Beyene:2014}.
+unlike~\cite{ryzhyk2014user,ryzhyk2016developing}, and is capable of providing
+solutions without the guidance of templates, like
+in~\cite{beyene2014constraint}.
 
 The main idea of the algorithm was inspired by the IC3 algorithm, its
-technique otherwise known as Property Directed Reachability (PDR)~\cite{}. In
-PDR, one aims to discover an inductive invariant for a property, by recursively
-blocking generalized regions describing unsafe states. In a similar concept, we attempt
+technique otherwise known as Property Directed Reachability
+(PDR)~\cite{bradley2011sat,een2011efficient}. In PDR, one aims to discover an
+inductive invariant for a property, by recursively blocking generalized regions describing unsafe states. In a similar concept, we attempt
 to reach a greatest fixpoint that contains states usable indefinitely by the
 system, in order to react to unpredictable environment behaviour, while
 complying to well-defined specification. As such, beginning from the entire
@@ -34,8 +39,8 @@ language intended for the system's implementation.
 
 The algorithm was implemented as a feature to the \jkind model checker, which
 already had unofficial support to program synthesis according to work based on
-the k-inductive proof of a contract's
-realizability~\cite{Katis15:Realizability,katis2016towards,katis2016synthesis}.
+k-inductive proofs of a contract's
+realizability~\cite{gacek2015towards,katis2016towards,katis2016synthesis}.
 Our approach is completely independent of the k-inductive method, but is still
 based on the extraction of a witness that satisfies a $\forall\exists$ formula, using the \aeval Skolemizer~\cite{fedyukovich2015automated}. To extract such a
 witness, we do not depend on a k-inductive proof, but instead use the
@@ -50,7 +55,7 @@ behavior of the k-inductive algorithm, as it is not capable to only consider a
 ``safe'' subset of the state space. We were able to confirm our claims
 by comparing the two algorithms under a comprehensive benchmark suite containing
 contracts that were initially used in verification problems, as well as
-industrial-level specification provided by Rockwell Collins.
+specification for industrial-level designs.
 
 In Section~\ref{sec:synthesis} we provide the background that is required in the
 context of this paper, and present the validity-guided approach to synthesizing
