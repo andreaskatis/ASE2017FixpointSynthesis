@@ -19,7 +19,7 @@ for representing system requirements, using an \textit{Assume-Guarantee
 Contract}. Requirements in this format contain two main types of constraints.
 The \emph{assumptions} of the contract restrict the possible inputs that the
 environment can provide to the system, while the \emph{guarantees} are used to
-describe what is considered a safe reaction of the system to the outside world. 
+describe what is considered a safe reaction of the system to the outside world.
 
 A simple example is the contract with assumption $A = \{x\neq
 y\}$ and guarantee $G = \{x \leq y \Rightarrow z =
@@ -118,10 +118,10 @@ discovery of a greatest fixpoint that only contains viable states.
 			\EndIf
 			\State $\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
 			Q(s,i)$;
-			\State $aevalResult' \gets \aeval(\phi')$;		
+			\State $aevalResult' \gets \aeval(\phi')$;
 			\If{$(\isValid(aevalResult'))$}\Comment{Check if $Q(s,i)$ contains only
 			unsafe states}
-				\State $\skolems \gets (aevalResult'.\skolems)$;			
+				\State $\skolems \gets (aevalResult'.\skolems)$;
 				\Return \unrealizable, \skolems;\Comment{Extract witnessing cex}
 			\Else{}
 				\State $W(s) \gets aevalResult'.validSubset$;
@@ -129,7 +129,7 @@ discovery of a greatest fixpoint that only contains viable states.
 			\EndIf
 		\EndIf
 	\EndWhile
-\EndProcedure	
+\EndProcedure
 \end{algorithmic}
 \end{algorithm*}
 
@@ -180,7 +180,7 @@ i. A(s,i) \land \lnot Q(s,i)$. If $\phi'$ is a valid formula, then for any
 assignment of the state variables $s$, we have a valid input (i.e. that
 satisfies the assumptions), for which the states are taken outside of the region
 of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
-safe in this context. On the other hand, if $phi'$ is not valid, \aeval computes
+safe in this context. On the other hand, if $\phi'$ is not valid, \aeval computes
 a new region of validity, namely $W(s)$. The new region is a strict subset of
 $F(s)$, is described using constraints over state variables only, and entails
 the existence of unsafe states in $F(s)$, considering valid inputs.
@@ -299,22 +299,22 @@ node game(i1,i2,i3,i4,i5: real; e: int)
 var
   b1, b2, b3, b4, b5 : real;
 let
-  assert i1 >= 0.0 and i2 >= 0.0 and 
+  assert i1 >= 0.0 and i2 >= 0.0 and
  	i3 >= 0.0 and i4 >= 0.0 and i5 >= 0.0;
   assert i1 + i2 + i3 + i4 + i5 = 1.0;
 
-  b1 = 0.0 -> 
+  b1 = 0.0 ->
        (if (e = 5 or e = 1) then i1 else (pre(b1) + i1)) ;
-  b2 = 0.0 -> 
+  b2 = 0.0 ->
        (if (e = 1 or e = 2) then i2 else (pre(b2) + i2)) ;
-  b3 = 0.0 -> 
+  b3 = 0.0 ->
        (if (e = 2 or e = 3) then i3 else (pre(b3) + i3)) ;
-  b4 = 0.0 -> 
+  b4 = 0.0 ->
        (if (e = 3 or e = 4) then i4 else (pre(b4) + i4)) ;
-  b5 = 0.0 -> 
+  b5 = 0.0 ->
        (if (e = 4 or e = 5) then i5 else (pre(b5) + i5)) ;
 
-  guarantee = b1 <= C and b2 <= C and b3 <= C and 
+  guarantee = b1 <= C and b2 <= C and b3 <= C and
   	    b4 <= C and b5 <= C;
 
   --%REALIZABLE i1, i2, i3, i4, i5;
@@ -347,7 +347,7 @@ the contract's guarantee $G$, and is explicitly defined to be such using the
 Finally, we define what each bucket's state should be through the entire
 duration of the game, using the local variables \textit{b1} to \textit{b5}.
 Initially, each bucket is empty, and with each transition to a new state, the contents depend on
-whether Cinderella chose the specific bucket, or an adjucent one. If this is the
+whether Cinderella chose the specific bucket, or an adjacent one. If this is the
 case, the contents of the bucket $b_i$ become equal to the amount of water that
 Stepmother puts in the corresponding input variable $i$, during the next turn.
 If the bucket was not covered by Cinderella's choice, then its contents are
@@ -395,7 +395,7 @@ machinery as a flag to indicate whether the current state is initial or not
 \caption{Part of the region of validity generated for the Cinderella-Stepmother
 example}
 \label{fg:snippet}
-\end{figure}  
+\end{figure}
 
 Considering the existence of undesirable constraints in $Q(s,i)$, the next step
 is to extract a region of validity that is only described using state variables.
@@ -454,4 +454,3 @@ necessary in order to construct a solution. Despite this, we were able to
 synthesize implementations for the Cinderella-Stepmother game without using any form of template, for any value of $C \geq 2$.
 This fact alone, provided us with solid foundations regarding the effectiveness of our approach in solving
 complex problems.
-         
