@@ -124,10 +124,23 @@ D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha,
   ``Compositional verification of architectural models,'' in \emph{NFM}.\hskip
   1em plus 0.5em minus 0.4em\relax Springer-Verlag, 2012, pp. 126--140.
 
+\bibitem{manna1971toward}
+Z.~Manna and R.~J. Waldinger, ``Toward automatic program synthesis,''
+  \emph{Communications of the ACM}, vol.~14, no.~3, pp. 151--165, 1971.
+
 \bibitem{DBLP:conf/popl/PnueliR89}
 A.~Pnueli and R.~Rosner, ``On the synthesis of a reactive module,'' in
   \emph{POPL}.\hskip 1em plus 0.5em minus 0.4em\relax {ACM} Press, 1989, pp.
   179--190.
+
+\bibitem{Bohy12}
+A.~Bohy, V.~Bruy{\`{e}}re, E.~Filiot, N.~Jin, and J.~Raskin, ``Acacia+, a tool
+  for {LTL} {S}ynthesis,'' in \emph{CAV}, 2012, pp. 652--657.
+
+\bibitem{Tini03}
+S.~Tini and A.~Maggiolo-Schettini, ``Compositional {S}ynthesis of {G}eneralized
+  {M}ealy {M}achines,'' \emph{Fundamenta Informaticae}, vol.~60, no. 1-4, pp.
+  367--382, 2003.
 
 \bibitem{Klein10}
 U.~Klein and A.~Pnueli, ``Revisiting {S}ynthesis of {GR}(1) {S}pecifications,''
@@ -141,15 +154,6 @@ R.~Ehlers, ``Symbolic bounded synthesis,'' in \emph{CAV}.\hskip 1em plus 0.5em
 C.-H. Cheng, Y.~Hamza, and H.~Ruess, ``Structural synthesis for gxw
   specifications,'' in \emph{CAV}.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer, 2016, pp. 95--117.
-
-\bibitem{Bohy12}
-A.~Bohy, V.~Bruy{\`{e}}re, E.~Filiot, N.~Jin, and J.~Raskin, ``Acacia+, a tool
-  for {LTL} {S}ynthesis,'' in \emph{CAV}, 2012, pp. 652--657.
-
-\bibitem{Tini03}
-S.~Tini and A.~Maggiolo-Schettini, ``Compositional {S}ynthesis of {G}eneralized
-  {M}ealy {M}achines,'' \emph{Fundamenta Informaticae}, vol.~60, no. 1-4, pp.
-  367--382, 2003.
 
 \bibitem{monmege2016real}
 B.~Monmege, T.~Brihaye, M.~Esti{\'e}venart, H.-M. Ho, G.~G. ULB, and
@@ -168,6 +172,29 @@ A.~Aziz, F.~Balarin, R.~Braton, and A.~Sangiovanni-Vincentelli, ``Sequential
 \bibitem{Chatterjee07}
 K.~Chatterjee and T.~A. Henzinger, ``Assume-{G}uarantee {S}ynthesis,''
   \emph{TACAS}, pp. 261--275, 2007.
+
+\bibitem{DBLP:conf/fmcad/CimattiGMT13}
+A.~Cimatti, A.~Griggio, S.~Mover, and S.~Tonetta, ``Parameter synthesis with
+  {IC3},'' in \emph{{FMCAD}}.\hskip 1em plus 0.5em minus 0.4em\relax {IEEE},
+  2013, pp. 165--168.
+
+\bibitem{cimatti2015hycomp}
+------, ``Hycomp: An smt-based model checker for hybrid systems,'' in
+  \emph{International Conference on Tools and Algorithms for the Construction
+  and Analysis of Systems}.\hskip 1em plus 0.5em minus 0.4em\relax Springer,
+  2015, pp. 52--67.
+
+\bibitem{piterman2006synthesis}
+N.~Piterman, A.~Pnueli, and Y.~Sa’ar, ``Synthesis of reactive (1) designs,'' in
+  \emph{International Workshop on Verification, Model Checking, and Abstract
+  Interpretation}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2006, pp.
+  364--380.
+
+\bibitem{preiner2017counterexample}
+M.~Preiner, A.~Niemetz, and A.~Biere, ``Counterexample-guided model
+  synthesis,'' in \emph{International Conference on Tools and Algorithms for
+  the Construction and Analysis of Systems}.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer, 2017, pp. 264--280.
 
 \bibitem{walker2014predicate}
 A.~Walker and L.~Ryzhyk, ``Predicate abstraction for reactive synthesis,'' in

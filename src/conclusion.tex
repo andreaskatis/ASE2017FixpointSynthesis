@@ -21,15 +21,14 @@ validity-guided approach can lead to the solution of a bigger class of problems.
 
 Future work in this area is rich with challenges and promising directions. The
 most interesting question is how we can possibly improve \jsynvg's
-speed ofconvergence. Without excluding techniques such as counterexample
-refinement and predicate abstraction, an potential improvement could be achieved
-through the use of a more compact transition relation. As a minor addition, we
-plan on writing an extensive proof regarding the soundness of our approach,
-preferably using a proof assistant. As for the synthesized implementations
-themselves, there are several promising concepts that can lead to further
-improvement, such as the use of Inductive Validity Cores~\cite{Ghass16}, which
-can be potenitally used to identify the core elements in a synthesized
-implementation that lead to the satisfaction of the specification. Using only
+speed of convergence. Not excluding techniques such as counterexample
+refinement and predicate abstraction~\cite{walker2014predicate}, a potential
+improvement could be achieved through the use of a more compact transition
+relation. Minor contributions include the development of a  machine-checked
+proof regarding the soundness of our approach, as well as the potential use of a
+subprocess that provides collections of equivalent implementations, rather than
+a sigle witness. As for the implementations themselves, there are
+several promising concepts that can lead to further optimization, such as the use of Inductive Validity Cores~\cite{Ghass16}, which can be potenitally used to identify the core elements in a synthesized implementation that lead to the satisfaction of the specification. Using only
 the core elements, we can effectively reduce the size of the implementations,
 and improve their performance. Finally, a more abstract, but rather interesting
 topic of research, is how we can transition from implementations that use

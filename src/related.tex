@@ -1,41 +1,61 @@
 \section{Related Work}
 \label{sec:related}
 
-Pnueli and Rosner were the
-first to involve the formal definition of a reactive system's realizability (or
-implementability), introduce the notion of a \emph{Skolem paradigm}, as well as
-describe a process to synthesize implementations for temporal
-specifications~\cite{DBLP:conf/popl/PnueliR89}.	
 
-Since then, a vast variety of techniques have been developed. Efficient
-algorithms were proposed for subsets of propositional LTL
-\cite{Klein10,ehlers2010symbolic,cheng2016structural} simple
-LTL formulas \cite{Bohy12,Tini03}, as well as other temporal
-logics \cite{monmege2016real,Hamza10}, such as SIS~\cite{Aziz95}.
-Component-based approaches have also been explored in~\cite{Chatterjee07}.
+Research in the field of program synthesis attributes its origins in the 1970s,
+when Manna and Waldinger~\cite{manna1971toward} first introduced a synthesis
+procedure using principles of theorem proving. Almost two decades later, Pnueli
+and Rosner~\cite{DBLP:conf/popl/PnueliR89} first formally described the
+implementability of reactive systems, considering first order logic formulas
+that stem from temporal specifications. In the same work, they provided a
+complete approach to synthesize finite-state implementations through the
+construction of deterministic Rabin automata.
 
-Template-based approaches to
-synthesis described in~\cite{srivastava2013template,beyene2014constraint} focus on the exploration of programs that satisfy a specification that is refined after each
-iteration, following the basic principles of deductive synthesis.
-In particular, the \textsc{E-HSF} engine~\cite{beyene2014constraint}, 
-uses a predefined set of templates to search for potential Skolem
-relations and thus to solve $\forall\exists$-formulas. 
-In contrast, our synthesis algorithm is template-free.
-Enumeration, is not an optimal choice, because the Skolem functions generated from
-our benchmarks may contain 10-20 branches of the $ite$-statement. In these
-cases, an enormous number of potential shapes may exist, thus prohibiting the use of
-enumeration. 
+In the recent years, program synthesis has enjoyed a vast variety of
+contributions under numerous contexts. Gulwani~\cite{gulwani2010dimensions}
+presented an extended survey, hinting future research directions. Synthesis
+algorithms have been proposed for simple LTL specification~\cite{Bohy12,Tini03}
+subsets of it~\cite{Klein10,ehlers2010symbolic,cheng2016structural}, as well as under other temporal logics~\cite{monmege2016real,Hamza10}, such as SIS~\cite{Aziz95}.
+Chatterjee and Henzinger~\cite{Chatterjee07} proposed a novel component-based approach using the notion of Assume-Guarantee contracts. 
 
-Inductive synthesis is an active area of research where the main
-goal is the generation of an inductive invariant that can be used to describe the space of programs that are guaranteed to satisfy the given specification~\cite{flener2001inductive}. This idea is mainly supported by the use of SMT solvers to guide the invariant refinement through traces that violate the requirements, known as counterexamples. Our approach differentiates from this approach by only considering the capability of constructing k-inductive proofs, with no further refinement of the problem space.
+The work presented in this paper is closely related to approaches that attempt
+to construct infinite-state implementations. Some focus on the continuous
+interaction of the user with the underlying machinery, either through the use of templates~\cite{srivastava2013template,beyene2014constraint} that
+provide non-intuitive clarifications, or a framework where the user attempts to
+guide the solver by choosing reactions from a collection of different
+interpretations~\cite{ryzhyk2016developing}. We differentiate from this
+direction by providing an approach that requires no user interaction to discover solutions.
 
-A rather important contribution in the area is the recently published work by
-Ryzhyk and Walker~\cite{ryzhykdeveloping}, where they share their
-experience in developing and using a reactive synthesis tool called \textsc{Termite} for
-device drivers in an industrial environment. The driver synthesis uses
-a predicate abstraction technique~\cite{walker2014predicate} to efficiently
-cover the state space for both safety and liveness GR(1) specifications,
-leveraging the theory of fixed-size vectors. The authors follow a user-guided
-approach, that continuously interacts with the user in order to combat ambiguities in the specification.
-In contrast, our approach supports safety specifications using infinite-state,
-linear-arithmetic domains and follows a ``hands-off'', automated process.
+The concept of synthesizing implementations by discovering fixpoints was mostly
+inspired by the IC3 algorithm, the technique also known as Property Directed
+Reachability~\cite{bradley2011sat,een2011efficient}, which was first introduced
+in the context of verification. Work from Cimatti \textit{et al.} effectively
+applied this idea for synthesis, albeit that of parameters, in the
+\textsc{HyComp} model checker~\cite{DBLP:conf/fmcad/CimattiGMT13, cimatti2015hycomp}.
+Discovering fixpoints to synthesize reactive designs, instead, was first
+extensively covered by Piterman \textit{et al.}~\cite{piterman2006synthesis},
+who proved that the problem can be solved in cubic time, for GR(1) specifications.
+However, their proposed algorithm is significantly different from this paper. It
+requires the discovery of multiple greatest fixpoints for the state variables,
+each one covering a least fixpoint of the input variables. If the specification
+is realizable, then the entirety of the the input space is covered by at least
+one of the greatest fixpoints. For the purposes of our work, we only require the
+discovery of a single greatest fixpoint over the system's outputs, considering
+the entire region of valid inputs at all times. The construction of the witness
+in the following process, fragments the input space through the use of Model-Based Projections, rather than computing fixpoints.
+Unfortunately, a straightforward comparison between the two techniques is
+currently not feasible, but we hope that it is included as part of future work.
+
+Finally, an interesting work was recently published by Preiner \textit{et
+al.}~\cite{preiner2017counterexample}, where the authors construct candidate
+witnesses and proceed to check their validity with respect to the specification.
+Internally, a counterexample-guided refinement process is
+used~\cite{reynolds2015counterexample} for the purposes of quantifier
+elimination. Our approach instead uses Model-Based Projection as the main
+quantifier elimination process, which is essential in the context of this paper,
+since the witnesses constructed for the most complex contracts are described by
+nested if-then-else expressions of depth (i.e. number of branches) 10-20.
+Enumeration of Skolem functions, a technique that is also followedi n the E-HSF
+engine~\cite{beyene2014constraint} is not an optimal strategy for these cases,
+since the space of of candidate solutions explodes.
+

@@ -2,6 +2,10 @@
 %%There is just one section and two subsections.
 \documentclass[10pt,conference]{IEEEtran}
 
+%to handle ranges of citations in IEEEtran
+\usepackage[noadjust]{cite}
+\renewcommand{\citepunct}{,\penalty\citepunctpenalty\,}
+\renewcommand{\citedash}{--}% optionally
 
 %To fix ``fi'' encoding
 \usepackage{cmap}
