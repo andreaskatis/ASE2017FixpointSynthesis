@@ -1,4 +1,4 @@
-\section{Validity-Guided Synthesis from Assume-Guarantee Contracts}
+\section{Background}
 \label{sec:synthesis}
 
 
@@ -37,7 +37,7 @@ implementation is the main focus of \emph{program synthesis}.
 It is apparent that the example contract above is therefore \emph{realizable},
 and an efficient synthesis procedure would be capable of providing at least one
 implementation. Nevertheless, it is important to consider a variation of the
-example, where $A = \emptyset$. This is a practical case of an
+example, where $A = \varnothing$. This is a practical case of an
 \emph{unrealizable} contract, as there is no feasible implementation that can
 correctly react to the environment assigning values to $x$ and $y$, such that
 $x = y$.
@@ -80,58 +80,56 @@ intersects with the set of initial states. As such, to conclude that a contract
 is realizable, we require that
 
 \begin{equation}
-\viable(s) \land G_I(s) \neq \emptyset
+\viable(s) \land G_I(s) \neq \varnothing
 \label{eq:nonempty}
 \end{equation}
 
 The intuition behind our proposed algorithm in this paper relies on the
 discovery of a greatest fixpoint that only contains viable states.
 
+\input{aeval}
 
-\subsection{Validity-Guided Synthesis from Contracts}
+\section{Validity-Guided Synthesis from Assume-Guarantee Contracts}
 \label{sec:synth}
 
-\begin{algorithm*}[!t]
+\begin{algorithm}[!t]
 \footnotesize
-\caption{Validity-Guided Synthesis}\label{alg:synthesis}
+\caption{\jsynvg (A : assumptions, G : guarantees)}\label{alg:synthesis}
 \begin{algorithmic}[1]
-\Procedure{\jsynvg}{A : assumptions, G : guarantees}
-	\State $\skolems \gets null$;
+%\Procedure{\jsynvg}{A : assumptions, G : guarantees}
 	\State $F(s) \gets true$;\Comment{Fixpoint of viable states}
 	\While{true}
-		\State $\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'.
-			G_{T}(s,i,s') \land F(s')$;
-		\State $aevalResult \gets \aeval(\phi)$;
-		\If{$(\isValid(aevalResult))$}
-			\State $\skolems \gets (aevalResult.\skolems)$;
+		\State $\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s')$;
+		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
+		\If{$\isValid(\phi)$}
 			\If{$G_{I}(s) \land F(s) \neq false$}
-				\Return \realizable, %\textcolor{red}{\init},
-		 		\skolems;
-			\Else{}
-		 		\Return \unrealizable;\Comment{Empty set of initial states}
+				\Return $\tuple{\realizable, \skolems}$;
+			\Else{\Comment{Empty set of initial states}}
+		 		\Return $\tuple{\unrealizable, \varnothing}$;
+				\State
 		 	\EndIf
-		\Else
-			\State $Q(s,i) \gets aevalResult.validSubset$;\Comment{Extract region of
-			validity $Q(s,i)$}
+		\Else{\Comment{Extract region of validity $Q(s,i)$}}
+			\State $Q(s,i) \gets \subs$;
 			\If{$Q(s,i) = false$}
-				\Return \unrealizable;
+				\Return $\tuple{\unrealizable, \varnothing}$;
+				\State
 			\EndIf
 			\State $\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
 			Q(s,i)$;
-			\State $aevalResult' \gets \aeval(\phi')$;
-			\If{$(\isValid(aevalResult'))$}\Comment{Check if $Q(s,i)$ contains only
-			unsafe states}
-				\State $\skolems \gets (aevalResult'.\skolems)$;
-				\Return \unrealizable, \skolems;\Comment{Extract witnessing cex}
+			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
+			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
+			        \State\Comment{Extract witnessing cex}
+				\Return $\tuple{\unrealizable, \skolems'}$;
+				\State
 			\Else{}
-				\State $W(s) \gets aevalResult'.validSubset$;
+				\State $W(s) \gets \subs'$;
 				\State $F(s) = F(s) \land \lnot W(s)$;\Comment{Refine candidate fixpoint}
 			\EndIf
 		\EndIf
 	\EndWhile
-\EndProcedure
+%\EndProcedure
 \end{algorithmic}
-\end{algorithm*}
+\end{algorithm}
 
 The main contribution presented in this paper, is a novel idea that effectively
 uses the information provided by \textit{regions of validity} to compute a
@@ -139,6 +137,8 @@ greatest fixpoint of safe states. In our context, this fixpoint is not only
 usable as a proof to the realizability of a specification, but also leads to the
 construction of a witness that can be translated with a straightforward process
 into a functional and efficient implementation.
+
+\grigory{Please, add references to lines from the text}
 
 Algorithm~\ref{alg:synthesis} shows this validity-guided technique, which we
 named \jsynvg.
@@ -162,6 +162,7 @@ quantified variables, \aeval provides an exact subset of $F(s) \land A(s,i)$, na
 $Q(s,i)$, which, if plugged in the original left-hand side of $\phi$, makes the
 resulting formula valid. We will refer to such subsets as \textit{regions of
 validity}.
+\grigory{now, the definition is in Sect.~\ref{sec:aeval}.}
 
 At this point, one could falsely assume that replacing $F(s) \land A(s,i)$ with
 $Q(s,i)$ is sufficient to solve our problem, and use the resulting witness as a
@@ -205,6 +206,8 @@ certain assignments to input variables, for which the condition of viability doe
 hold, for any state. We leave the specifics regarding the meaning and usability
 of such counterexamples as potential future work.
 
+\subsection{Soundness}
+
 From the previous, it is straightforward to show that
 Algorithm~\ref{alg:synthesis} is complete, since it either terminates by
 constructing a fixpoint, or when the computed region of validity is the empty
@@ -214,7 +217,7 @@ formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
 use the fixed point theorem that was first stated by Alfred Tarski~\cite{tarski1955lattice}.
 
 \begin{lemma} Consider the system
-$\mathfrak{U} = \langle S, T \rangle$. With $S$, we denote the set of
+$\mathfrak{U} = \tuple{S, T}$. With $S$, we denote the set of
 subsets of the orignal state space, such that each subset contains assignments that lead to the
 satisfiability of Equation~\ref{eq:viable}. By $T$, we refer to the
 transition relation between any two states, that establishes a partial order
@@ -246,7 +249,7 @@ $f(B) \subseteq f(A)$.
 
 \begin{theorem}[Soundness of Fixpoint]
 The set $P$ of all fixpoints in Algorithm~\ref{alg:synthesis} is non
-empty, and the system $\langle P, T \rangle$ is a complete lattice.
+empty, and the system $\tuple{P, T}$ is a complete lattice.
 \label{thm:fixpoint}
 \end{theorem}
 \begin{proof}
@@ -262,7 +265,7 @@ fixpoints.
 
 Since all three conditions of Tarski's Fixed Point theorem are satisfied by our
 solution, we can conclude that $P$ is a non empty set, while the system
-$\langle P, T \rangle$ is a complete lattice, as it contains a \lub, which is
+$\tuple{P, T}$ is a complete lattice, as it contains a \lub, which is
 the solution to a realizable contract, while $\glb = false$, and corresponds to
 the solution for an unrealizable contract.
 \end{proof}

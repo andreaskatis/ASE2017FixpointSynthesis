@@ -63,6 +63,7 @@
 \newcommand{\viable}{{\mathsf {Viable}}}
 \newcommand{\glb}{\textit {GLB}\xspace}
 \newcommand{\lub}{\textit {LUB}\xspace}
+\newcommand{\tuple}[1]{\langle #1 \rangle}
 
 \renewcommand{\labelitemi}{\tiny$\blacksquare$}
 
@@ -77,12 +78,14 @@
 \newcommand{\realizable}{\textsc{realizable}}
 \newcommand{\unrealizable}{\textsc{unrealizable}}
 \newcommand{\skolems}{\textit{Skolem}}
+\newcommand{\subs}{\textit{validRegion}}
 \newcommand{\init}{\textit{Init}}
 \newcommand{\isValid}{\textsc{isValid}\xspace}
 \newcommand{\isInvalid}{\textsc{isInvalid}\xspace}
 %\newcommand{\isSat}{\textsc{isSat}\xspace}
 \newcommand{\isUnsat}{\textsc{isUnsat}\xspace}
 
+\newcommand\eqdef{\mathrel{\stackrel{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
 
 \newcounter{template}
 \newenvironment{template}[1][htb]
@@ -116,7 +119,7 @@ problem space is recursively refined, with the goal being the discovery of a
 fixpont that effectively describes a region of safe states. If such a fixpoint
 is found, we construct a witness that can be directly transformed into an
 implementation using mainstream programming languages, like C. We implemented
-this algorithm in the \jkind model checker, and exersised it against contracts
+this algorithm in the \jkind model checker, and exercised it against contracts
 written using the Lustre specification language. Experimental results show how
 the new algorithm improves upon previous work on synthesizing programs from k-inductive proofs of
 realizability, yielding better performance as well as soundness for ``unrealizable'' results.
@@ -124,7 +127,6 @@ realizability, yielding better performance as well as soundness for ``unrealizab
 
 \input{intro}
 \input{synthesis}
-\input{aeval}
 \input{impl}
 \input{results}
 \input{related}
