@@ -1,6 +1,13 @@
 \subsection{\aeval}
 \label{sec:aeval}
 
+\begin{figure}[!t]
+\centering
+\includegraphics[width=2.5in]{aeval_invalid}
+\caption{Region of validity computed for an example requiring \aeval to iterate two times.}
+\label{fg:aeval}
+\end{figure}
+
 \aeval~\cite{fedyukovich2015automated} is an algorithm to decide validity and to extracts Skolem functions.
 It takes as input a formula of the form $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$, 
 where $A(s)$ has only existential quantifiers, and $G(s,s')$ is quantifier-free.
@@ -9,7 +16,7 @@ While deciding the validity, \aeval iteratively enumerates models of $A(s) \land
 We say that after $n$ iterations, \aeval establishes a formula $R_n(s) \eqdef \bigvee_{i=1}^n P_i(s)$ which is by definition an under-approximation of $\exists s' . G (s, s')$.
 
 If after $n$ iterations, it happens that $A(s) \Rightarrow R_n(s)$ then $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is valid, and \aeval generates a Skolem function as described in~\cite{katis2016synthesis}.
-Alternatively, if $A(s) \land  G (s, s') \land \neg{R_n (s, s')}$ is unsatisfiable, then $A(s) \land \neg G (s, s')$ is satisfiable, or equivalently $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid.
+Alternatively, if $A(s) \land  G (s, s') \land \neg{R_n (s, s')}$ is unsatisfiable, then $A(s) \land \neg G (s, s')$ is satisfiable, or equivalently $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid (see an example in Fig.~\ref{fg:aeval}).
 In both cases, we say that $A(s) \land R_n(s)$ is a \emph{region of validity}, meaning that $\forall s \,.\,  A(s) \land R_n(s) \Rightarrow \exists s' . G(s,s')$ is valid by construction.
 
 \begin{lemma}
