@@ -118,11 +118,13 @@ discovery of a greatest fixpoint that only contains viable states.
 			Q(s,i)$;
 			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
 			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
-			        \State\Comment{Extract witnessing cex}
 				\Return $\tuple{\unrealizable, \skolems'}$;
-				\State
+		        \State\Comment{Extract witnessing cex}
 			\Else{}
 				\State $W(s) \gets \subs'$;
+				\If{$W(s) = false$}
+					\Return $\tuple{\unrealizable, \varnothing}$;
+				\EndIf
 				\State $F(s) = F(s) \land \lnot W(s)$;\Comment{Refine candidate fixpoint}
 			\EndIf
 		\EndIf
@@ -138,19 +140,18 @@ usable as a proof to the realizability of a specification, but also leads to the
 construction of a witness that can be translated with a straightforward process
 into a functional and efficient implementation.
 
-\grigory{Please, add references to lines from the text}
 
 Algorithm~\ref{alg:synthesis} shows this validity-guided technique, which we
 named \jsynvg.
-We initialize the process by defining the fixpoint $F(s)$ to be equal to $true$.
-Eventually, the algorithm attempts to converge to such a fixpoint $F(s)$ that
-only contains viable states, considering Equation~\ref{eq:viable}
+Line 1 initializes the process by defining the fixpoint $F(s)$ to be equal to
+$true$. The algorithm then attempts to converge to a fixpoint $F(s)$
+that only contains viable states, considering Equation~\ref{eq:viable}
 and~\ref{eq:nonempty}.
 We therefore construct the formula $\phi = \forall s,i. F(s) \land A(s,i)
 \Rightarrow \exists s'.
 			G_{T}(s,i,s') \land F(s')$, and provide it as an input to \aeval, an efficient
-Skolemizer for $\forall\exists$ formulas. \aeval is particularly focused on
-determining the validity of $\phi$. If the formula is valid, then a witness
+Skolemizer for $\forall\exists$ formulas (Line 4). \aeval is particularly
+focused on determining the validity of $\phi$. If the formula is valid, then a witness
 \textit{Skolem} is constructed, containing valid assignments to the
 existentially quantified variables of $\phi$. In the context of viability, this
 witness is capable of providing viable states that can be used as a safe
@@ -158,12 +159,11 @@ reaction, considering the precedence of a viable state and an input that
 satisfies the assumptions.
 
 If $\phi$ is not true for every possible assignment of the universally
-quantified variables, \aeval provides an exact subset of $F(s) \land A(s,i)$, namely
-$Q(s,i)$, which, if plugged in the original left-hand side of $\phi$, makes the
-resulting formula valid. We will refer to such subsets as \textit{regions of
-validity}.
-\grigory{now, the definition is in Sect.~\ref{sec:aeval}.}
-
+quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
+(Line 12).
+%an exact subset of $F(s) \land A(s,i)$, namely $Q(s,i)$, which, if plugged in
+% the original left-hand side of $\phi$, makes the resulting formula valid. We will refer to such subsets as \textit{regions of
+%validity}.
 At this point, one could falsely assume that replacing $F(s) \land A(s,i)$ with
 $Q(s,i)$ is sufficient to solve our problem, and use the resulting witness as a
 candidate implementation. This is not the case however, as $Q(s,i)$ is a subset
@@ -177,8 +177,8 @@ towards eliminating this issue.
 The main concept to properly refine $F(s)$, is to extract a region of validity
 that only involves constraints over state variables. To achieve this, we ask for
 the validity of the formula $\phi' = \forall s. F(s) \Rightarrow \exists
-i. A(s,i) \land \lnot Q(s,i)$. If $\phi'$ is a valid formula, then for any
-assignment of the state variables $s$, we have a valid input (i.e. that
+i. A(s,i) \land \lnot Q(s,i)$ (Line 17). If $\phi'$ is a valid formula, then for
+any assignment of the state variables $s$, we have a valid input (i.e. that
 satisfies the assumptions), for which the states are taken outside of the region
 of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
 safe in this context. On the other hand, if $\phi'$ is not valid, \aeval computes
@@ -186,11 +186,10 @@ a new region of validity, namely $W(s)$. The new region is a strict subset of
 $F(s)$, is described using constraints over state variables only, and entails
 the existence of unsafe states in $F(s)$, considering valid inputs.
 
-Having this new region of validity, we can finally refine $F(s)$, by conjucting
-to it the negation of $W(s)$. Despite the fact that we now have a refined
-candidate fixpoint, we are not yet done, as $\lnot W(s)$ is not an exact region
-of validity, with respect to $Q(s,i)$. As such there might still be states in
-$Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
+Having a new region of validity that is not equal to \textit{false} (Line 23),
+we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 25). Despite the fact that we now have a refined candidate fixpoint, we are not yet done,
+as $\lnot W(s)$ is not an exact region of validity, with respect to $Q(s,i)$. As
+such there might still be states in $Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
 process by repeating the top-level \aeval query, with $F(s) = F(s) \land \lnot
 W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
 describes the set of viable states, or reach the case where $F(s) = false$, and
@@ -427,7 +426,7 @@ state variables, for this particular subset.
  \begin{Verbatim}[fontsize=\scriptsize]
 ...
 if (((!(b1 + i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
-  e = 3.0;
+  e = 3;
   b1 = b1 + i1;
   b2 = b2 + i2;
   b3 = i3;
@@ -435,7 +434,7 @@ if (((!(b1 + i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
   b5 = b5 + i5;
 } else {
   if (((!(i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
-  e = 5.0;
+  e = 5;
   b1 = i1;
   b2 = b2 + i2;
   b3 = b3 + i3;
@@ -452,8 +451,9 @@ example}
 As is discussed by Beyene \textit{et al.}~\cite{beyene2014constraint}, the
 Cinderella-Stepmother is a rather challenging game. In particular, for the
 cases where $1.5 \leq C \leq 3.0$, the problem becomes non-trivial, and their
-proposed work showed how the use of additional, non-intuitive information is
-necessary in order to construct a solution. Despite this, we were able to
-synthesize implementations for the Cinderella-Stepmother game without using any form of template, for any value of $C \geq 2$.
-This fact alone, provided us with solid foundations regarding the effectiveness of our approach in solving
-complex problems.
+work showed how familiarity with the problem can help alleviate this complexity
+through the use of pre-defined templates. Despite this, we were still
+able to synthesize implementations for the Cinderella-Stepmother game for any
+value of $C \geq 2$, using a completely automatic approach. This fact alone,
+provided us with solid foundations regarding the algorithm's effectiveness in
+solving complex problems.
