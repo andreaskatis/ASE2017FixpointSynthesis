@@ -39,13 +39,12 @@ formula's satisfiability, which can be directly transformed into the
 language intended for the system's implementation.
 
 The algorithm was implemented as a feature to the \jkind model checker, which
-already had unofficial support to program synthesis according to work based on
-k-inductive proofs of a contract's
+already had unofficial support to program synthesis according to work from
+Katis~\textit{et al.} based on k-inductive proofs of a contract's
 realizability~\cite{gacek2015towards,katis2016towards,katis2016synthesis}.
-Our approach is completely independent of the k-inductive method, but is still
-based on the extraction of a witness that satisfies a $\forall\exists$ formula, using the \aeval Skolemizer~\cite{fedyukovich2015automated}. To extract such a
-witness, we do not depend on a k-inductive proof, but instead use the
-\textit{regions of validity} that \aeval can generate from non-valid formulas,
+Our approach does not depend on k-induction, but is still based on the general
+concept of extracting a witness that satisfies a $\forall\exists$ formula, using
+the \aeval Skolemizer~\cite{fedyukovich2015automated}. To extract such a witness, we do not depend on a k-inductive proof, but instead use the \textit{regions of validity} that \aeval can generate from non-valid formulas,
 to reach a fixpoint of satisfiable assignments to state variables.
 This approach is a direct improvement over the k-inductive method in two
 important aspects; performance, and soundness of 'unrealizable' results. While

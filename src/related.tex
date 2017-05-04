@@ -25,7 +25,13 @@ templates~\cite{srivastava2013template,beyene2014constraint}, or environments wh
 interpretations~\cite{ryzhyk2016developing}. We differentiate from this
 direction by providing a completely automatic approach that does not require
 human ingenuity to find a solution and most importantly, the user
-does not need to be deeply familiar with the problem at hand.
+does not need to be deeply familiar with the problem at hand. A ``hands-off''
+approach has been proposed in the past by Katis \textit{et
+al.}~\cite{gacek2015towards,katis2016towards,katis2016synthesis}. The work is
+based on the concept of extracting collections of reactions that witness the satisfaction of a k-inductive proof on the contract's realizability. In
+Section~\ref{sec:results} we were able to effectively show in practice how a
+validity-guided approach significantly improves upon this work, by using a
+fixpoint-generating technique rather than the principle of k-induction.
 
 The concept of synthesizing implementations by discovering fixpoints was mostly
 inspired by the IC3 algorithm, the technique also known as Property Directed
@@ -44,8 +50,9 @@ one of the greatest fixpoints. For the purposes of our work, we only require the
 discovery of a single greatest fixpoint over the system's outputs, considering
 the entire region of valid inputs at all times. The construction of the witness
 in the following process, fragments the input space through the use of Model-Based Projections, rather than computing fixpoints.
-Unfortunately, a straightforward comparison between the two techniques is
-currently not feasible, but we hope that it is included as part of future work.
+A straightforward comparison between the two techniques, while not currently
+supported, is of particular interest to us and we will be looking forward to
+achieving this as part of future work.
 
 Finally, an interesting work was recently published by Preiner \textit{et
 al.}~\cite{preiner2017counterexample}, where the authors construct candidate
