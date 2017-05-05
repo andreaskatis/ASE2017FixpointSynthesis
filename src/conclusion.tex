@@ -3,12 +3,12 @@
 
 In this paper, we presented a novel and elegant approach towards the synthesis
 of reactive system implementations, using only the knowledge provided by the
-system specification, using linear integer and real arithmetic. The approach is
-directly inspired from previous work on Property Directed Reachability, having the objective of constructing inductive
-invariants that can be used as a proof of the specification's realizability. The
-main objective is to converge to a fixpoint by iteratively blocking subsets of
+system specification expressed in linear integer and real arithmetic. The approach is
+directly inspired from previous work on Property Directed Reachability, with the objective being the construction of inductive
+invariants that can be used as a proof to the specification's realizability. The
+main goal is to converge to a fixpoint by iteratively blocking subsets of
 unsafe states from the problem space. This is achieved through the continuous
-extraction of regions of validity which hint towards subsets of states that may
+extraction of regions of validity which hint towards subsets of states that
 lead to a candidate implementation.
 
 This is the first complete attempt, to the best of our knowledge, on handling
@@ -21,10 +21,10 @@ validity-guided approach can lead to the solution of a bigger class of problems.
 
 Future work in this area is rich with challenges and promising directions. The
 most interesting question is how we can possibly improve \jsynvg's
-speed of convergence. Not excluding techniques such as counterexample
+speed of convergence. Not excluding techniques such as counterexample-guided
 refinement and predicate abstraction~\cite{walker2014predicate}, a potential
 improvement could be achieved through the use of a more compact transition
-relation. Minor contributions include the development of a  machine-checked
+relation. Other minor contributions include the development of a  machine-checked
 proof regarding the soundness of our approach, as well as the potential use of a
 subprocess that provides collections of equivalent implementations, rather than
 a sigle witness. As for the implementations themselves, there are

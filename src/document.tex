@@ -102,27 +102,44 @@
 
 
 \begin{document}
-\title{Validity Guided Synthesis from Assume-Guarantee Contracts}
+\title{Validity Guided Synthesis of Reactive Systems from Assume-Guarantee Contracts}
+
+\iffalse
+\author{\IEEEauthorblockN{Andreas Katis\IEEEauthorrefmark{1}, Grigory Fedyukovich\IEEEauthorrefmark{2}, Huajun
+Guo\IEEEauthorrefmark{1}, Andrew Gacek\IEEEauthorrefmark{3}\\ John
+Backes\IEEEauthorrefmark{3}, Arie Gurfinkel\IEEEauthorrefmark{4} and
+Michael W. Whalen\IEEEauthorrefmark{1}}
+\IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Computer Science and
+Engineering,
+University of Minnesota\\
+Email: \{katis001,guoxx663\}@umn.edu, whalen@cs.umn.edu}
+\IEEEauthorblockA{\IEEEauthorrefmark{2}University of Washington Paul G. Allen School of Computer Science \& Engineering\\
+Email: grigory@cs.washington.edu}
+\IEEEauthorblockA{\IEEEauthorrefmark{3}Rockwell Collins Advanced Technology Center\\
+Email: \{andrew.gacek,john.backes\}@rockwellcollins.com}
+\IEEEauthorblockA{\IEEEauthorrefmark{4}Department of Electrical and Computer
+Engineering, University of Waterloo\\
+Email: agurfinkel@uwaterloo.ca}}
+\fi
 \maketitle
 
 \begin{abstract}
-Automated synthesis of programs using only system specification is one of
+Automated synthesis of reactive systems using only specification knowledge is one of
 the most popular and well explored subjects in formal verification. A variety of
 approaches have been proposed in the recent years, through inductive and
-functional synthesis, while template-based and counterexample-guided techniques
+functional synthesis, while template-based, counterexample-guided and predicate abstraction techniques
 have been proved useful towards extending the applicability of such algorithms
 to solving difficult problems. In this paper, we propose a novel approach to
 program synthesis, which is based on the validity of a $\forall\exists$-formula.
-The approach is inspired from similar techniques that effectively construct
-inductive invariants, like Property Directed Reachability, in the sense that the
-problem space is recursively refined, with the goal being the discovery of a
-fixpont that effectively describes a region of safe states. If such a fixpoint
+The approach is inspired from verification techniques that construct
+inductive invariants, like Property Directed Reachability. The original
+problem space is recursively refined by blocking out regions of unsafe states, with the goal being the discovery of a
+fixpont that describes a region containing safe reactions. If such a fixpoint
 is found, we construct a witness that can be directly transformed into an
 implementation using mainstream programming languages, like C. We implemented
-this algorithm in the \jkind model checker, and exercised it against contracts
+the algorithm in the \jkind model checker, and exercised it against contracts
 written using the Lustre specification language. Experimental results show how
-the new algorithm improves upon previous work on synthesizing programs from k-inductive proofs of
-realizability, yielding better performance as well as soundness for ``unrealizable'' results.
+the new algorithm yields better performance as well as soundness for ``unrealizable'' results when compared to \jkind's existing synthesis procedure, an approach that is based on the construction of k-inductive proofs of realizability.
 \end{abstract}
 
 \input{intro}
@@ -131,6 +148,7 @@ realizability, yielding better performance as well as soundness for ``unrealizab
 \input{results}
 \input{related}
 \input{conclusion}
+
 
 %\subsubsection*{\textbf{Acknowledgments}}
 %This work was funded by DARPA and AFRL under contract FA8750-12-9-0179 (Secure

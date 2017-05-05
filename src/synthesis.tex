@@ -85,7 +85,7 @@ is realizable, we require that
 \end{equation}
 
 The intuition behind our proposed algorithm in this paper relies on the
-discovery of a greatest fixpoint that only contains viable states.
+discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extract a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
 
 \input{aeval}
 
@@ -279,11 +279,9 @@ problem, the two player game between Cinderella and her wicked
 Stepmother, first  expressed by Bodlaender \textit{et
 al.}~\cite{bodlaender2012cinderella}.
 
-The main objective for Cinderella (i.e. the reactive system) is to keep a
+The main objective for Cinderella (i.e. the reactive system) is to prevent a
 collection of buckets from overflowing with water. On the other hand,
-Cinderella's Stepmother (i.e. the system's environment), attempts to fill the
-buckets with water in such a manner that a bucket overflow must eventually
-happen.
+Cinderella's Stepmother (i.e. the system's environment) refills the buckets with a predifined amount of water that is distributed in a random fashion between the buckets.
 For the running example, we chose an instance of the game that has been
 previously used in template-based synthesis~\cite{beyene2014constraint}. In this instance, the game is described
 using five buckets, where each bucket can contain up to two units of water.

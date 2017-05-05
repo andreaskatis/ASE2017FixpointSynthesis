@@ -40,14 +40,12 @@ in the context of verification. Work from Cimatti \textit{et al.} effectively
 applied this idea for synthesis, albeit that of parameters, in the
 \textsc{HyComp} model checker~\cite{DBLP:conf/fmcad/CimattiGMT13, cimatti2015hycomp}.
 Discovering fixpoints to synthesize reactive designs, instead, was first
-extensively covered by Piterman \textit{et al.}~\cite{piterman2006synthesis},
-who proved that the problem can be solved in cubic time, for GR(1) specifications.
+extensively covered by Piterman \textit{et al.}~\cite{piterman2006synthesis}
+who proved that the problem can be solved in cubic time for the class of GR(1) specifications.
 However, their proposed algorithm is significantly different from this paper. It
 requires the discovery of multiple greatest fixpoints for the state variables,
 each one covering a least fixpoint of the input variables. If the specification
-is realizable, then the entirety of the the input space is covered by at least
-one of the greatest fixpoints. For the purposes of our work, we only require the
-discovery of a single greatest fixpoint over the system's outputs, considering
+is realizable, then the entirety of the the input space is covered by the greatest fixpoints. For the purposes of our work, we only require the discovery of a single greatest fixpoint over the system's outputs, considering
 the entire region of valid inputs at all times. The construction of the witness
 in the following process, fragments the input space through the use of Model-Based Projections, rather than computing fixpoints.
 A straightforward comparison between the two techniques, while not currently
@@ -63,7 +61,7 @@ elimination. Our approach instead uses Model-Based Projection as the main
 quantifier elimination process, which is essential in the context of this paper,
 since the witnesses constructed for the most complex contracts are described by
 nested if-then-else expressions of depth (i.e. number of branches) 10-20.
-Enumeration of Skolem functions, a technique that is also followedi n the E-HSF
+Enumeration of Skolem functions, a technique that is also followed in the E-HSF
 engine~\cite{beyene2014constraint} is not an optimal strategy for these cases,
 since the space of of candidate solutions explodes.
 

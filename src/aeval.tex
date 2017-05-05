@@ -1,4 +1,4 @@
-\subsection{\aeval}
+\subsection{\textit{AE-VAL}}
 \label{sec:aeval}
 
 \begin{figure}[!t]
@@ -8,9 +8,9 @@
 \label{fg:aeval}
 \end{figure}
 
-\aeval~\cite{fedyukovich2015automated} is an algorithm to decide validity and to extracts Skolem functions.
+\aeval~\cite{fedyukovich2015automated} is an algorithm to decide validity and extract Skolem functions.
 It takes as input a formula of the form $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$, 
-where $A(s)$ has only existential quantifiers, and $G(s,s')$ is quantifier-free.
+where $A(s)$ has only existential\andreas{you meant universal here, right?} quantifiers, and $G(s,s')$ is quantifier-free.
 %
 While deciding the validity, \aeval iteratively enumerates models of $A(s) \land G (s, s')$ and groups them into a set of partitions $\{P_i(s)\}$, such that each $P_i(s) \Rightarrow \exists s' . G (s, s')$.
 We say that after $n$ iterations, \aeval establishes a formula $R_n(s) \eqdef \bigvee_{i=1}^n P_i(s)$ which is by definition an under-approximation of $\exists s' . G (s, s')$.
