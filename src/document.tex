@@ -132,7 +132,7 @@ have been proved useful towards extending the applicability of such algorithms
 to solving difficult problems. In this paper, we propose a novel approach to
 program synthesis, which is based on the validity of a $\forall\exists$-formula.
 The approach is inspired from verification techniques that construct
-inductive invariants, like Property Directed Reachability. The original
+inductive invariants, like Property Directed Reachability, and is completely automated. The original
 problem space is recursively refined by blocking out regions of unsafe states, with the goal being the discovery of a
 fixpont that describes a region containing safe reactions. If such a fixpoint
 is found, we construct a witness that can be directly transformed into an
@@ -143,6 +143,7 @@ the new algorithm yields better performance as well as soundness for ``unrealiza
 \end{abstract}
 
 \input{intro}
+\input{background}
 \input{synthesis}
 \input{impl}
 \input{results}

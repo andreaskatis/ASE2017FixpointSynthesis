@@ -1,0 +1,87 @@
+\section{Background}
+\label{sec:background}
+
+
+In this section we define Assume-Guarantee contracts (Section~\ref{sec:pre}),
+describe the problem of synthesis in terms of discovering inductive invariants that imply the realizability of the given specification (Section~\ref{sec:formals}), and show how a sophisticated solver is used in order to compute these fixpoints (Section~\ref{sec:aeval}).
+%Finally, we enrich our formal definitions with an informal proof of the
+%algorithm's correctness in terms of the successfully synthesized
+%implementations.
+
+\subsection{Assume-Guarantee Contracts}
+\label{sec:pre}
+
+For the purposes of this paper, we focus our interest in a mainstream variation
+for representing system requirements, using an \textit{Assume-Guarantee
+Contract}. Requirements in this format contain two main types of constraints.
+The \emph{assumptions} of the contract restrict the possible inputs that the
+environment can provide to the system, while the \emph{guarantees} are used to
+describe what is considered a safe reaction of the system to the outside world.
+
+A simple example is the contract with assumption $A = \{x\neq
+y\}$ and guarantee $G = \{x \leq y \Rightarrow z =
+\textit{true}, x \geq y \Rightarrow z = \textit{false}\}$. Variables
+$x$ and $y$ are the designated inputs while $z$ is the output. This is a
+well-defined contract, since by the assumption $A$, it is always the case that
+$x \neq y$, therefore at least one implementation exists, which, for example
+sets $z$ to true if $x < y$ and false otherwise. An alternative
+valid implementation could set $z$ to false if $x > y$, and true otherwise. The
+proof of existence of such an implementation is the main concept behind the
+\emph{realizability} problem, while the automated construction of a witness
+implementation is the main focus of \emph{program synthesis}.
+
+
+It is apparent that the example contract above is therefore \emph{realizable},
+and an efficient synthesis procedure would be capable of providing at least one
+implementation. Nevertheless, it is important to consider a variation of the
+example, where $A = \varnothing$. This is a practical case of an
+\emph{unrealizable} contract, as there is no feasible implementation that can
+correctly react to the environment assigning values to $x$ and $y$, such that
+$x = y$.
+
+\subsection{Formal Representation}
+\label{sec:formals}
+We use two disjoint sets, $state$ and $inputs$, to describe a system.
+A straightforward and intuitive way to represent an \emph{implementation} is by
+defining a \emph{transition system}, composed of an initial state
+predicate $I(s)$ of type $state \to bool$, as well as a transition relation
+$T(s,i,s')$ of type $state \to inputs \to state \to bool$.
+
+Combining the above, we represent an Assume-Guarantee (AG) contract using a set
+of \emph{assumptions}, $A: state \rightarrow inputs \rightarrow bool$,
+and a set of \emph{guarantees} $G$. The latter is further decomposed into two
+distinct subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
+inputs \rightarrow state \rightarrow bool$. $G_I$ defines the set of valid
+initial states, and $G_T$ contains constraints that need to be satisfied in
+every transition between two states. An important note at this point is that we
+we do not make any distinction between internal state variables and outputs in the
+formalism. This alone allows us to use state variables to (in some cases)
+simplify specification of guarantees, since we do not expect a contract
+to be always defined over all variables in the transition system.
+
+Consequently, we can formally define a realizable contract, as one for which any
+preceeding state $s$ can take a transition into a new state $s'$ that satisfies
+the guarantees, assuming valid inputs. For a system to be ever-reactive, these
+new states $s'$ should be further usable as preceeding states in a future
+transition. States like $s$ and $s'$ are defined as being \textit{viable}, if
+and only if:
+
+\begin{equation}
+\forall s,i.~ A(s, i) \land \viable(s) \Rightarrow \exists s'.~ G_T(s, i,s')
+\land \viable(s')
+\label{eq:viable}
+\end{equation}
+
+A necessary condition, finally, is that the set of viable states
+intersects with the set of initial states. As such, to conclude that a contract
+is realizable, we require that
+
+\begin{equation}
+\viable(s) \land G_I(s) \neq \varnothing
+\label{eq:nonempty}
+\end{equation}
+
+The intuition behind our proposed algorithm in this paper relies on the
+discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extract a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
+
+\input{aeval}

@@ -1,96 +1,5 @@
-\section{Background}
-\label{sec:synthesis}
-
-
-In this section we define Assume-Guarantee contracts (Sect.~\ref{sec:pre}),
-describe the validity-guided approach we take towards synthesizing
-implementations (Sect.~\ref{sec:synth}),
-and finally illustrate how it works using the popular cinderella-stepmother
-game (Sect.~\ref{sec:example}).
-%Finally, we enrich our formal definitions with an informal proof of the
-%algorithm's correctness in terms of the successfully synthesized
-%implementations.
-
-\subsection{Assume-Guarantee Contracts}
-\label{sec:pre}
-
-For the purposes of this paper, we focus our interest in a mainstream variation
-for representing system requirements, using an \textit{Assume-Guarantee
-Contract}. Requirements in this format contain two main types of constraints.
-The \emph{assumptions} of the contract restrict the possible inputs that the
-environment can provide to the system, while the \emph{guarantees} are used to
-describe what is considered a safe reaction of the system to the outside world.
-
-A simple example is the contract with assumption $A = \{x\neq
-y\}$ and guarantee $G = \{x \leq y \Rightarrow z =
-\textit{true}, x \geq y \Rightarrow z = \textit{false}\}$. Variables
-$x$ and $y$ are the designated inputs while $z$ is the output. This is a
-well-defined contract, since by the assumption $A$, it is always the case that
-$x \neq y$, therefore at least one implementation exists, which, for example
-sets $z$ to true if $x < y$ and false otherwise. An alternative
-valid implementation could set $z$ to false if $x > y$, and true otherwise. The
-proof of existence of such an implementation is the main concept behind the
-\emph{realizability} problem, while the automated construction of a witness
-implementation is the main focus of \emph{program synthesis}.
-
-
-It is apparent that the example contract above is therefore \emph{realizable},
-and an efficient synthesis procedure would be capable of providing at least one
-implementation. Nevertheless, it is important to consider a variation of the
-example, where $A = \varnothing$. This is a practical case of an
-\emph{unrealizable} contract, as there is no feasible implementation that can
-correctly react to the environment assigning values to $x$ and $y$, such that
-$x = y$.
-
-\subsection{Formal Representation}
-\label{sec:formals}
-We use two disjoint sets, $state$ and $inputs$, to describe a system.
-A straightforward and intuitive way to represent an \emph{implementation} is by
-defining a \emph{transition system}, composed of an initial state
-predicate $I(s)$ of type $state \to bool$, as well as a transition relation
-$T(s,i,s')$ of type $state \to inputs \to state \to bool$.
-
-Combining the above, we represent an Assume-Guarantee (AG) contract using a set
-of \emph{assumptions}, $A: state \rightarrow inputs \rightarrow bool$,
-and a set of \emph{guarantees} $G$. The latter is further decomposed into two
-distinct subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
-inputs \rightarrow state \rightarrow bool$. $G_I$ defines the set of valid
-initial states, and $G_T$ contains constraints that need to be satisfied in
-every transition between two states. An important note at this point is that we
-we do not make any distinction between internal state variables and outputs in the
-formalism. This alone allows us to use state variables to (in some cases)
-simplify specification of guarantees, since we do not expect a contract
-to be always defined over all variables in the transition system.
-
-Consequently, we can formally define a realizable contract, as one for which any
-preceeding state $s$ can take a transition into a new state $s'$ that satisfies
-the guarantees, assuming valid inputs. For a system to be ever-reactive, these
-new states $s'$ should be further usable as preceeding states in a future
-transition. States like $s$ and $s'$ are defined as being \textit{viable}, if
-and only if:
-
-\begin{equation}
-\forall s,i.~ A(s, i) \land \viable(s) \Rightarrow \exists s'.~ G_T(s, i,s')
-\land \viable(s')
-\label{eq:viable}
-\end{equation}
-
-A necessary condition, finally, is that the set of viable states
-intersects with the set of initial states. As such, to conclude that a contract
-is realizable, we require that
-
-\begin{equation}
-\viable(s) \land G_I(s) \neq \varnothing
-\label{eq:nonempty}
-\end{equation}
-
-The intuition behind our proposed algorithm in this paper relies on the
-discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extract a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
-
-\input{aeval}
-
 \section{Validity-Guided Synthesis from Assume-Guarantee Contracts}
-\label{sec:synth}
+\label{sec:synthesis}
 
 \begin{algorithm}[!t]
 \footnotesize
@@ -134,13 +43,14 @@ discovery of a greatest fixpoint that only contains viable states. In the case w
 \end{algorithm}
 
 The main contribution presented in this paper, is a novel idea that effectively
-uses the information provided by \textit{regions of validity} to compute a
+uses the information provided by regions of validity to compute a
 greatest fixpoint of safe states. In our context, this fixpoint is not only
 usable as a proof to the realizability of a specification, but also leads to the
 construction of a witness that can be translated with a straightforward process
-into a functional and efficient implementation.
+into a functional and efficient implementation. The algorithm is presented in detail in Section~\ref{sec:alg} and we provide soundness proofs regarding the algorithm's capabilities of determining the realizability (unrealizability) of specification in Section~\ref{sec:soundness}. An illustrative example is used in Section~\ref{sec:example} to guide the reader through the process of synthesizing implementations, using specification that describes the Cinderella-Stepmother game.
 
-
+\subsection{Algorithm}
+\label{sec:alg}
 Algorithm~\ref{alg:synthesis} shows this validity-guided technique, which we
 named \jsynvg.
 Line 1 initializes the process by defining the fixpoint $F(s)$ to be equal to
@@ -206,7 +116,7 @@ hold, for any state. We leave the specifics regarding the meaning and usability
 of such counterexamples as potential future work.
 
 \subsection{Soundness}
-
+\label{sec:soundness}
 From the previous, it is straightforward to show that
 Algorithm~\ref{alg:synthesis} is complete, since it either terminates by
 constructing a fixpoint, or when the computed region of validity is the empty
@@ -392,7 +302,7 @@ machinery as a flag to indicate whether the current state is initial or not
   (<= i4 2.0)
   (<= i5 2.0))
  \end{Verbatim}
-\caption{Part of the region of validity generated for the Cinderella-Stepmother
+\caption{Code snippet of the region of validity generated for the Cinderella-Stepmother
 example}
 \label{fg:snippet}
 \end{figure}
@@ -441,7 +351,7 @@ if (((!(b1 + i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
 } else {
 ...
  \end{Verbatim}
-\caption{Part of the synthesized implementation for the Cinderella-Stepmother
+\caption{Code snippet of the synthesized implementation for the Cinderella-Stepmother
 example}
 \label{fg:witness}
 \end{figure}
