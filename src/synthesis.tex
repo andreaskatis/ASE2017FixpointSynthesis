@@ -1,14 +1,14 @@
 \section{Validity-Guided Synthesis from Assume-Guarantee Contracts}
 \label{sec:synthesis}
 
-\begin{algorithm}[!t]
-\footnotesize
-\caption{\jsynvg (A : assumptions, G : guarantees)}\label{alg:synthesis}
+\begin{algorithm*}[!t]
+\caption{\jsynvg (A : assumptions, G : guarantees)}
+\label{alg:synthesis}
 \begin{algorithmic}[1]
 %\Procedure{\jsynvg}{A : assumptions, G : guarantees}
 	\State $F(s) \gets true$;\Comment{Fixpoint of viable states}
 	\While{true}
-		\State $\phi \gets \forall s,i. F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s')$;
+		\State $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$;
 		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
 		\If{$\isValid(\phi)$}
 			\If{$G_{I}(s) \land F(s) \neq false$}
@@ -23,8 +23,8 @@
 				\Return $\tuple{\unrealizable, \varnothing}$;
 				\State
 			\EndIf
-			\State $\phi' \gets \forall s. F(s) \Rightarrow \exists i. A(s,i) \land \lnot
-			Q(s,i)$;
+			\State $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists i. A(s,i) \land \lnot
+			Q(s,i))$;
 			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
 			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
 				\Return $\tuple{\unrealizable, \skolems'}$;
@@ -40,7 +40,7 @@
 	\EndWhile
 %\EndProcedure
 \end{algorithmic}
-\end{algorithm}
+\end{algorithm*}
 
 The main contribution presented in this paper, is a novel idea that effectively
 uses the information provided by regions of validity to compute a
@@ -51,15 +51,13 @@ into a functional and efficient implementation. The algorithm is presented in de
 
 \subsection{Algorithm}
 \label{sec:alg}
-Algorithm~\ref{alg:synthesis} shows this validity-guided technique, which we
-named \jsynvg.
+Algorithm~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:formals} and is provided as an input to the algorithm. 
 Line 1 initializes the process by defining the fixpoint $F(s)$ to be equal to
 $true$. The algorithm then attempts to converge to a fixpoint $F(s)$
 that only contains viable states, considering Equation~\ref{eq:viable}
 and~\ref{eq:nonempty}.
-We therefore construct the formula $\phi = \forall s,i. F(s) \land A(s,i)
-\Rightarrow \exists s'.
-			G_{T}(s,i,s') \land F(s')$, and provide it as an input to \aeval, an efficient
+We therefore construct the formula $\phi = \forall s,i. \ (F(s) \land A(s,i)
+\Rightarrow \exists s'. G_{T}(s,i,s') \land F(s'))$, and provide it as an input to \aeval, an efficient
 Skolemizer for $\forall\exists$ formulas (Line 4). \aeval is particularly
 focused on determining the validity of $\phi$. If the formula is valid, then a witness
 \textit{Skolem} is constructed, containing valid assignments to the
@@ -86,8 +84,8 @@ towards eliminating this issue.
 
 The main concept to properly refine $F(s)$, is to extract a region of validity
 that only involves constraints over state variables. To achieve this, we ask for
-the validity of the formula $\phi' = \forall s. F(s) \Rightarrow \exists
-i. A(s,i) \land \lnot Q(s,i)$ (Line 17). If $\phi'$ is a valid formula, then for
+the validity of the formula $\phi' = \forall s. \ (F(s) \Rightarrow \exists
+i. A(s,i) \land \lnot Q(s,i))$ (Line 17). If $\phi'$ is a valid formula, then for
 any assignment of the state variables $s$, we have a valid input (i.e. that
 satisfies the assumptions), for which the states are taken outside of the region
 of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
@@ -117,12 +115,8 @@ of such counterexamples as potential future work.
 
 \subsection{Soundness}
 \label{sec:soundness}
-From the previous, it is straightforward to show that
-Algorithm~\ref{alg:synthesis} is complete, since it either terminates by
-constructing a fixpoint, or when the computed region of validity is the empty
-set \textit{false}. To prove its soundness regarding results, we require that
-the algorithm always computes a fixpoint, containing only state variable assignments that lead to the satisfiability of $\forall\exists$
-formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
+To prove Algorithm~\ref{alg:synthesis}'s soundness regarding results, we first need to show that
+the algorithm always computes in fact a fixpoint, containing only state variable assignments that lead to the satisfiability of $\forall\exists$ formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
 use the fixed point theorem that was first stated by Alfred Tarski~\cite{tarski1955lattice}.
 
 \begin{lemma} Consider the system
@@ -156,7 +150,7 @@ $f$, where, for every pair $(B,A)$ with $B \subseteq A \subseteq S$, we have tha
 $f(B) \subseteq f(A)$.
 \end{proof}
 
-\begin{theorem}[Soundness of Fixpoint]
+\begin{theorem}[Characterization of Generated Fixpoints]
 The set $P$ of all fixpoints in Algorithm~\ref{alg:synthesis} is non
 empty, and the system $\tuple{P, T}$ is a complete lattice.
 \label{thm:fixpoint}
@@ -179,6 +173,31 @@ the solution to a realizable contract, while $\glb = false$, and corresponds to
 the solution for an unrealizable contract.
 \end{proof}
 
+From Theorem~\ref{thm:fixpoint} we have shown that Algorithm~\ref{alg:synthesis} computes a fixpoint for both cases where the specification is realizable or not. With this knowledge at hand, it is necessary to prove the soundness of the fixpoints generated. In other words, when a fixpoint is computed for a realizable contract, it should be the case that the algorithm reports a ``realizable'' result. The same needs to hold for the dual case of ``unrealizable'' results.
+
+\begin{theorem}[Soundness of ``realizable'' results]
+\label{thm:sndreal}
+
+Assume a sound quantifier elimination process that provides us with exact regions of validity. If $F(s)$ is a fixpoint generated by Algorithm~\ref{alg:synthesis} and $F(s) \neq false$, then the contract is realizable.
+\end{theorem}
+\begin{proof} To prove this theorem, we show that $\forall s. \viable(s) \Rightarrow F(s)$ using induction on $F(s)$. The base case is covered since $F(s) \land G_I(s) \neq \varnothing$. For the inductive case, we require that a state $x$ exists, such that $G_T(s,i,x) \land F(x)$. Since $\viable(s)$ is true, we know that $\exists s'. G_T(s,i,s') \land \viable(s')$. Thus we pick $s'$ and use the inductive hypothesis to show that $\viable(s') \Rightarrow F(s')$.
+\end{proof}
+
+\begin{theorem}[Soundness of ``unrealizable" results]
+\label{thm:sndunreal}
+
+Assume a quantifier elimination process that provides exact regions of validity. If the output of Algorithm~\ref{alg:synthesis} is the fixpoint $F(s) = false$, then the contract is unrealizable.
+\end{theorem}
+\begin{proof}
+Dually to Theorem~\ref{thm:sndreal} we show that $\forall s. \lnot \viable(s) \Rightarrow \lnot F(s)$ using induction on $F(s)$. From this point on, the proof direction is analogous to that of Theorem~\ref{thm:sndreal}.
+\end{proof}
+
+
+\begin{corollary}[Soundness of Realizability results from Validity-Guided Synthesis]
+Assume a quantifier elimination process that provides exact regions of validity. The process described in Algorithm~\ref{alg:synthesis} is sound.
+\end{corollary}
+
+Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases. Overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations. In this case the most important impact is the decrease in performance, where problems might not be solvable in a reasonable time window. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might include safe states. This makes the algorithm follow a pessimist approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be faced in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to unsound ``unrealizable'' results.
 
 \subsection{Example: The Cinderella-Stepmother Game}
 \label{sec:example}
@@ -200,7 +219,7 @@ while the Stepmother distributes one unit of water over all five buckets.
 
 \begin{figure}[!t]
 \centering
- \begin{Verbatim}[fontsize=\scriptsize]
+ \begin{Verbatim}[fontsize=\footnotesize]
 const C = 2.0;
 
 -- empty buckets e and e+1 each round
@@ -214,15 +233,20 @@ let
   assert i1 + i2 + i3 + i4 + i5 = 1.0;
 
   b1 = 0.0 ->
-       (if (e = 5 or e = 1) then i1 else (pre(b1) + i1)) ;
+       (if (e = 5 or e = 1) then i1
+                            else (pre(b1) + i1)) ;
   b2 = 0.0 ->
-       (if (e = 1 or e = 2) then i2 else (pre(b2) + i2)) ;
+       (if (e = 1 or e = 2) then i2
+                            else (pre(b2) + i2)) ;
   b3 = 0.0 ->
-       (if (e = 2 or e = 3) then i3 else (pre(b3) + i3)) ;
+       (if (e = 2 or e = 3) then i3
+                            else (pre(b3) + i3)) ;
   b4 = 0.0 ->
-       (if (e = 3 or e = 4) then i4 else (pre(b4) + i4)) ;
+       (if (e = 3 or e = 4) then i4
+                            else (pre(b4) + i4)) ;
   b5 = 0.0 ->
-       (if (e = 4 or e = 5) then i5 else (pre(b5) + i5)) ;
+       (if (e = 4 or e = 5) then i5
+                            else (pre(b5) + i5)) ;
 
   guarantee = b1 <= C and b2 <= C and b3 <= C and
   	    b4 <= C and b5 <= C;
@@ -275,8 +299,7 @@ We initiate our call to the procedure defined in Algorithm~\ref{alg:synthesis},
 by providing the contract in Figure~\ref{fg:cind} as input. The algorithm
 then enters an infinite loop, where it attempts to construct a fixpoint of
 viable states that can use the transition relation to new, viable states,
-while complying to the specification. Initially $F(s) = true$, and we ask \aeval for the validiity of the formula $\phi = \forall s,i. F(s) \land A(s,i) \Rightarrow \exists
-s'.G_{T}(s,i,s') \land F(s')$. Unfortunately, not every state in $F(s)$
+while complying to the specification. Initially $F(s) = true$, and we ask \aeval for the validiity of the formula $\phi = \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
 satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
 a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
 which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
@@ -290,7 +313,7 @@ machinery as a flag to indicate whether the current state is initial or not
 
 \begin{figure}[!t]
 \centering
- \begin{Verbatim}[fontsize=\scriptsize]
+ \begin{Verbatim}[fontsize=\footnotesize]
 (and (or (and %init (= (+ b1 i1) 0.0)) (not %init))
   (or (and %init (= (+ b2 i2) 0.0)) (not %init))
   (or (and %init (= (+ b3 i3) 0.0)) (not %init))
@@ -309,8 +332,8 @@ example}
 
 Considering the existence of undesirable constraints in $Q(s,i)$, the next step
 is to extract a region of validity that is only described using state variables.
-As such, we construct the formula $\phi' = \forall s. F(s) \Rightarrow \exists
-i. A(s,i) \land \lnot Q(s,i)$, and ask \aeval regarding its validity. According
+As such, we construct the formula $\phi' = \forall s. \ (F(s) \Rightarrow \exists
+i. A(s,i) \land \lnot Q(s,i))$, and ask \aeval regarding its validity. According
 to \aeval, $\phi'$ is not valid, an indication that may eventually lead us to a
 proof of the contract's realizability. If $\phi'$ was valid, then every state in
 $F(s)$ is unsafe, under a specific input that satisfies the contract
@@ -331,9 +354,9 @@ state variables, for this particular subset.
 
 \begin{figure}[!t]
 \centering
- \begin{Verbatim}[fontsize=\scriptsize]
+ \begin{Verbatim}[fontsize=\footnotesize]
 ...
-if (((!(b1 + i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
+if (!(b1 + i1 <= 0.0) || !((b2 + i2) <= 0.0) || ...)
   e = 3;
   b1 = b1 + i1;
   b2 = b2 + i2;
@@ -341,7 +364,7 @@ if (((!(b1 + i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
   b4 = i4;
   b5 = b5 + i5;
 } else {
-  if (((!(i1 <= 0.0)) || ((!((b2 + i2) <= 0.0)) || ...)
+  if (!(i1 <= 0.0) || !((b2 + i2) <= 0.0) || ...)
   e = 5;
   b1 = i1;
   b2 = b2 + i2;

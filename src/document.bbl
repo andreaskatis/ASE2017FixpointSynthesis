@@ -21,6 +21,20 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{church1962logic}
+A.~Church, ``Logic, arithmetic and automata,'' in \emph{Proceedings of the
+  international congress of mathematicians}, 1962, pp. 23--35.
+
+\bibitem{pnueli1989synthesis}
+A.~Pnueli and R.~Rosner, ``On the synthesis of a reactive module,'' in
+  \emph{Proceedings of the 16th ACM SIGPLAN-SIGACT symposium on Principles of
+  programming languages}.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 1989, pp.
+  179--190.
+
+\bibitem{BarFT-SMTLIB}
+C.~Barrett, P.~Fontaine, and C.~Tinelli, ``{The Satisfiability Modulo Theories
+  Library (SMT-LIB)},'' {\tt www.SMT-LIB.org}, 2016.
+
 \bibitem{gulwani2010dimensions}
 S.~Gulwani, ``Dimensions in program synthesis,'' in \emph{Proceedings of the
   12th international ACM SIGPLAN symposium on Principles and practice of
@@ -35,12 +49,6 @@ S.~Srivastava, S.~Gulwani, and J.~S. Foster, ``Template-based program
 \bibitem{flener2001inductive}
 P.~Flener and D.~Partridge, ``Inductive programming,'' \emph{Automated Software
   Engineering}, vol.~8, no.~2, pp. 131--137, 2001.
-
-\bibitem{reynolds2015counterexample}
-A.~Reynolds, M.~Deters, V.~Kuncak, C.~Tinelli, and C.~Barrett,
-  ``Counterexample-guided quantifier instantiation for synthesis in smt,'' in
-  \emph{International Conference on Computer Aided Verification}.\hskip 1em
-  plus 0.5em minus 0.4em\relax Springer, 2015, pp. 198--216.
 
 \bibitem{kuncak2013functional}
 V.~Kuncak, M.~Mayer, R.~Piskac, and P.~Suter, ``Functional synthesis for linear
@@ -128,11 +136,6 @@ D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha,
 Z.~Manna and R.~J. Waldinger, ``Toward automatic program synthesis,''
   \emph{Communications of the ACM}, vol.~14, no.~3, pp. 151--165, 1971.
 
-\bibitem{DBLP:conf/popl/PnueliR89}
-A.~Pnueli and R.~Rosner, ``On the synthesis of a reactive module,'' in
-  \emph{POPL}.\hskip 1em plus 0.5em minus 0.4em\relax {ACM} Press, 1989, pp.
-  179--190.
-
 \bibitem{Bohy12}
 A.~Bohy, V.~Bruy{\`{e}}re, E.~Filiot, N.~Jin, and J.~Raskin, ``Acacia+, a tool
   for {LTL} {S}ynthesis,'' in \emph{CAV}, 2012, pp. 652--657.
@@ -195,6 +198,12 @@ M.~Preiner, A.~Niemetz, and A.~Biere, ``Counterexample-guided model
   synthesis,'' in \emph{International Conference on Tools and Algorithms for
   the Construction and Analysis of Systems}.\hskip 1em plus 0.5em minus
   0.4em\relax Springer, 2017, pp. 264--280.
+
+\bibitem{reynolds2015counterexample}
+A.~Reynolds, M.~Deters, V.~Kuncak, C.~Tinelli, and C.~Barrett,
+  ``Counterexample-guided quantifier instantiation for synthesis in smt,'' in
+  \emph{International Conference on Computer Aided Verification}.\hskip 1em
+  plus 0.5em minus 0.4em\relax Springer, 2015, pp. 198--216.
 
 \bibitem{walker2014predicate}
 A.~Walker and L.~Ryzhyk, ``Predicate abstraction for reactive synthesis,'' in

@@ -48,6 +48,7 @@
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
 
 \newcommand{\aeval}{\textsc{AE-VAL}\xspace}
 \newcommand{\jkind}{\textsc{JKind}\xspace}
@@ -104,10 +105,9 @@
 \begin{document}
 \title{Validity Guided Synthesis of Reactive Systems from Assume-Guarantee Contracts}
 
-\iffalse
-\author{\IEEEauthorblockN{Andreas Katis\IEEEauthorrefmark{1}, Grigory Fedyukovich\IEEEauthorrefmark{2}, Huajun
-Guo\IEEEauthorrefmark{1}, Andrew Gacek\IEEEauthorrefmark{3}\\ John
-Backes\IEEEauthorrefmark{3}, Arie Gurfinkel\IEEEauthorrefmark{4} and
+\author{\IEEEauthorblockN{Andreas Katis\IEEEauthorrefmark{1}, Grigory Fedyukovich\IEEEauthorrefmark{2}, Andrew Gacek\IEEEauthorrefmark{3}\\ John
+Backes\IEEEauthorrefmark{3}, Arie Gurfinkel\IEEEauthorrefmark{4}, Huajun
+Guo\IEEEauthorrefmark{1} and
 Michael W. Whalen\IEEEauthorrefmark{1}}
 \IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Computer Science and
 Engineering,
@@ -120,10 +120,34 @@ Email: \{andrew.gacek,john.backes\}@rockwellcollins.com}
 \IEEEauthorblockA{\IEEEauthorrefmark{4}Department of Electrical and Computer
 Engineering, University of Waterloo\\
 Email: agurfinkel@uwaterloo.ca}}
-\fi
 \maketitle
 
 \begin{abstract}
+
+%shortened version due to 200 word limit
+Automated synthesis of reactive systems using only
+specification knowledge is a popular and well
+explored subject in formal verification. A variety of approaches
+have been proposed in the recent years, through inductive
+and functional synthesis, while template-based, counterexample-
+guided and predicate abstraction techniques have been proved
+useful towards extending the applicability of such algorithms
+to solving difficult problems. In this paper, we propose a novel
+approach to program synthesis, which is based on the validity
+of a $\forall\exists$-formula. The approach is inspired from verification
+techniques that construct inductive invariants, like Property
+Directed Reachability, and is completely automated. The original
+problem space is recursively refined by blocking out regions of
+unsafe states, with the goal being the discovery of a fixpont that
+describes safe reactions. If such a fixpoint
+is found, we construct a witness that is directly translated into a C implementation. We implemented the algorithm in the \jkind model checker, and exercised it against contracts written using
+the Lustre specification language. Experimental results show
+how the new algorithm yields better performance as well as
+soundness for ``unrealizable'' results when compared to \jkind's
+existing synthesis procedure, an approach based on the construction of k-inductive proofs of realizability.
+
+
+\iffalse
 Automated synthesis of reactive systems using only specification knowledge is one of
 the most popular and well explored subjects in formal verification. A variety of
 approaches have been proposed in the recent years, through inductive and
@@ -140,6 +164,7 @@ implementation using mainstream programming languages, like C. We implemented
 the algorithm in the \jkind model checker, and exercised it against contracts
 written using the Lustre specification language. Experimental results show how
 the new algorithm yields better performance as well as soundness for ``unrealizable'' results when compared to \jkind's existing synthesis procedure, an approach that is based on the construction of k-inductive proofs of realizability.
+\fi
 \end{abstract}
 
 \input{intro}

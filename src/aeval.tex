@@ -3,7 +3,7 @@
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=2.5in]{aeval_invalid}
+\includegraphics[width=3.5in]{aeval_invalid}
 \caption{Region of validity computed for an example requiring \aeval to iterate two times.}
 \label{fg:aeval}
 \end{figure}
@@ -12,6 +12,7 @@
 It takes as input a formula of the form $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$, 
 where $A(s)$ has only existential\andreas{you meant universal here, right?} quantifiers, and $G(s,s')$ is quantifier-free.
 %
+\andreas{I suppose that the partitions P are the ones named T in the Figure. I think we should keep the same name or the reader might get confused.}
 While deciding the validity, \aeval iteratively enumerates models of $A(s) \land G (s, s')$ and groups them into a set of partitions $\{P_i(s)\}$, such that each $P_i(s) \Rightarrow \exists s' . G (s, s')$.
 We say that after $n$ iterations, \aeval establishes a formula $R_n(s) \eqdef \bigvee_{i=1}^n P_i(s)$ which is by definition an under-approximation of $\exists s' . G (s, s')$.
 

@@ -67,8 +67,8 @@ transition. States like $s$ and $s'$ are defined as being \textit{viable}, if
 and only if:
 
 \begin{equation}
-\forall s,i.~ A(s, i) \land \viable(s) \Rightarrow \exists s'.~ G_T(s, i,s')
-\land \viable(s')
+\viable(s) = \forall s,i. \ (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s')
+\land \viable(s'))
 \label{eq:viable}
 \end{equation}
 
@@ -77,7 +77,7 @@ intersects with the set of initial states. As such, to conclude that a contract
 is realizable, we require that
 
 \begin{equation}
-\viable(s) \land G_I(s) \neq \varnothing
+\exists s. G_I(s) \land \viable(s)
 \label{eq:nonempty}
 \end{equation}
 
