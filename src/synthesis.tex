@@ -57,8 +57,7 @@ $true$. The algorithm then attempts to converge to a fixpoint $F(s)$
 that only contains viable states, considering Equation~\ref{eq:viable}
 and~\ref{eq:nonempty}.
 We therefore construct the formula $\phi = \forall s,i. \ (F(s) \land A(s,i)
-\Rightarrow \exists s'. G_{T}(s,i,s') \land F(s'))$, and provide it as an input to \aeval, an efficient
-Skolemizer for $\forall\exists$ formulas (Line 4). \aeval is particularly
+\Rightarrow \exists s'. G_{T}(s,i,s') \land F(s'))$, and provide it as an input to \aeval (Line 4). \aeval is particularly
 focused on determining the validity of $\phi$. If the formula is valid, then a witness
 \textit{Skolem} is constructed, containing valid assignments to the
 existentially quantified variables of $\phi$. In the context of viability, this
@@ -104,7 +103,7 @@ describes the set of viable states, or reach the case where $F(s) = false$, and
 declare our contract to be unrealizable.
 
 \aeval's effectiveness in providing witnesses to the
-satisfiability of $\forall\exists$ formulas is also exploited in terms of the
+satisfiability of $\forall\exists$-formulas is also exploited in terms of the
 tool providing concrete counterexamples to unrealizable contracts, using line 19
 in Algorithm~\ref{alg:synthesis}. In this particular case, if $\phi'$ is a valid
 formula, we can extract a witness that can be essentially used as a test case to
@@ -116,8 +115,10 @@ of such counterexamples as potential future work.
 \subsection{Soundness}
 \label{sec:soundness}
 To prove Algorithm~\ref{alg:synthesis}'s soundness regarding results, we first need to show that
-the algorithm always computes in fact a fixpoint, containing only state variable assignments that lead to the satisfiability of $\forall\exists$ formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
+the algorithm always computes in fact a fixpoint, containing only state variable assignments that lead to the satisfiability of $\forall\exists$-formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
 use the fixed point theorem that was first stated by Alfred Tarski~\cite{tarski1955lattice}.
+
+
 
 \begin{lemma} Consider the system
 $\mathfrak{U} = \tuple{S, T}$. With $S$, we denote the set of
@@ -137,6 +138,8 @@ possible ones in the \glb, and the states from which we take a transition into
 a new state that's either in the \lub, or outside of $B$. For the special case
 where $B = S$, we have that $\glb = false$ and $\lub = true$.
 \end{proof}
+
+\andreas{An alternative would be to define a set S where each element is a set X of valid regions that lead to SAT, and the order in which X elements are constructed to be the relation that establishes a partial order over S. Please let me know which seems better tou you.}
 
 \begin{lemma} Algorithm~\ref{alg:synthesis} is a monotonic function on $S$ to
 $S$.
@@ -197,7 +200,7 @@ Dually to Theorem~\ref{thm:sndreal} we show that $\forall s. \lnot \viable(s) \R
 Assume a quantifier elimination process that provides exact regions of validity. The process described in Algorithm~\ref{alg:synthesis} is sound.
 \end{corollary}
 
-Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases. Overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations. In this case the most important impact is the decrease in performance, where problems might not be solvable in a reasonable time window. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might include safe states. This makes the algorithm follow a pessimist approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be faced in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to unsound ``unrealizable'' results.
+Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases, overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations and the algorithm's performance decreases, since problems might not be solvable as fast as with the use of exact regions. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might cover safe states in their constraints. This makes the algorithm follow a more pessimistic approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be manifested in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to unsound ``unrealizable'' results.
 
 \subsection{Example: The Cinderella-Stepmother Game}
 \label{sec:example}
