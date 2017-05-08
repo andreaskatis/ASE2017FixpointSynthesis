@@ -15,21 +15,18 @@
 				\Return $\tuple{\realizable, \skolems}$;
 			\Else{\Comment{Empty set of initial states}}
 		 		\Return $\tuple{\unrealizable, \varnothing}$;
-				\State
 		 	\EndIf
 		\Else{\Comment{Extract region of validity $Q(s,i)$}}
 			\State $Q(s,i) \gets \subs$;
 			\If{$Q(s,i) = false$}
 				\Return $\tuple{\unrealizable, \varnothing}$;
-				\State
 			\EndIf
 			\State $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists i. A(s,i) \land \lnot
 			Q(s,i))$;
 			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
 			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
 				\Return $\tuple{\unrealizable, \skolems'}$;
-		        \State\Comment{Extract witnessing cex}
-			\Else{}
+			\Else{}\Comment{Extract witnessing cex}
 				\State $W(s) \gets \subs'$;
 				\If{$W(s) = false$}
 					\Return $\tuple{\unrealizable, \varnothing}$;
