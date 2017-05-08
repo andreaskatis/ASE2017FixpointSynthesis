@@ -29,7 +29,7 @@ describe what is considered a safe reaction of the system to the outside world.
 A simple example is shown in Figure~\ref{fg:agcontract}. The contract is defined using the assumption $A = \{x\neq
 y\}$ and the guarantee $G = \{x \leq y \Rightarrow z =
 \textit{true}, x \geq y \Rightarrow z = \textit{false}\}$. Variables
-$x$ and $y$ are the designated inputs while $z$ is the output. An implementation may or may not exist at the time the contract is written (i.e. questionmark in Figure~\ref{fg:agcontract}.
+$x$ and $y$ are the designated inputs while $z$ is the output. An implementation may or may not exist at the time the contract is written (i.e. questionmark in Figure~\ref{fg:agcontract}).
 Despite this, it is easy to show that at least one implementation exists which, for example, sets $z$ to true if $x < y$ and false otherwise. An alternative
 valid implementation could set $z$ to false if $x > y$, and true otherwise. The
 proof of existence of such an implementation  is the main concept behind the
