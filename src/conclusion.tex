@@ -30,9 +30,7 @@ subprocess that provides collections of equivalent implementations, rather than
 a sigle witness. As for the implementations themselves, there are
 several promising concepts that can lead to further optimization, such as the use of Inductive Validity Cores~\cite{Ghass16}, which can be potenitally used to identify the core elements in a synthesized implementation that lead to the satisfaction of the specification. Using only
 the core elements, we can effectively reduce the size of the implementations,
-and improve their performance. Finally, a more abstract, but rather interesting
+and improve their performance. With regards to more compact implementations, another interesting approach that could be exploited is recent work in witness abstractions~\cite{jakobs2017compact}. Finally, a rather generic, but still challenging
 topic of research, is how we can transition from implementations that use
 infinite types through SMT, to equivalent ones using finite representations,
-without violating the specification. This is particularly important when the
-high-end user has to define secure contracts that contain properties for memory
-allocation, representation of floats, and overflow handling.
+without violating the specification. The SMT community has already kickstarted a project towards achieving this, through a recently introduced theory on Floating-Point Arithmetic~\cite{brain2015automatable}. The problem is particularly interesting for the cases where the high-end user has to define secure contracts that contain properties for memory allocation, representation of floats, and overflow handling.

@@ -218,4 +218,15 @@ A.~Walker and L.~Ryzhyk, ``Predicate abstraction for reactive synthesis,'' in
 E.~Ghassabani, A.~Gacek, and M.~W. Whalen, ``Efficient generation of inductive
   validity cores for safety properties,'' in \emph{FSE}, 2016.
 
+\bibitem{jakobs2017compact}
+M.-C. Jakobs and H.~Wehrheim, ``Compact proof witnesses,'' in \emph{NASA Formal
+  Methods Symposium}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2017,
+  pp. 389--403.
+
+\bibitem{brain2015automatable}
+M.~Brain, C.~Tinelli, P.~R{\"u}mmer, and T.~Wahl, ``An automatable formal
+  semantics for ieee-754 floating-point arithmetic,'' in \emph{Computer
+  Arithmetic (ARITH), 2015 IEEE 22nd Symposium on}.\hskip 1em plus 0.5em minus
+  0.4em\relax IEEE, 2015, pp. 160--167.
+
 \end{thebibliography}
