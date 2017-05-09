@@ -159,7 +159,7 @@ the solution for an unrealizable contract.
 \end{proof}
 \fi
 
-
+%\iffalse
 \begin{lemma} Consider the system
 $\mathfrak{U} = \tuple{S, T}$. With $S$, we denote the set of
 subsets of the orignal state space, such that each subset contains assignments that lead to the
@@ -178,9 +178,6 @@ possible ones in the \glb, and the states from which we take a transition into
 a new state that's either in the \lub, or outside of $B$. For the special case
 where $B = S$, we have that $\glb = false$ and $\lub = true$.
 \end{proof}
-
-
-
 
 
 \begin{lemma} Algorithm~\ref{alg:synthesis} is a monotonic function on $S$ to
@@ -217,6 +214,7 @@ $\tuple{P, T}$ is a complete lattice, as it contains a \lub, which is
 the solution to a realizable contract, while $\glb = false$, and corresponds to
 the solution for an unrealizable contract.
 \end{proof}
+%\fi
 
 From Theorem~\ref{thm:fixpoint} we have shown that Algorithm~\ref{alg:synthesis} computes a fixpoint for both cases where the specification is realizable or not. With this knowledge at hand, it is necessary to prove the soundness of the fixpoints generated. In other words, when a fixpoint is computed for a realizable contract, it should be the case that the algorithm reports a ``realizable'' result. The same needs to hold for the dual case of ``unrealizable'' results.
 
