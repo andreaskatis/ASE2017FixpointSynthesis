@@ -247,23 +247,8 @@ Assume a quantifier elimination process that provides exact regions of validity.
 
 Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases, overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations and the algorithm's performance decreases, since problems might not be solvable as fast as with the use of exact regions. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might cover safe states in their constraints. This makes the algorithm follow a more pessimistic approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be manifested in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to unsound ``unrealizable'' results. In the context of this paper, and considering Lemma~\ref{lem:subset}, \aeval is able to provide exact regions of validity.
 
-\subsection{Example: The Cinderella-Stepmother Game}
-\label{sec:example}
-
-For the purposes of this paper, we will illustrate how the validity
-guided-synthesis algorithm works, using a variation of the minimum-backlog
-problem, the two player game between Cinderella and her wicked
-Stepmother, first  expressed by Bodlaender \textit{et
-al.}~\cite{bodlaender2012cinderella}.
-
-The main objective for Cinderella (i.e. the reactive system) is to prevent a
-collection of buckets from overflowing with water. On the other hand,
-Cinderella's Stepmother (i.e. the system's environment) refills the buckets with a predifined amount of water that is distributed in a random fashion between the buckets.
-For the running example, we chose an instance of the game that has been
-previously used in template-based synthesis~\cite{beyene2014constraint}. In this instance, the game is described
-using five buckets, where each bucket can contain up to two units of water.
-Cinderella has the option to empty two adjacent buckets at each of her turns,
-while the Stepmother distributes one unit of water over all five buckets.
+\subsection{Applying \jsynvg to the Cinderella-Stepmother game}
+\label{sec:algexample}
 
 \begin{figure}[!t]
 \centering
@@ -303,12 +288,12 @@ let
   --%PROPERTY guarantee;
 tel;
  \end{Verbatim}
-\caption{An Assume-Guarantee contract for the Cinderella-Stepmother game}
+\caption{An Assume-Guarantee contract for the Cinderella-Stepmother game in Lustre}
 \label{fg:cind}
 \end{figure}
 
-Figure~\ref{fg:cind} shows one possible interpretation of a contract designed
-for the aforementioned instance of the Cinderella-Stepmother game. The contract
+Figure~\ref{fg:cind} shows one possible interpretation of the contract designed
+for the instance of the Cinderella-Stepmother game that we introduced in Section~\ref{sec:example}. The contract
 is expressed using Lustre~\cite{lustrev6}, a language
 that has been extensively used for specification as well as implementation of
 safety-critical systems, and is the kernel language in SCADE, a popular tool in
