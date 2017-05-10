@@ -64,7 +64,7 @@ satisfies the assumptions.
 
 If $\phi$ is not true for every possible assignment of the universally
 quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
-(Line 12).
+(Line 11).
 %an exact subset of $F(s) \land A(s,i)$, namely $Q(s,i)$, which, if plugged in
 % the original left-hand side of $\phi$, makes the resulting formula valid. We will refer to such subsets as \textit{regions of
 %validity}.
@@ -95,7 +95,7 @@ we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 2
 as $\lnot W(s)$ is not an exact region of validity, with respect to $Q(s,i)$. As
 such there might still be states in $Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
 process by repeating the top-level \aeval query, with $F(s) = F(s) \land \lnot
-W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
+W(s)$. \john{I'm not sure what notation you want to use here, but $=$ does not make sense since it is already being used for logical equality. Maybe use $\leftarrow$ or $:=$?} Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
 describes the set of viable states, or reach the case where $F(s) = false$, and
 declare our contract to be unrealizable.
 
@@ -111,8 +111,7 @@ of such counterexamples as potential future work.
 
 \subsection{Soundness}
 \label{sec:soundness}
-To prove Algorithm~\ref{alg:synthesis}'s soundness regarding results, we first need to show that
-the algorithm always computes in fact a fixpoint, containing only state variable assignments that lead to the satisfiability of $\forall\exists$-formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
+To prove Algorithm~\ref{alg:synthesis}'s soundness regarding results, we first need to show that the algorithm always computes a fixpoint containing only state variable assignments that lead to the satisfiability of $\forall\exists$-formulas following the form of Equation~\ref{eq:viable}. To achieve this, we
 use the fixed point theorem that was first stated by Alfred Tarski~\cite{tarski1955lattice}.
 
 
@@ -163,7 +162,7 @@ the solution for an unrealizable contract.
 \begin{lemma} Consider the system
 $\mathfrak{U} = \tuple{S, T}$. With $S$, we denote the set of
 subsets of the orignal state space, such that each subset contains assignments that lead to the
-satisfiability of Equation~\ref{eq:viable}. By $T$, we refer to the
+satisfiability of Equation~\ref{eq:viable}. $T$ refers to the
 transition relation between any two states, that establishes a partial order
 on $S$. Then $\mathfrak{U}$ is a complete lattice, where every subset $B \subseteq
 S$ has a greatest lower bound  $\glb = \cap B$  and a least upper
@@ -179,9 +178,13 @@ a new state that's either in the \lub, or outside of $B$. For the special case
 where $B = S$, we have that $\glb = false$ and $\lub = true$.
 \end{proof}
 
+\john{I really do not follow this proof. Why is it clear that $T$ represents a partial order of states? Is $T$ the result of the synthesis algorithm? Certainly you could have a transition system in which states transition from one back to another and so on and so forth.}
+
 
 \begin{lemma} Algorithm~\ref{alg:synthesis} is a monotonic function on $S$ to
 $S$.
+
+\john{The type of Algorithm~\ref{alg:synthesis}'s input is different from its output so I do not understand how it can map $S$ to $S$}.
 \label{lem:monotonicity}
 \end{lemma}
 \begin{proof}
@@ -225,6 +228,8 @@ Assume a sound quantifier elimination process that provides us with exact region
 \end{theorem}
 \begin{proof} To prove this theorem, we show that $\forall s. \viable(s) \Rightarrow F(s)$ using induction on $F(s)$. The base case is covered since $F(s) \land G_I(s) \neq \varnothing$. For the inductive case, we require that a state $x$ exists, such that $G_T(s,i,x) \land F(x)$. Since $\viable(s)$ is true, we know that $\exists s'. G_T(s,i,s') \land \viable(s')$. Thus we pick $s'$ and use the inductive hypothesis to show that $\viable(s') \Rightarrow F(s')$.
 \end{proof}
+
+\john{The base case of this proof does not imply that $\exists s. \viable(s) \Rightarrow F(s)$. Viability is not defined in terms of $G_I(s)$. Also, even if you can show the base case is satisfied you need to make an assumption that $A(s,i)$ is non-empty in order to have $\exists s'. G_T(s,i,s') \land \viable(s')$. Also to imply induction this way don't we need to show that $\forall_i. G_T(s,i,s')$ is some sort of well-founded relation over $S$?}
 
 \begin{theorem}[Soundness of ``unrealizable" results]
 \label{thm:sndunreal}

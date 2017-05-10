@@ -16,11 +16,11 @@ where $A(s)$ has only existential\andreas{you meant universal here, right?} quan
 %
 \andreas{I suppose that the partitions P are the ones named T in the Figure. I think we should keep the same name or the reader might get confused.}
 While deciding the validity, \aeval iteratively enumerates models of $A(s) \land G (s, s')$ and groups them into a set of partitions $\{P_i(s)\}$, such that each $P_i(s) \Rightarrow \exists s' . G (s, s')$.
-We say that after $n$ iterations, \aeval establishes a formula $R_n(s) \eqdef \bigvee_{i=1}^n P_i(s)$ which is by definition an under-approximation of $\exists s' . G (s, s')$.
+We say that after $n$ iterations, \aeval establishes a formula $R_n(s) \eqdef \bigvee_{i=1}^n P_i(s)$ which is by definition an under-approximation of $\exists s' . G (s, s')$. \john {Because we are are already using $A$ and $G$ to represent meaningful formulas I suggest that we use different symbols here so it is not confusing. Especially because the symbols have different signatures in these locations.}
 
 If after $n$ iterations, it happens that $A(s) \Rightarrow R_n(s)$ then $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is valid, and \aeval generates a Skolem function as described in~\cite{katis2016synthesis}.
 Alternatively, if $A(s) \land  G (s, s') \land \neg{R_n (s, s')}$ is unsatisfiable, then $A(s) \land \neg G (s, s')$ is satisfiable, or equivalently $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid (see an example in Figure~\ref{fg:aeval}).
-In both cases, we say that $A(s) \land R_n(s)$ is a \emph{region of validity}, meaning that $\forall s \,.\,  A(s) \land R_n(s) \Rightarrow \exists s' . G(s,s')$ is valid by construction.
+In both cases, we say that $A(s) \land R_n(s)$ is a \emph{region of validity}, meaning that $\forall s \,.\,  A(s) \land R_n(s) \Rightarrow \exists s' . G(s,s')$ is valid by construction. \john{It is a bit strange how we alternate using formulas that have no free variables along with formulas whose free variables are meant to be implicitly existentially quantified. I think we should either stick with a notation or explicitly say that free variables are interpreted to be existentially quantified.}
 
 \begin{lemma}
 If formula $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid, and $A(s) \land R_n(s)$ is the region of validity, then there is no other formula $S(s)$ such that $A(s) \land R_n(s) \Rightarrow S(s)$ and $\forall s \,.\,  S(s) \Rightarrow \exists s' . G(s,s')$.

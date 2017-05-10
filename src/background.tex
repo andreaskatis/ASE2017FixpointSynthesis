@@ -5,7 +5,7 @@
 \begin{figure}[!t]
 \centering
 \includegraphics[width=3.5in]{agcontract-crop.pdf}
-\caption{A simple Assume-Guarantee Contract.}
+\caption{A simple Assume-Guarantee Contract. \john{Was this example used in previous papers? I am not sure if it matters or not, but it might be more compelling to come up with another simple example. Reviewers may bulk if we keep hitting them over the head with the same figure.}}
 \label{fg:agcontract}
 \end{figure}
 
@@ -88,6 +88,6 @@ is realizable, we require that
 \end{equation}
 
 The intuition behind our proposed algorithm in this paper relies on the
-discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extract a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
+discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extracting a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
 
 \input{aeval}
