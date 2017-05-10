@@ -59,7 +59,7 @@ Line 1 initializes the process by defining the fixpoint $F(s)$ to be equal to
 $true$. The algorithm then attempts to converge to a fixpoint $F(s)$
 that only contains viable states, considering Equation~\ref{eq:viable}
 and~\ref{eq:nonempty}.
-We therefore construct the formula $\phi = \forall s,i. \ (F(s) \land A(s,i)
+We therefore construct the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i)
 \Rightarrow \exists s'. G_{T}(s,i,s') \land F(s'))$, and provide it as an input to \aeval (Line 4). \aeval is particularly
 focused on determining the validity of $\phi$. If the formula is valid, then a witness
 \textit{Skolem} is constructed, containing valid assignments to the
@@ -86,7 +86,7 @@ towards eliminating this issue.
 
 The main concept to properly refine $F(s)$, is to extract a region of validity
 that only involves constraints over state variables. To achieve this, we ask for
-the validity of the formula $\phi' = \forall s. \ (F(s) \Rightarrow \exists
+the validity of the formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
 i. A(s,i) \land \lnot Q(s,i))$ (Line 17). If $\phi'$ is a valid formula, then for
 any assignment of the state variables $s$, we have a valid input (i.e. that
 satisfies the assumptions), for which the states are do not satisfy the constraints defined by the region
@@ -100,8 +100,8 @@ Having a new region of validity that is not equal to \textit{false} (Line 23),
 we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 25). Despite the fact that we now have a refined set of viable states, we are not yet done,
 as $\lnot W(s)$ is not an exact region of validity, with respect to $Q(s,i)$. As
 such there might still be states in $Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
-process by repeating the top-level \aeval query, with $F(s) = F(s) \land \lnot
-W(s)$. \john{I'm not sure what notation you want to use here, but $=$ does not make sense since it is already being used for logical equality. Maybe use $\leftarrow$ or $:=$?} Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
+process by repeating the top-level \aeval query, with $F(s) \gets F(s) \land \lnot
+W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
 describes the set of viable states, or reach the case where $F(s) = false$, and
 declare our contract to be unrealizable.
 
@@ -338,7 +338,7 @@ We initiate our call to the procedure defined in Algorithm~\ref{alg:synthesis},
 by providing the contract in Figure~\ref{fg:cind} as input. The algorithm
 then enters an infinite loop, where it attempts to construct a fixpoint of
 viable states that can use the transition relation to new, viable states,
-while complying to the specification. Initially $F(s) = true$, and we ask \aeval for the validiity of the formula $\phi = \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
+while complying to the specification. Initially $F(s) = true$, and we ask \aeval for the validiity of the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
 satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
 a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
 which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
@@ -373,7 +373,7 @@ example}
 
 Considering the existence of undesirable constraints in $Q(s,i)$, the next step
 is to extract a region of validity that is only described using state variables.
-As such, we construct the formula $\phi' = \forall s. \ (F(s) \Rightarrow \exists
+As such, we construct the formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
 i. A(s,i) \land \lnot Q(s,i))$, and ask \aeval regarding its validity. According
 to \aeval, $\phi'$ is not valid, an indication that may eventually lead us to a
 proof of the contract's realizability. If $\phi'$ was valid, then every state in
