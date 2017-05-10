@@ -10,6 +10,8 @@ Lustre language~\cite{lustrev6}, which functions as an intermediate representati
 The latter is a high-level specification and analysis language with which
 contracts are expressed, using the Assume-Guarantee Reasoning (\textsc{AGREE})
 framework~\cite{NFM2012:CoGaMiWhLaLu}.
+\andrew{it seems strange to be talking about AADL and maybe even AGREE
+  at all here.}
 %\footnote{An unofficial release of \jkind
 %including our synthesis algorithm is available to download at
 %https://github.com/andrewkatis/jkind-1/tree/synthesis. \aeval needs to be
@@ -17,7 +19,8 @@ framework~\cite{NFM2012:CoGaMiWhLaLu}.
 During the internal process, \jsynvg translates Lustre specifications to
 the SMT-LIB language, with which the $\forall\exists$-formulas, regions of
 validity, as well as the witnesses are expressed. The underlying solver that is
-used is the \aeval Skolemizer, which currently supports $\forall\exists$-formulas expressed using real (LRA) and integer (LIA) arithmetic, as well as
+used is the \aeval Skolemizer, which currently supports
+$\forall\exists$-formulas expressed using linear real (LRA) and integer (LIA) arithmetic, as well as
 their combination (LIRA).
 %
 For realizable specification, and considering Algorithm~\ref{alg:synthesis}, we

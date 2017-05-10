@@ -8,9 +8,9 @@ match a certain shape (the template) while {\em inductive synthesis} uses the id
 
 In this work, we describe a novel approach that can effectively synthesize
 programs using specifications written in the form of an arbitrary {\em
-assume/guarantee contract}. The technique has been excersised to specification
-that includes safety properties in linear real and integer arithmetic (LIRA),
-but remains generic enough to be extended into supporting additional theories
+assume/guarantee contract}. The technique has been exercised on specifications
+of safety properties in linear real and integer arithmetic (LIRA),
+but it remains generic enough to be extended to other theories
 in the future. This is a ``hands-off'' approach, as there is no
 requirement from the user to interact with the underlying machinery,
 \andreas{I edited the way multiple citations look (all in one pair of
@@ -32,8 +32,8 @@ provide safe reactions to environment inputs.\john{This is a little bit confusin
 formula's satisfiability, which can be directly transformed into the
 language intended for the system's implementation.
 
-The algorithm was implemented as a feature to the \jkind model checker, which
-already had unofficial support to program synthesis according to work from
+The algorithm was implemented as a feature in the \jkind model checker, which
+already had unofficial support for program synthesis according to work from
 Katis~\textit{et al.} based on k-inductive proofs of a contract's
 realizability~\cite{gacek2015towards,katis2016towards,katis2016synthesis}.
 Our approach does not depend on k-induction, but is still based on the general
@@ -41,11 +41,12 @@ concept of extracting a witness that satisfies a $\forall\exists$-formula, using
 the \aeval Skolemizer~\cite{fedyukovich2015automated}. To extract such a witness, we do not depend on a k-inductive proof, but instead use the \textit{regions of validity} that \aeval can generate from non-valid formulas,
 to reach a fixpoint of satisfiable assignments to state variables.
 This approach is a direct improvement over the k-inductive method in two
-important aspects; performance, and soundness of 'unrealizable' results. While
+important aspects: performance, and soundness of `unrealizable' results. While
 the former is self-explanatory, with the latter we refer to cases where the
-k-inductive algorithm would spuriously report a contract as 'unrealizable', when a correct
+k-inductive algorithm would spuriously report a contract as `unrealizable', when a correct
 implementation actually exists. This unsoundness stems from the pessimistic
-behavior of the k-inductive algorithm, as it is not capable to only consider a
+behavior of the k-inductive algorithm, as it is not capable of
+considering only a
 ``safe'' subset of the state space. We were able to confirm our claims
 by comparing the two algorithms under a comprehensive benchmark suite containing
 contracts that were initially used in verification problems, as well as
@@ -60,3 +61,7 @@ approach, comparing it against a method based on k-induction that exists under t
 We discuss the differences of our work with closely related ideas in
 Section~\ref{sec:related} and we conclude by providing potential directions for future work in Section~\ref{sec:conclusion}.
 
+	
+%%% Local Variables:
+%%% TeX-master: "document"
+%%% End:

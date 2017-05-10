@@ -44,7 +44,13 @@ uses the information provided by regions of validity to compute a
 greatest fixpoint of safe states. In our context, this fixpoint is not only
 usable as a proof to the realizability of a specification, but also leads to the
 construction of a witness that can be translated with a straightforward process
-into a functional and efficient implementation. The algorithm is presented in detail in Section~\ref{sec:alg} and we provide soundness proofs regarding the algorithm's capabilities of determining the realizability (unrealizability) of specification in Section~\ref{sec:soundness}. An illustrative example is used in Section~\ref{sec:example} to guide the reader through the process of synthesizing implementations, using specification that describes the Cinderella-Stepmother game.
+into a functional and efficient implementation. The algorithm is
+presented in detail in Section~\ref{sec:alg} and we provide soundness
+proofs regarding the algorithm's capabilities of determining the
+realizability (unrealizability) of specification in
+Section~\ref{sec:soundness}. An illustrative example is used in
+Section~\ref{sec:example} to guide the reader through the process of
+synthesizing implementations, using a specification that describes the Cinderella-Stepmother game.
 
 \subsection{Algorithm}
 \label{sec:alg}
@@ -59,7 +65,7 @@ focused on determining the validity of $\phi$. If the formula is valid, then a w
 \textit{Skolem} is constructed, containing valid assignments to the
 existentially quantified variables of $\phi$. In the context of viability, this
 witness is capable of providing viable states that can be used as a safe
-reaction, considering the precedence of a viable state and an input that
+reaction, given a prior viable state and an input that
 satisfies the assumptions.
 
 If $\phi$ is not true for every possible assignment of the universally
@@ -256,14 +262,18 @@ problem, the two player game between Cinderella and her wicked
 Stepmother, first  expressed by Bodlaender \textit{et
 al.}~\cite{bodlaender2012cinderella}.
 
-The main objective for Cinderella (i.e. the reactive system) is to prevent a
-collection of buckets from overflowing with water. On the other hand,
-Cinderella's Stepmother (i.e. the system's environment) refills the buckets with a predifined amount of water that is distributed in a random fashion between the buckets.
-For the running example, we chose an instance of the game that has been
-previously used in template-based synthesis~\cite{beyene2014constraint}. In this instance, the game is described
-using five buckets, where each bucket can contain up to two units of water.
-Cinderella has the option to empty two adjacent buckets at each of her turns,
-while the Stepmother distributes one unit of water over all five buckets.
+The main objective for Cinderella (i.e. the reactive system) is to
+prevent a collection of buckets from overflowing with water. On the
+other hand, Cinderella's Stepmother (i.e. the system's environment)
+refills the buckets with a predefined amount of water that is
+distributed in an arbitrary fashion between the buckets. For the
+running example, we chose an instance of the game that has been
+previously used in template-based
+synthesis~\cite{beyene2014constraint}. In this instance, the game is
+described using five buckets, placed in a circle, where each bucket
+can contain up to two units of water. Cinderella has the option to
+empty two adjacent buckets at each of her turns, while the Stepmother
+distributes one unit of water over all five buckets.
 
 \begin{figure}[!t]
 \centering
@@ -282,19 +292,19 @@ let
 
   b1 = 0.0 ->
        (if (e = 5 or e = 1) then i1
-                            else (pre(b1) + i1)) ;
+                            else (pre(b1) + i1));
   b2 = 0.0 ->
        (if (e = 1 or e = 2) then i2
-                            else (pre(b2) + i2)) ;
+                            else (pre(b2) + i2));
   b3 = 0.0 ->
        (if (e = 2 or e = 3) then i3
-                            else (pre(b3) + i3)) ;
+                            else (pre(b3) + i3));
   b4 = 0.0 ->
        (if (e = 3 or e = 4) then i4
-                            else (pre(b4) + i4)) ;
+                            else (pre(b4) + i4));
   b5 = 0.0 ->
        (if (e = 4 or e = 5) then i5
-                            else (pre(b5) + i5)) ;
+                            else (pre(b5) + i5));
 
   guarantee = b1 <= C and b2 <= C and b3 <= C and
   	    b4 <= C and b5 <= C;
@@ -357,7 +367,9 @@ in full effect, but Figure~\ref{fg:snippet} shows part of the generated
 $Q(s,i)$, in SMT-LIB format (pre-fix notation), where the input variables are
 part of the constraints. The variable \textit{\%init} is used in the underlying
 machinery as a flag to indicate whether the current state is initial or not
-(true and false, respectively).
+(true and false, respectively). \andrew{Is there anything else we can
+  say about the code in the figure? Does it give us any insight into a
+  possible solution for cinderella?}
 
 \begin{figure}[!t]
 \centering
@@ -392,8 +404,10 @@ From this point on, the algorithm reiterates the process following the steps
 explained above. For this particular example, the algorithm terminates after one
 more refinement, at depth 2. At that point, the refined version of
 $\phi$ is valid, and \aeval constructs a witness containing valid reactions to
-environment behavior. Figure~\ref{fg:witness} provides a snippet of how a
-witness looks like, after being translated to a C implementation. In general,
+environment behavior. Figure~\ref{fg:witness} provides a snippet of
+that witness, after being translated to a C implementation. \andrew{What's with the 'if' in the middle of the 'else' block? Is it
+  suppose to be an 'else-if'?}
+In general,
 the witness is described through the use of an nested if-then-else block, where the conditions are subsets of the antecedent of
 the implication in formula $\phi$, while the body contains valid assignments to
 state variables, for this particular subset.
@@ -434,4 +448,5 @@ through the use of pre-defined templates. Despite this, we were still
 able to synthesize implementations for the Cinderella-Stepmother game for any
 value of $C \geq 2$, using a completely automatic approach. This fact alone,
 provided us with solid foundations regarding the algorithm's effectiveness in
-solving complex problems.
+solving complex problems. \andrew{What about $C < 2$. Did you check
+  any of these values? What does the algorithm say about them?}
