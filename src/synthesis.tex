@@ -15,26 +15,23 @@
 				\Return $\tuple{\realizable, \skolems}$;
 			\Else{\Comment{Empty set of initial states}}
 		 		\Return $\tuple{\unrealizable, \varnothing}$;
-				\State
 		 	\EndIf
 		\Else{\Comment{Extract region of validity $Q(s,i)$}}
 			\State $Q(s,i) \gets \subs$;
 			\If{$Q(s,i) = false$}
 				\Return $\tuple{\unrealizable, \varnothing}$;
-				\State
 			\EndIf
 			\State $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists i. A(s,i) \land \lnot
 			Q(s,i))$;
 			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
 			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
 				\Return $\tuple{\unrealizable, \skolems'}$;
-		        \State\Comment{Extract witnessing cex}
-			\Else{}
+			\Else{}\Comment{Extract witnessing cex}
 				\State $W(s) \gets \subs'$;
 				\If{$W(s) = false$}
 					\Return $\tuple{\unrealizable, \varnothing}$;
 				\EndIf
-				\State $F(s) = F(s) \land \lnot W(s)$;\Comment{Refine candidate fixpoint}
+				\State $F(s) \gets F(s) \land \lnot W(s)$;\Comment{Refine set of viable states}
 			\EndIf
 		\EndIf
 	\EndWhile
@@ -86,15 +83,15 @@ that only involves constraints over state variables. To achieve this, we ask for
 the validity of the formula $\phi' = \forall s. \ (F(s) \Rightarrow \exists
 i. A(s,i) \land \lnot Q(s,i))$ (Line 17). If $\phi'$ is a valid formula, then for
 any assignment of the state variables $s$, we have a valid input (i.e. that
-satisfies the assumptions), for which the states are taken outside of the region
+satisfies the assumptions), for which the states are do not satisfy the constraints defined by the region
 of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
 safe in this context. On the other hand, if $\phi'$ is not valid, \aeval computes
 a new region of validity, namely $W(s)$. The new region is a strict subset of
-$F(s)$, is described using constraints over state variables only, and entails
+$F(s)$, is described using constraints only over state variables, and entails
 the existence of unsafe states in $F(s)$, considering valid inputs.
 
 Having a new region of validity that is not equal to \textit{false} (Line 23),
-we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 25). Despite the fact that we now have a refined candidate fixpoint, we are not yet done,
+we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 25). Despite the fact that we now have a refined set of viable states, we are not yet done,
 as $\lnot W(s)$ is not an exact region of validity, with respect to $Q(s,i)$. As
 such there might still be states in $Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
 process by repeating the top-level \aeval query, with $F(s) = F(s) \land \lnot
@@ -109,7 +106,7 @@ in Algorithm~\ref{alg:synthesis}. In this particular case, if $\phi'$ is a valid
 formula, we can extract a witness that can be essentially used as a test case to
 demonstrate the specification's unrealizability. The witness contains
 certain assignments to input variables, for which the condition of viability does not
-hold, for any state. We leave the specifics regarding the meaning and usability
+hold, for any state. We leave the details regarding the meaning and usability
 of such counterexamples as potential future work.
 
 \subsection{Soundness}
@@ -200,7 +197,7 @@ Dually to Theorem~\ref{thm:sndreal} we show that $\forall s. \lnot \viable(s) \R
 Assume a quantifier elimination process that provides exact regions of validity. The process described in Algorithm~\ref{alg:synthesis} is sound.
 \end{corollary}
 
-Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases, overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations and the algorithm's performance decreases, since problems might not be solvable as fast as with the use of exact regions. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might cover safe states in their constraints. This makes the algorithm follow a more pessimistic approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be manifested in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to unsound ``unrealizable'' results.
+Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases, overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations and the algorithm's performance decreases, since problems might not be solvable as fast as with the use of exact regions. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might cover safe states in their constraints. This makes the algorithm follow a more pessimistic approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be manifested in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to unsound ``unrealizable'' results. In the context of this paper, and considering Lemma~\ref{lem:subset}, \aeval is able to provide exact regions of validity.
 
 \subsection{Example: The Cinderella-Stepmother Game}
 \label{sec:example}
@@ -340,9 +337,8 @@ i. A(s,i) \land \lnot Q(s,i))$, and ask \aeval regarding its validity. According
 to \aeval, $\phi'$ is not valid, an indication that may eventually lead us to a
 proof of the contract's realizability. If $\phi'$ was valid, then every state in
 $F(s)$ is unsafe, under a specific input that satisfies the contract
-assumptions, and the specification is unrealizable. Since this is not the case,
-however, a refinement process comes at the next step. We derive $F(s) = F(s)
-\land \lnot W(s)$, where $W(s)$ is the region of validity of $\phi'$.
+assumptions (since $\lnot Q(s,i)$ holds in this case), and the specification is unrealizable. Since this is not the case,
+however, \aeval computes a region of validity $W(s)$ that describes states that are unsafe under certain valid inputs. As a consequence, a refinement process comes at the next step. in which we derive $F(s) = F(s) \land \lnot W(s)$, thus blocking the unsafe region $W(s)$.
 
 From this point on, the algorithm reiterates the process following the steps
 explained above. For this particular example, the algorithm terminates after one

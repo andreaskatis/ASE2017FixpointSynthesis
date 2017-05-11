@@ -127,6 +127,10 @@ E.~Jahier, P.~Raymond, and N.~Halbwachs, ``{The Lustre V6 Reference Manual}.''
 A.~Gacek, ``{JK}ind -- an infinite-state model checker for safety properties in
   {Lustre},'' \url{http://loonwerks.com/tools/jkind.html}, 2016.
 
+\bibitem{feiler2006architecture}
+P.~H. Feiler, D.~P. Gluch, and J.~J. Hudak, ``The architecture analysis \&
+  design language (aadl): An introduction,'' DTIC Document, Tech. Rep., 2006.
+
 \bibitem{NFM2012:CoGaMiWhLaLu}
 D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha,
   ``Compositional verification of architectural models,'' in \emph{NFM}.\hskip
@@ -213,5 +217,16 @@ A.~Walker and L.~Ryzhyk, ``Predicate abstraction for reactive synthesis,'' in
 \bibitem{Ghass16}
 E.~Ghassabani, A.~Gacek, and M.~W. Whalen, ``Efficient generation of inductive
   validity cores for safety properties,'' in \emph{FSE}, 2016.
+
+\bibitem{jakobs2017compact}
+M.-C. Jakobs and H.~Wehrheim, ``Compact proof witnesses,'' in \emph{NASA Formal
+  Methods Symposium}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2017,
+  pp. 389--403.
+
+\bibitem{brain2015automatable}
+M.~Brain, C.~Tinelli, P.~R{\"u}mmer, and T.~Wahl, ``An automatable formal
+  semantics for ieee-754 floating-point arithmetic,'' in \emph{Computer
+  Arithmetic (ARITH), 2015 IEEE 22nd Symposium on}.\hskip 1em plus 0.5em minus
+  0.4em\relax IEEE, 2015, pp. 160--167.
 
 \end{thebibliography}
