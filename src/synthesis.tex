@@ -87,18 +87,16 @@ quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
 %an exact subset of $F(s) \land A(s,i)$, namely $Q(s,i)$, which, if plugged in
 % the original left-hand side of $\phi$, makes the resulting formula valid. We will refer to such subsets as \textit{regions of
 %validity}.
-At this point, one might assume that $Q(s,i)$ is sufficient to restrict $F$ towards a solution. This is not the case however, as $Q(s,i)$ creates a subregion
+At this point, one might assume that $Q(s,i)$ is sufficient to restrict $F$ towards a solution. This is not the case, however, as $Q(s,i)$ creates a subregion
 involving both state and input variables. As such, it may contain constraints
-over the contract's inputs over and above what are required by $A$, ultimately leading to implementations that only work correctly for a small part of the input domain.
+over the contract's inputs above what are required by $A$, ultimately leading to implementations that only work correctly for a small part of the input domain.
 
 Fortunately, we can again use \aeval's capability of providing regions of validity
 towards removing inputs from $Q$.  Essentially, we want to remove those states from $Q$ if even one input causes them to violate the formula on line (3).  We denote by $W$ the ``violating region'' of $Q$.  To construct $W$, we ask \aeval to determine
 the validity of the formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
 i. A(s,i) \land \lnot Q(s,i))$ (Line 13). \aeval computes
 a new region of validity and assigns it to $W(s)$. The new region entails
-the existence of unsafe states in $F(s)$ for some input.  We remove this unsafe region from $F$ in line 16.  
-
-The loop continues until we reach a (greatest) fixpoint for $F$.  If the system is unrealizable, this fixpoint (which may be the formula `false') does not intersect the set of initial states.  
+the existence of unsafe states in $F(s)$ for some input.  We remove this unsafe region from $F$ in line 16.   The loop continues until we reach a greatest fixpoint for $F$.  %If the system is unrealizable, this fixpoint (which may be the formula `false') does not intersect the set of initial states.
 
 %or until $W(s)$ becomes valid, that is, for any assignment of the state variables $s$, we have an input that satisfies the assumptions and violates $Q$.  In this case, every state in $F$ has some failing input and the system is unrealizable, which will lead to a failed check in Line 7 during the next iteration of the loop.
 
