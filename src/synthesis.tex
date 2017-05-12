@@ -622,6 +622,16 @@ the implication in formula $\phi$, while the body contains valid assignments to
 state variables to the corresponding subset.
 
 
+As is discussed by Beyene \textit{et al.}~\cite{beyene2014constraint}, the
+Cinderella-Stepmother is a rather challenging game. In particular, for the
+cases where $1.5 \leq C \leq 3.0$, the problem becomes non-trivial, and their
+work showed how familiarity with the problem can help alleviate this complexity
+through the use of pre-defined templates. Despite this, we were still
+able to synthesize implementations for the Cinderella-Stepmother game for any
+value of $C \geq 2$, using a completely automatic approach\footnote{The region $1.5\leq C < 2$ is a particularly hard problem - no results for this region are presented in Beyene, and our algorithm does not converge given a timeout of seven hours.}. %This fact alone,
+%provided us with solid foundations regarding the algorithm's effectiveness in
+%solving complex problems.
+
 \begin{figure}[!t]
 \centering
  \begin{Verbatim}[fontsize=\footnotesize]
@@ -649,12 +659,3 @@ example}
 \label{fg:witness}
 \end{figure}
 
-As is discussed by Beyene \textit{et al.}~\cite{beyene2014constraint}, the
-Cinderella-Stepmother is a rather challenging game. In particular, for the
-cases where $1.5 \leq C \leq 3.0$, the problem becomes non-trivial, and their
-work showed how familiarity with the problem can help alleviate this complexity
-through the use of pre-defined templates. Despite this, we were still
-able to synthesize implementations for the Cinderella-Stepmother game for any
-value of $C \geq 2$, using a completely automatic approach.~\footnote{The region $1.5\leq C < 2$ is a particularly hard problem and the algorithm does not converge with a timeout up to seven hours.} This fact alone,
-provided us with solid foundations regarding the algorithm's effectiveness in
-solving complex problems.
