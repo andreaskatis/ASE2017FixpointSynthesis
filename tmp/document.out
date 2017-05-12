@@ -6,15 +6,13 @@
 \BOOKMARK [2][-]{subsection.3.3}{Skolem functions and regions of validity}{section.3}% 6
 \BOOKMARK [1][-]{section.4}{Validity-Guided Synthesis from Assume-Guarantee Contracts}{}% 7
 \BOOKMARK [2][-]{subsection.4.1}{Algorithm}{section.4}% 8
-\BOOKMARK [2][-]{subsection.4.2}{Notes}{section.4}% 9
-\BOOKMARK [2][-]{subsection.4.3}{Soundness of Realizable Results}{section.4}% 10
-\BOOKMARK [2][-]{subsection.4.4}{Soundness of Unrealizable Results}{section.4}% 11
-\BOOKMARK [2][-]{subsection.4.5}{Termination on Finite Models}{section.4}% 12
-\BOOKMARK [2][-]{subsection.4.6}{Applying JSyn-vg to the Cinderella-Stepmother game}{section.4}% 13
-\BOOKMARK [1][-]{section.5}{Implementation}{}% 14
-\BOOKMARK [1][-]{section.6}{Experimental Results}{}% 15
-\BOOKMARK [1][-]{section.7}{Related Work}{}% 16
-\BOOKMARK [1][-]{section.8}{Conclusion and Future Work}{}% 17
-\BOOKMARK [2][-]{subsection.8.1}{Summary}{section.8}% 18
-\BOOKMARK [2][-]{subsection.8.2}{Future Work}{section.8}% 19
-\BOOKMARK [1][-]{section*.9}{References}{}% 20
+\BOOKMARK [2][-]{subsection.4.2}{Soundness}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.3}{Termination on Finite Models}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.4}{Applying JSyn-vg to the Cinderella-Stepmother game}{section.4}% 11
+\BOOKMARK [1][-]{section.5}{Implementation}{}% 12
+\BOOKMARK [1][-]{section.6}{Experimental Results}{}% 13
+\BOOKMARK [1][-]{section.7}{Related Work}{}% 14
+\BOOKMARK [1][-]{section.8}{Conclusion and Future Work}{}% 15
+\BOOKMARK [2][-]{subsection.8.1}{Summary}{section.8}% 16
+\BOOKMARK [2][-]{subsection.8.2}{Future Work}{section.8}% 17
+\BOOKMARK [1][-]{section*.9}{References}{}% 18
