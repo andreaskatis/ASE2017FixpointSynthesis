@@ -30,7 +30,7 @@ while the Stepmother distributes one unit of water over all five buckets. In the
 
 
 In this section we define Assume-Guarantee contracts (Section~\ref{sec:pre}),
-describe the problem of synthesis in terms of discovering inductive invariants that imply the realizability of the given specification (Section~\ref{sec:formals}), and show how a sophisticated solver is used in order to compute these fixpoints (Section~\ref{sec:aeval}).
+describe the problem of synthesis in terms of discovering inductive invariants that imply the realizability of the given specification (Section~\ref{sec:formals}), and give a background on our main solving engine (Section~\ref{sec:aeval}).
 %Finally, we enrich our formal definitions with an informal proof of the
 %algorithm's correctness in terms of the successfully synthesized
 %implementations.
@@ -96,6 +96,6 @@ is realizable, we require that
 \end{equation}
 
 The intuition behind our proposed algorithm in this paper relies on the
-discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extracting a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
+discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extracting a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, the solver for $\forall\exists$-formulas.
 
 \input{aeval}
