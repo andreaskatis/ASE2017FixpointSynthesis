@@ -60,7 +60,7 @@ Implementation Performance (max - ms) & \textbf{464.359} & 485.197 \\
 \label{tbl:cindtbl}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
- & \multicolumn{3}{c|}{JSYN-VG} & \multicolumn{2}{c|}{CONSYNTH~\cite{beyene2014constraint}} \\ \hline
+ & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \hline
  & Implementation Size (LoC) & Implementation Performance (ms) & Time & Time (Z3) & Time (Barcelogic) \\ \hline
 Cinderella (C = 3) & 92 & 262.84 & 35s & \multirow{3.2s} & \multirow{1.2s} \\ \cline{1-4}
 Cinderella2 (C = 3) & 222 & 309.24 & 2m9s &  &  \\ \hline
@@ -158,7 +158,7 @@ well as synthesize an implementation for each.
 \label{fg:cex}
 \end{figure}
 
-Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity $C$ is equal to 2 and 3. The performance is heavily affected when we exercise the variation for $C=2$, but \jsynvg is still able to synthesize a winning region for Cinderella. Regarding the synthesized implementations, their size remains analogous to the difficulty of the problem, in conjunction with the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same levels across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates dramatically increases the performance of the underlying synthesis procedure. Nevertheless, the automated approach in \jsynvg is able to synthesize solutions for the same problems in a reasonable time margin, when compared to \textsc{Consynth}.
+Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity $C$ is equal to 2 and 3. The performance is heavily affected when we exercise the variation for $C=2$, but \jsynvg is still able to synthesize a winning region for Cinderella. Regarding the synthesized implementations, their size remains analogous to the difficulty of the problem, in conjunction with the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same levels across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates dramatically increases the performance of the underlying synthesis procedure. Nevertheless, the automated approach in \jsynvg is able to synthesize solutions for the same problems in a reasonable time margin, when compared to \textsc{ConSynth}.
 
 
 Overall, \jsynvg's validity-guided approach provides significant advantages
