@@ -485,12 +485,11 @@ explained above. For this particular example, the algorithm terminates after one
 more refinement, at depth 2. At that point, the refined version of
 $\phi$ is valid, and \aeval constructs a witness containing valid reactions to
 environment behavior. Figure~\ref{fg:witness} provides a snippet of
-that witness, after being translated to a C implementation. \andrew{What's with the 'if' in the middle of the 'else' block? Is it
-  suppose to be an 'else-if'?}
-In general,
-the witness is described through the use of nested \textit{if-then-else} blocks, following the structure of the Skolem witnesses, where the conditions are subsets of the antecedent of
+that witness, after being translated to a C implementation. 
+%\andrew{What's with the 'if' in the middle of the 'else' block? Is it suppose to be an 'else-if'?}
+In general, the witness is described through the use of nested \textit{if-then-else} blocks, following the structure of the Skolem witnesses, where the conditions are subsets of the antecedent of
 the implication in formula $\phi$, while the body contains valid assignments to
-state variables, for this particular subset.
+state variables to the corresponding subset.
 
 
 \begin{figure}[!t]
