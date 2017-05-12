@@ -12,7 +12,7 @@
 		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
 		\If{$\isValid(\subs)$}
             \State{$init \gets SAT(G_{I}(s) \land F(s))$}
-            \If(\isSat(init))
+            \If{$\isSat(init)$}
 			%\If{$G_{I}(s) \land F(s) \neq false$}
 				\Return $\tuple{\realizable, \skolems, init.model, F}$;
 			\Else{\Comment{Empty set of initial states}}
