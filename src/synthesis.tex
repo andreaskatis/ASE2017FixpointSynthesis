@@ -17,7 +17,7 @@
 			%\If{$G_{I}(s) \land F(s) \neq false$}
 				\Return $\tuple{\realizable, \aevalres.\skolems, init.model, F}$;
 			\Else{\Comment{Empty set of initial or viable states}}
-		 		\Return $\tuple{\unrealizable, \varnothing}$;
+		 		\Return $\tuple{\unrealizable}$;
 		 	\EndIf
 		\Else{\Comment{Extract region of validity $Q(s,i)$}}
 			\State $Q(s,i) \gets \aevalres.\subs$;
@@ -31,10 +31,10 @@
 %			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
 %				\Return $\tuple{\unrealizable, \skolems'}$;
 %			\Else{}\Comment{Extract witnessing cex}
-			\State $W(s) \gets true$;
-			\If{$\isInvalid(\aevalres')$}
+%			\State $W(s) \gets true$;
+%			\If{$\isInvalid(\aevalres')$}
 				\State $W(s) \gets \aevalres.\subs'$;
-			\EndIf
+%			\EndIf
 			\State $F(s) \gets F(s) \land \lnot W(s)$;\Comment{Refine set of viable states}	
 			
 %				\If{$W(s) = false$}
@@ -76,8 +76,10 @@ existentially quantified variables of $\phi$. In the context of viability, this
 witness is capable of providing viable states that can be used as a safe
 reaction, given a prior viable state and an input that
 satisfies the assumptions. With a valid formula at hand, it only remains to check that the fixpoint is not empty, and intersects with the initial states (Line 7).
+
 If the check passes, we have a realizable contract and the algorithm returns the extracted witness and a model for the initial state that can be directly combined and used towards an implementation of the system. Otherwise, the contract is unrealizable, since either the are no states that satisfy the
 initial state guarantees $G_I$, or the set of viable states $F(s)$ is empty. 
+
 
 If $\phi$ is not true for every possible assignment of the universally
 quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
@@ -128,11 +130,11 @@ Things to fix:
 
 %If the algorithm terminates with a $\realizable$ result, it is straightforward to establish that the generated Skolem function yields a realization.
 
-Lemmas / proof thoughts.  For soundness of realizable results: 
+Lemmas / proof thoughts.  For soundness of realizable results:
 \begin{itemize}
-    \item It is straightforward to show $Viable$ of the initial state proposed by 
+    \item It is straightforward to show $Viable$ of the initial state proposed by
         the algorithm, just by the definition of the fixpoint function, but this doesn't really show the correctness of the Realization (Transition system).
-    \item Showing Realization would be more interesting.  
+    \item Showing Realization would be more interesting.
     \item $\reachable_{A}(s) \implies F(s)$.  We can prove this with induction.  Base case is easy. Showing inductive case: $\reachable_{A}(s') \implies F(s')$ from pre-state is also, I think straightforward from:
         \begin{itemize}
             \item $\reachable_{A}(s) => F(s)$
@@ -141,7 +143,7 @@ Lemmas / proof thoughts.  For soundness of realizable results:
             \item $T(s, i, s')$
         \end{itemize}
         so this immediately implies $F(s')$
-    \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.  
+    \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.
 \end{itemize}
 
 For soundness of unrealizable results:
@@ -153,7 +155,7 @@ For soundness of unrealizable results:
 
 Put these two results together and we have that the algorithm yields correct results when it terminates (partial correctness).
 
-Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg: 
+Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg:
 \begin{itemize}
     \item Each iteration removes at least one state from $F$.  (Progress)
 \end{itemize}
