@@ -118,108 +118,144 @@ W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
 describes the set of viable states, or reach the case where $F(s) = false$, and
 declare our contract to be unrealizable.
 
-\subsection{Notes}
+% \subsection{Notes}
 
-\mike{Here are my notes...sorry that these are disorganized}
-Things to fix:
-\begin{itemize}
-\item The initial state is not returned by the algorithm.
-\item The algorithm checks for validity of $\phi$, but isn't this the same as checking whether the viable region is valid?  Does this boil down to checking whether viableRegion == true?
-\item We need to know where to start a proof.  If it is in terms of the result of Algorithm 1, then it needs to be something returned by Algorithm 1.
-\end{itemize}
+% \mike{Here are my notes...sorry that these are disorganized}
+% Things to fix:
+% \begin{itemize}
+% \item The initial state is not returned by the algorithm.
+% \item The algorithm checks for validity of $\phi$, but isn't this the same as checking whether the viable region is valid?  Does this boil down to checking whether viableRegion == true?
+% \item We need to know where to start a proof.  If it is in terms of the result of Algorithm 1, then it needs to be something returned by Algorithm 1.
+% \end{itemize}
 
-%If the algorithm terminates with a $\realizable$ result, it is straightforward to establish that the generated Skolem function yields a realization.
+% %If the algorithm terminates with a $\realizable$ result, it is straightforward to establish that the generated Skolem function yields a realization.
 
-Lemmas / proof thoughts.  For soundness of realizable results:
-\begin{itemize}
-    \item It is straightforward to show $Viable$ of the initial state proposed by
-        the algorithm, just by the definition of the fixpoint function, but this doesn't really show the correctness of the Realization (Transition system).
-    \item Showing Realization would be more interesting.
-    \item $\reachable_{A}(s) \implies F(s)$.  We can prove this with induction.  Base case is easy. Showing inductive case: $\reachable_{A}(s') \implies F(s')$ from pre-state is also, I think straightforward from:
-        \begin{itemize}
-            \item $\reachable_{A}(s) => F(s)$
-            \item $\reachable_{A}(s)$
-            \item $A(s, i)$
-            \item $T(s, i, s')$
-        \end{itemize}
-        so this immediately implies $F(s')$
-    \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.
-\end{itemize}
+% Lemmas / proof thoughts.  For soundness of realizable results:
+% \begin{itemize}
+%     \item It is straightforward to show $Viable$ of the initial state proposed by
+%         the algorithm, just by the definition of the fixpoint function, but this doesn't really show the correctness of the Realization (Transition system).
+%     \item Showing Realization would be more interesting.
+%     \item $\reachable_{A}(s) \implies F(s)$.  We can prove this with induction.  Base case is easy. Showing inductive case: $\reachable_{A}(s') \implies F(s')$ from pre-state is also, I think straightforward from:
+%         \begin{itemize}
+%             \item $\reachable_{A}(s) => F(s)$
+%             \item $\reachable_{A}(s)$
+%             \item $A(s, i)$
+%             \item $T(s, i, s')$
+%         \end{itemize}
+%         so this immediately implies $F(s')$
+%     \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.
+% \end{itemize}
 
-For soundness of unrealizable results:
-\begin{itemize}
-    \item Show Algorithm 1 yields a greatest fixed point
-    \item Show each iteration removes only states that are known to yield a violation.  This is where exactness of AEval is necessary.  This may be a delicate argument; I have not thought it through yet.  I think it would be proved via induction: something like, for each loop iteration, if $\lnot F$ contains only
-        states that violate the guarantees under the assumptions, then $\lnot F'$ contains only states that violate the guarantees under the assumptions.
-\end{itemize}
+% For soundness of unrealizable results:
+% \begin{itemize}
+%     \item Show Algorithm 1 yields a greatest fixed point
+%     \item Show each iteration removes only states that are known to yield a violation.  This is where exactness of AEval is necessary.  This may be a delicate argument; I have not thought it through yet.  I think it would be proved via induction: something like, for each loop iteration, if $\lnot F$ contains only
+%         states that violate the guarantees under the assumptions, then $\lnot F'$ contains only states that violate the guarantees under the assumptions.
+% \end{itemize}
 
-Put these two results together and we have that the algorithm yields correct results when it terminates (partial correctness).
+% Put these two results together and we have that the algorithm yields correct results when it terminates (partial correctness).
 
-Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg:
-\begin{itemize}
-    \item Each iteration removes at least one state from $F$.  (Progress)
-\end{itemize}
+% Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg:
+% \begin{itemize}
+%     \item Each iteration removes at least one state from $F$.  (Progress)
+% \end{itemize}
 
-\mike{End of Mike's notes}
+% \mike{End of Mike's notes}
 
-\subsection{Soundness of Realizable Results}
-
-
-\begin{lemma} $\reachable_A(s) \implies F(s)$
-\end{lemma}
-
-\begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\realizable, \skolems, I, F}$, then it is a {\em Realization} of the contract $(A, (G_{I}, G_{T}))$.
-\end{theorem}
+% \subsection{Soundness of Realizable Results}
 
 
-\subsection{Soundness of Unrealizable Results}
+% \begin{lemma} $\reachable_A(s) \implies F(s)$
+% \end{lemma}
+
+% \begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\realizable, \skolems, I, F}$, then it is a {\em Realization} of the contract $(A, (G_{I}, G_{T}))$.
+% \end{theorem}
 
 
-\begin{lemma}
-$\viable(s) \implies s \in F$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
-\label{lem:alg1-viable}
-\end{lemma}
+% \subsection{Soundness of Unrealizable Results}
 
-\begin{corollary}
-$s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
-\label{cor:alg1-nonviable}
-\end{corollary}
 
-\begin{proof}
-Immediate from Lemma~\ref{lem:alg1-viable}.
-\end{proof}
+% \begin{lemma}
+% $\viable(s) \implies s \in F$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
+% \label{lem:alg1-viable}
+% \end{lemma}
 
-\begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\unrealizable, ?}$, then there is no $Viable$ state $s$.
-\end{theorem}
+% \begin{corollary}
+% $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
+% \label{cor:alg1-nonviable}
+% \end{corollary}
 
-Perhaps we don't even need to bring in Tarski...It could be done with just Hoare logic loop invariants.
+% \begin{proof}
+% Immediate from Lemma~\ref{lem:alg1-viable}.
+% \end{proof}
+
+% \begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\unrealizable, ?}$, then there is no $Viable$ state $s$.
+% \end{theorem}
+
+% Perhaps we don't even need to bring in Tarski...It could be done with just Hoare logic loop invariants.
 
 
 \subsection{Soundness}
 
-\andrew{First version of joint soundness result. Assume we already
-  have lemma~\ref{lem:alg1-viable} proven. }
+\andrew{TODO: This isn't really a lemma so much as an assumption about
+  AE-VAL. We should document it the right way, and then reference it
+  as needed in the following proofs.}
+
+\begin{lemma}
+  Let $R$ be the region of validty for $\forall s.~ A(s) \Rightarrow
+  \exists s. G(s, s')$ as returned by AE-VAL. Then the following
+  formulas hold:
+  \begin{align*}
+  &\forall s.~ (A(s) \land W(s) \Rightarrow \exists s. G(s, s')) \\
+  &\forall s.~ (A(s) \land \neg W(s) \Rightarrow \neg \exists s. G(s, s')) \\
+  \end{align*}
+\end{lemma}
+
+\begin{lemma}
+  $\viable \subseteq F$ is an invariant for
+  Algorithm~\ref{alg:synthesis}.
+\label{lem:alg1-viable}
+\end{lemma}
+\begin{proof}
+  It suffices to show this invariant holds each time $F$ is assigned.
+  On Line 1, this is trivial. For Line 16, we can assume that
+  $\viable \subseteq F$ holds prior to this line. Suppose towards
+  contradiction that the assignment on Line 16 violates the invariant.
+  Then there exists $s_0$ such that $F(s_0)$, $W(s_0)$, and
+  $\viable(s_0)$ all hold. Since $W$ is the region of validity for
+  $\phi'$ on Line 13, we have $F(s_0) \Rightarrow \exists i. A(s_0, i)
+  \land \neg Q(s_0, i)$. Given that $F(s_0)$ holds, let $i_0$ be such
+  that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$. Since $Q$ is the region
+  of validity for $\phi$ on Line 3, we have $F(s_0) \land A(s_0, i_0)
+  \Rightarrow \neg \exists s'. G_T(s, i, s') \land F(s')$. Since
+  $F(s_0$ and $A(s_0, i_0)$ hold we have $\neg \exists s'. G_T(s, i,
+  s') \land F(s')$. We know $\viable \subseteq F$ holds prior to Line
+  16, thus $\neg \exists s'. G_T(s, i, s') \land \viable(s')$. But
+  this is a contradiction since $\viable(s_0)$. Therefore the
+  invariant holds on Line 16.
+\end{proof}
+
 
 \begin{theorem}
   The \realizable and \unrealizable results of
   Algorithm~\ref{alg:synthesis} are sound.
 \end{theorem}
 
-\begin{proof}
-If Algorithm~\ref{alg:synthesis} terminates, then the
-formula for $\phi$ on Line 3 is valid. Rewritten, $F$
-satisfies the formula
-\begin{equation*}
-  \forall s.~F(s) \Rightarrow \left(\forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s')\right)
-\end{equation*}
-This means $F$ is a post-fixed point of the defining equation for
-$\viable$ given in Equation~\ref{eq:viable}. Moreover $\viable$ is
-defined as the greatest fixed-point of this equation, thus by the
-Knaster-Tarski theorem we have $F(s) \Rightarrow \viable(s)$ for all $s$.
-Combining this with Lemma~\ref{lem:alg1-viable}, we have
-$F(s) = \viable(s)$. Therefore the check on Line 7 is equivalent to
-the check in Equation~\ref{eq:nonempty} for realizability.
-\end{proof}
+% \begin{proof}
+% If Algorithm~\ref{alg:synthesis} terminates, then the
+% formula for $\phi$ on Line 3 is valid. Rewritten, $F$
+% satisfies the formula
+% \begin{equation*}
+%   \forall s.~F(s) \Rightarrow \left(\forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s')\right)
+% \end{equation*}
+% This means $F$ is a post-fixed point of the defining equation for
+% $\viable$ given in Equation~\ref{eq:viable}. Moreover $\viable$ is
+% defined as the greatest fixed-point of this equation, thus by the
+% Knaster-Tarski theorem we have $F(s) \Rightarrow \viable(s)$ for all $s$.
+% Combining this with Lemma~\ref{lem:alg1-viable}, we have
+% $F(s) = \viable(s)$. Therefore the check on Line 7 is equivalent to
+% the check in Equation~\ref{eq:nonempty} for realizability.
+% \end{proof}
 
 \begin{proof}
 If Algorithm~\ref{alg:synthesis} terminates, then the
