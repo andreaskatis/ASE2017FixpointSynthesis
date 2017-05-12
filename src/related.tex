@@ -42,9 +42,10 @@ who proved that the problem can be solved in cubic time for the class of GR(1) s
 However, their proposed algorithm is significantly different from this paper. It
 requires the discovery of multiple greatest fixpoints for the state variables,
 each one covering a least fixpoint of the input variables. If the specification
-is realizable, then the entirety of the the input space is covered by the greatest fixpoints. For the purposes of our work, we only require the discovery of a single greatest fixpoint over the system's outputs, considering
+is realizable, then the entirety of the input space is covered by the greatest fixpoints. For the purposes of our work, we only require the discovery of a single greatest fixpoint over the system's outputs, considering
 the entire region of valid inputs at all times. The construction of the witness
 in the following process, fragments the input space through the use of Model-Based Projections, rather than computing fixpoints.
+\grigory{unable to parse the entire message about MBPs here. Since we are not defining the MBPs in the background section, I suggest to remove it from here.}
 A straightforward comparison between the two techniques, while not currently
 supported, is of particular interest to us and we will be looking forward to
 achieving this as part of future work.
@@ -54,7 +55,9 @@ al.}~\cite{preiner2017counterexample}, where the authors construct candidate
 witnesses and proceed to check their validity with respect to the specification.
 Internally, a counterexample-guided refinement process is
 used~\cite{reynolds2015counterexample} for the purposes of quantifier
-elimination. Our approach instead uses Model-Based Projection as the main
+elimination. 
+\grigory{in fact, they use something similar to MBPs. You need to find another way how to compare.}
+Our approach instead uses Model-Based Projection as the main
 quantifier elimination process, which is essential in the context of this paper,
 since the witnesses constructed for the most complex contracts are described by
 nested if-then-else expressions of depth (i.e. number of branches) 10-20.
