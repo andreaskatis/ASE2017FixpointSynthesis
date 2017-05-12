@@ -13,9 +13,8 @@
 %		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
 		\If{$\isValid(\aevalres)$}
             \State{$\init \gets SAT(G_{I}(s) \land F(s))$}
-            \If{$\isSat(\init) \ \land \ F(s) \neq  false$}
+            \If{$\isSat(\init)$}
 			%\If{$G_{I}(s) \land F(s) \neq false$}
-		        %\andreas{I'm not yet comfortable with the algorithm returning a model for the initial states. That could be misunderstood as the implementation starting from a single possible assignment. The Skolem may have multiple branches that may be used as initial state assignments\ldots}
 				\Return $\tuple{\realizable, \aevalres.\skolems, init.model, F}$;
 			\Else{\Comment{Empty set of initial or viable states}}
 		 		\Return $\tuple{\unrealizable}$;
@@ -65,7 +64,7 @@ synthesizing implementations, using a specification that describes the Cinderell
 \subsection{Algorithm}
 \label{sec:alg}
 Algorithm~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:formals} and is provided as an input to the algorithm.
-Line 1 initializes the process by defining the fixpoint $F(s)$ to be equal to
+Line 1 initializes the process by defining the fixpoint $F$ to be equal to
 $true$. The algorithm then attempts to converge to a fixpoint $F(s)$
 that only contains viable states, considering Equation~\ref{eq:viable}
 and~\ref{eq:nonempty}.
@@ -75,10 +74,12 @@ focused on determining the validity of $\phi$. If the formula is valid, then a w
 \textit{Skolem} is constructed, containing valid assignments to the
 existentially quantified variables of $\phi$. In the context of viability, this
 witness is capable of providing viable states that can be used as a safe
-reaction, given a prior viable state and an input that
-satisfies the assumptions. With a valid formula at hand, it only remains to check that the fixpoint is not empty, and intersects with the initial states (Line 7).
-If the check passes, we have a realizable contract and the algorithm returns the extracted witness that can be used as an implementation. Otherwise, the contract is unrealizable, since either the are no states that satisfy the
-initial state guarantees $G_I$, or the set of viable states $F(s)$ is empty.
+reaction, given an input that
+satisfies the assumptions. 
+
+With a valid formula at hand, it remains to check that the fixpoint intersects with the initial states (Line 7).  If the check passes, we have a realizable contract and the algorithm returns the extracted witness and a model for the initial state that can be directly combined and used towards an implementation of the system. Otherwise, the contract is unrealizable, since either the are no states that satisfy the
+initial state guarantees $G_I$, or the set of viable states $F$ is empty.
+
 
 If $\phi$ is not true for every possible assignment of the universally
 quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
@@ -86,93 +87,105 @@ quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
 %an exact subset of $F(s) \land A(s,i)$, namely $Q(s,i)$, which, if plugged in
 % the original left-hand side of $\phi$, makes the resulting formula valid. We will refer to such subsets as \textit{regions of
 %validity}.
-At this point, one could falsely assume that replacing $F(s) \land A(s,i)$ with
-$Q(s,i)$ is sufficient to solve our problem, and use the resulting witness as a
-candidate implementation. This is not the case however, as $Q(s,i)$ is a subset
-of both state and input variables. As such, it may contain further constraints
-over the contract's inputs. This would lead to implementations that only
-consider a subset of the original assumptions of the contract, with no
-pre-defined strategy for the rest of the originally valid inputs.
-Fortunately, we can exploit \aeval's capability of providing regions of validity
-towards eliminating this issue.
+At this point, one might assume that $Q(s,i)$ is sufficient to restrict $F$ towards a solution. This is not the case however, as $Q(s,i)$ creates a subregion
+involving both state and input variables. As such, it may contain constraints
+over the contract's inputs over and above what are required by $A$, ultimately leading to implementations that only work correctly for a small part of the input domain.
 
-The main concept to properly refine $F(s)$ is to extract a region of validity $W(s)$
-that only involves constraints over state variables. To achieve this, we ask \aeval to determine
+Fortunately, we can again use \aeval's capability of providing regions of validity
+towards removing inputs from $Q$.  Essentially, we want to remove those states from $Q$ if even one input causes them to violate the formula on line (3).  We denote by $W$ the ``violating region'' of $Q$.  To construct $W$, we ask \aeval to determine
 the validity of the formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
-i. A(s,i) \land \lnot Q(s,i))$ (Line 13). If $\phi'$ is invalid, \aeval computes
-a new region of validity and assigns it to $W(s)$. The new region is a strict subset of
-$F(s)$, is described using constraints only over state variables, and entails
-the existence of unsafe states in $F(s)$, considering valid inputs.
-On the other hand, if $\phi'$ is a valid formula, then for any assignment of the state variables $s$, we have a valid input (i.e. that
-satisfies the assumptions), for which the states are do not satisfy the constraints defined by the region
-of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
-safe in this context and $W(s)$ gets assigned to $true$, eventually leading to a failed check in Line 7, during the next iteration.
+i. A(s,i) \land \lnot Q(s,i))$ (Line 13). \aeval computes
+a new region of validity and assigns it to $W(s)$. The new region entails
+the existence of unsafe states in $F(s)$ for some input.  We remove this unsafe region from $F$ in line 16.  
 
-Assuming that a region of validity is extracted ($W(s) \neq true$) we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 18).
-Despite the fact that we now have a refined set of viable states, we are not yet done,
-as $\lnot W(s)$ is not an exact region of validity, with respect to $Q(s,i)$. As
-such there might still be states in $Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
-process by repeating the top-level \aeval query, with $F(s) \gets F(s) \land \lnot
-W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
-describes the set of viable states, or reach the case where $F(s) = false$, and
-declare our contract to be unrealizable.
+The loop continues until we reach a (greatest) fixpoint for $F$.  If the system is unrealizable, this fixpoint (which may be the formula `false') does not intersect the set of initial states.  
 
-\subsection{Notes}
-
-\mike{Here are my notes...sorry that these are disorganized}
-Things to fix:
-\begin{itemize}
-\item The initial state is not returned by the algorithm.
-\item The algorithm checks for validity of $\phi$, but isn't this the same as checking whether the viable region is valid?  Does this boil down to checking whether viableRegion == true?
-\item We need to know where to start a proof.  If it is in terms of the result of Algorithm 1, then it needs to be something returned by Algorithm 1.
-\end{itemize}
-
-%If the algorithm terminates with a $\realizable$ result, it is straightforward to establish that the generated Skolem function yields a realization.
-
-Lemmas / proof thoughts.  For soundness of realizable results:
-\begin{itemize}
-    \item It is straightforward to show $Viable$ of the initial state proposed by
-        the algorithm, just by the definition of the fixpoint function, but this doesn't really show the correctness of the Realization (Transition system).
-    \item Showing Realization would be more interesting.
-    \item $\reachable_{A}(s) \implies F(s)$.  We can prove this with induction.  Base case is easy. Showing inductive case: $\reachable_{A}(s') \implies F(s')$ from pre-state is also, I think straightforward from:
-        \begin{itemize}
-            \item $\reachable_{A}(s) => F(s)$
-            \item $\reachable_{A}(s)$
-            \item $A(s, i)$
-            \item $T(s, i, s')$
-        \end{itemize}
-        so this immediately implies $F(s')$
-    \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.
-\end{itemize}
-
-For soundness of unrealizable results:
-\begin{itemize}
-    \item Show Algorithm 1 yields a greatest fixed point
-    \item Show each iteration removes only states that are known to yield a violation.  This is where exactness of AEval is necessary.  This may be a delicate argument; I have not thought it through yet.  I think it would be proved via induction: something like, for each loop iteration, if $\lnot F$ contains only
-        states that violate the guarantees under the assumptions, then $\lnot F'$ contains only states that violate the guarantees under the assumptions.
-\end{itemize}
-
-Put these two results together and we have that the algorithm yields correct results when it terminates (partial correctness).
-
-Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg:
-\begin{itemize}
-    \item Each iteration removes at least one state from $F$.  (Progress)
-\end{itemize}
-
-\mike{End of Mike's notes}
-
-\subsection{Soundness of Realizable Results}
+%or until $W(s)$ becomes valid, that is, for any assignment of the state variables $s$, we have an input that satisfies the assumptions and violates $Q$.  In this case, every state in $F$ has some failing input and the system is unrealizable, which will lead to a failed check in Line 7 during the next iteration of the loop.
 
 
-\begin{lemma} $\reachable_A(s) \implies F(s)$
-\end{lemma}
+% \subsection{Notes}
 
-\begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\realizable, \skolems, I, F}$, then it is a {\em Realization} of the contract $(A, (G_{I}, G_{T}))$.
-\end{theorem}
+% \mike{Here are my notes...sorry that these are disorganized}
+% Things to fix:
+% \begin{itemize}
+% \item The initial state is not returned by the algorithm.
+% \item The algorithm checks for validity of $\phi$, but isn't this the same as checking whether the viable region is valid?  Does this boil down to checking whether viableRegion == true?
+% \item We need to know where to start a proof.  If it is in terms of the result of Algorithm 1, then it needs to be something returned by Algorithm 1.
+% \end{itemize}
+
+% %If the algorithm terminates with a $\realizable$ result, it is straightforward to establish that the generated Skolem function yields a realization.
+
+% Lemmas / proof thoughts.  For soundness of realizable results:
+% \begin{itemize}
+%     \item It is straightforward to show $Viable$ of the initial state proposed by
+%         the algorithm, just by the definition of the fixpoint function, but this doesn't really show the correctness of the Realization (Transition system).
+%     \item Showing Realization would be more interesting.
+%     \item $\reachable_{A}(s) \implies F(s)$.  We can prove this with induction.  Base case is easy. Showing inductive case: $\reachable_{A}(s') \implies F(s')$ from pre-state is also, I think straightforward from:
+%         \begin{itemize}
+%             \item $\reachable_{A}(s) => F(s)$
+%             \item $\reachable_{A}(s)$
+%             \item $A(s, i)$
+%             \item $T(s, i, s')$
+%         \end{itemize}
+%         so this immediately implies $F(s')$
+%     \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.
+% \end{itemize}
+
+% For soundness of unrealizable results:
+% \begin{itemize}
+%     \item Show Algorithm 1 yields a greatest fixed point
+%     \item Show each iteration removes only states that are known to yield a violation.  This is where exactness of AEval is necessary.  This may be a delicate argument; I have not thought it through yet.  I think it would be proved via induction: something like, for each loop iteration, if $\lnot F$ contains only
+%         states that violate the guarantees under the assumptions, then $\lnot F'$ contains only states that violate the guarantees under the assumptions.
+% \end{itemize}
+
+% Put these two results together and we have that the algorithm yields correct results when it terminates (partial correctness).
+
+% Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg:
+% \begin{itemize}
+%     \item Each iteration removes at least one state from $F$.  (Progress)
+% \end{itemize}
+
+% \mike{End of Mike's notes}
+
+% \subsection{Soundness of Realizable Results}
 
 
-\subsection{Soundness of Unrealizable Results}
+% \begin{lemma} $\reachable_A(s) \implies F(s)$
+% \end{lemma}
 
+% \begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\realizable, \skolems, I, F}$, then it is a {\em Realization} of the contract $(A, (G_{I}, G_{T}))$.
+% \end{theorem}
+
+
+% \subsection{Soundness of Unrealizable Results}
+
+
+% \begin{lemma}
+% $\viable(s) \implies s \in F$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
+% \label{lem:alg1-viable}
+% \end{lemma}
+
+% \begin{corollary}
+% $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
+% \label{cor:alg1-nonviable}
+% \end{corollary}
+
+% \begin{proof}
+% Immediate from Lemma~\ref{lem:alg1-viable}.
+% \end{proof}
+
+% \begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\unrealizable, ?}$, then there is no $Viable$ state $s$.
+% \end{theorem}
+
+% Perhaps we don't even need to bring in Tarski...It could be done with just Hoare logic loop invariants.
+
+
+\subsection{Soundness}
+
+\iffalse
+\andrew{TODO: This isn't really a lemma so much as an assumption about
+  AE-VAL. We should document it the right way, and then reference it
+  as needed in the following proofs.}
 
 \begin{lemma}
 $\forall s. \viable(s) \implies F(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
@@ -180,43 +193,137 @@ $\forall s. \viable(s) \implies F(s)$ is a loop invariant for Algorithm~\ref{alg
 \end{lemma}
 
 \begin{proof}
-The property is trivially true prior to the first iteration of the loop, because 
+The property is trivially true prior to the first iteration of the loop, because
 $F(s) = true$.  Now, suppose $\forall s . \viable(s) \implies F(s)$ is true at the beginning of the loop.  We have three termination conditions for the loop: the loop exits at lines 8 and 10, and the loop continuation at line 16.  Neither of the termination conditions changes $F$, so these branches are discharged.
 
-What remains is the loop continuation at line 16.  Assuming $\forall s . \viable(s) \implies F(s)$, we must demonstrate $\forall s . \viable(s) \implies F(s) \land \lnot W(s)$.  We first examine the definition of viability: 
+What remains is the loop continuation at line 16.  Assuming $\forall s . \viable(s) \implies F(s)$, we demonstrate $\forall s . \viable(s) \implies F(s) \land \lnot W(s)$.  We first examine the definition of viability:
 \[
     \viable(s) = \forall s,i. \ (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s') \land \viable(s'))
 \]
 Applying the assumption yields $(\forall s,i. \ (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s') \land F(s'))$ (Weakening).
 
 Fixing $s$ to $s_0$, by the induction hypothesis, we know $F(s_0)$.  Suppose $W(s_0)$.  In this case, by line (15) and $F(s_0)$, we know $\exists i. A(s_0, i) \land \lnot Q(s_0, i)$.  We fix $i$ to be some arbitrary constant $i_0$.  From Corollary~\ref{cor:subset}, we have
-$A(s_0, i_0) \land \lnot ((F(s_0) \land A(s_0,i_0)) \implies \exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  Since $F(s_0)$ and $A(s_0, i_0)$, simplifying 
-yields $\lnot (\exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  But this contradicts the weakened loop hypothesis.  Therefore $\lnot W(s_0)$.  Since $s_0$ was arbitrary, $\forall s . \viable(s) \implies F(s) \land \lnot W(s)$. 
+$A(s_0, i_0) \land \lnot ((F(s_0) \land A(s_0,i_0)) \implies \exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  Since $F(s_0)$ and $A(s_0, i_0)$, simplifying
+yields $\lnot (\exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  But this contradicts the weakened loop hypothesis.  Therefore $\lnot W(s_0)$.  Since $s_0$ was arbitrary, $\forall s . \viable(s) \implies F(s) \land \lnot W(s)$.
 \end{proof}
 
 \begin{corollary}
 $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
 \label{cor:alg1-nonviable}
 \end{corollary}
+\fi
+
+\begin{lemma}
+  Let $R$ be the region of validity for $\forall s.~ A(s) \Rightarrow
+  \exists s. G(s, s')$ as returned by AE-VAL. Then the following
+  formulas hold:
+  \begin{align*}
+  &\forall s.~ (A(s) \land W(s) \Rightarrow \exists s. G(s, s')) \\
+  &\forall s.~ (A(s) \land \neg W(s) \Rightarrow \neg \exists s. G(s, s')) \\
+  \end{align*}
+\end{lemma}
+
+\begin{lemma}
+  $\viable \subseteq F$ is an invariant for
+  Algorithm~\ref{alg:synthesis}.
+\label{lem:alg1-viable}
+\end{lemma}
 
 \begin{proof}
-Immediate from Lemma~\ref{lem:alg1-viable}.
+  It suffices to show this invariant holds each time $F$ is assigned.
+  On Line 1, this is trivial. For Line 16, we can assume that
+  $\viable \subseteq F$ holds prior to this line. Suppose towards
+  contradiction that the assignment on Line 16 violates the invariant.
+  Then there exists $s_0$ such that $F(s_0)$, $W(s_0)$, and
+  $\viable(s_0)$ all hold. Since $W$ is the region of validity for
+  $\phi'$ on Line 13, we have $F(s_0) \Rightarrow \exists i. A(s_0, i)
+  \land \neg Q(s_0, i)$. Given that $F(s_0)$ holds, let $i_0$ be such
+  that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$. Since $Q$ is the region
+  of validity for $\phi$ on Line 3, we have $F(s_0) \land A(s_0, i_0)
+  \Rightarrow \neg \exists s'. G_T(s, i, s') \land F(s')$. Since
+  $F(s_0$ and $A(s_0, i_0)$ hold we have $\neg \exists s'. G_T(s, i,
+  s') \land F(s')$. We know $\viable \subseteq F$ holds prior to Line
+  16, thus $\neg \exists s'. G_T(s, i, s') \land \viable(s')$. But
+  this is a contradiction since $\viable(s_0)$. Therefore the
+  invariant holds on Line 16.
 \end{proof}
 
-\begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\unrealizable, ?}$, then there is no $Viable$ state $s$.
+
+\begin{theorem}
+  The \realizable and \unrealizable results of
+  Algorithm~\ref{alg:synthesis} are sound.
 \end{theorem}
 
-Perhaps we don't even need to bring in Tarski...It could be done with just Hoare logic loop invariants.
+% \begin{proof}
+% If Algorithm~\ref{alg:synthesis} terminates, then the
+% formula for $\phi$ on Line 3 is valid. Rewritten, $F$
+% satisfies the formula
+% \begin{equation*}
+%   \forall s.~F(s) \Rightarrow \left(\forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s')\right)
+% \end{equation*}
+% This means $F$ is a post-fixed point of the defining equation for
+% $\viable$ given in Equation~\ref{eq:viable}. Moreover $\viable$ is
+% defined as the greatest fixed-point of this equation, thus by the
+% Knaster-Tarski theorem we have $F(s) \Rightarrow \viable(s)$ for all $s$.
+% Combining this with Lemma~\ref{lem:alg1-viable}, we have
+% $F(s) = \viable(s)$. Therefore the check on Line 7 is equivalent to
+% the check in Equation~\ref{eq:nonempty} for realizability.
+% \end{proof}
+
+\begin{proof}
+If Algorithm~\ref{alg:synthesis} terminates, then the
+formula for $\phi$ on Line 3 is valid. Rewritten, $F$
+satisfies the formula
+\begin{equation}
+  \forall s.~F(s) \Rightarrow \left(\forall i.~ A(s,i) \Rightarrow \exists
+    s'.G_{T}(s,i,s') \land F(s')\right)
+  \label{eq:F-rewritten}
+\end{equation}
+Define the function $f$ over state predicates as
+  \begin{equation}
+    f = \lambda V. \lambda s.~ \forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land V(s')
+    \label{eq:f-fixed-point}
+  \end{equation}
+  State predicates are equivalent to subsets of the state space and
+  form a lattice in the natural way. Moreover, $f$ is monotone on this
+  lattice. From Equation~\ref{eq:F-rewritten} we have
+  $F \subseteq f(F)$. Thus $F$ is a post-fixed point of $f$. In
+  Equation~\ref{eq:viable}, $\viable$ is defined as the greated
+  fixed-point of $f$. Thus $f \subseteq \viable$ by the Knaster-Tarski
+  theorem. Combining this with Lemma~\ref{lem:alg1-viable}, we have
+  $F = \viable$. Therefore the check on Line 7 is equivalent to the
+  check in Equation~\ref{eq:nonempty} for realizability.
+\end{proof}
 
 \subsection{Termination on Finite Models}
 
 \begin{lemma}
-Every loop iteration in Algorithm~\ref{alg:synthesis} either terminates or removes at least one state from $F$.
+Every loop iteration in Algorithm~\ref{alg:synthesis} either
+terminates or removes at least one state from $F$.
+\label{lem:progress}
 \end{lemma}
+\begin{proof}
+  It suffices to show that at least one state is removed from $F$ on
+  Line 16. That is, we want to that $F \cap W \neq \emptyset$ since
+  this intersection is what is removed from $F$ by Line 16. Suppose
+  towards contradiction that $F \cap W = \emptyset$. Since $W$ is the
+  region of validity for $\phi'$ on Line 13, we know that $F$ lies
+  completely outside the region of validity and therefore
+  $\forall s.~ \neg \exists i. A(s,i) \land \neg Q(s, i)$. Rewritten,
+  $\forall s, i.~ A(s, i) \Rightarrow Q(s, i)$. Note that $Q$ is the
+  region of validity for $\phi$ on Line 3. Thus $A$ is completely
+  contained within the region of validity and formula $\phi$ is valid.
+  This is a contradiction since if $\phi$ is valid then Line 16 will
+  not be executed in this iteration of the loop. Therefore $F \cap W
+  \neq \emptyset$ and at least one state is removed from $F$ on Line 16.
+\end{proof}
 
 \begin{theorem}
 For finite models, Algorithm~\ref{alg:synthesis} terminates.
 \end{theorem}
+\begin{proof}
+Immediately from Lemma~\ref{lem:progress}.
+\end{proof}
 
 
 
@@ -225,7 +332,7 @@ For finite models, Algorithm~\ref{alg:synthesis} terminates.
 The system $\mathfrak{U} = \tuple{S, \subseteq}$ is a complete lattice, where every subset $S' \subseteq S$ has a greatest lower bound  $\glb(S') = \cap S'$  and a least upper bound $\lub(S') = \cup S'$.
 \label{lem:altlattice}
 %\end{lemma}
-\fi
+
 \begin{proof}
 Since the inclusion relation $\subseteq$ has been established over $S$, every subset $S' = \{M_k, M_{k+1}, \ldots M_{k+n}\}, n \in \mathbb{N}$ has a $\glb(S') = M_{k-1}$ and a $\lub(S') = M_{k+n+1}$. For the special case where $S' = S$ we have that $\glb(S) = M_0 = false$ and $\lub(S) = true$.
 \end{proof}
@@ -276,8 +383,6 @@ the solution to a realizable contract, while $\glb = false$, and corresponds to
 the solution for an unrealizable contract.
 \end{proof}
 
-
-\iffalse
 \begin{lemma} Consider the system
 $\mathfrak{U} = \tuple{S, T}$. With $S$, we denote the set of
 subsets of the orignal state space, such that each subset contains assignments that lead to the
@@ -336,7 +441,6 @@ $\tuple{P, T}$ is a complete lattice, as it contains a \lub, which is
 the solution to a realizable contract, while $\glb = false$, and corresponds to
 the solution for an unrealizable contract.
 \end{proof}
-\fi
 
 From Theorem~\ref{thm:fixpoint} we have shown that Algorithm~\ref{alg:synthesis} computes a fixpoint for both cases where the specification is realizable or not. With this knowledge at hand, it is necessary to prove the soundness of the fixpoints generated. In other words, when a fixpoint is computed for a realizable contract, it should be the case that the algorithm reports a ``realizable'' result. The same needs to hold for the dual case of ``unrealizable'' results.
 
@@ -365,6 +469,7 @@ Assume a quantifier elimination process that provides exact regions of validity.
 \end{corollary}
 
 Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases, overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations and the algorithm's performance decreases, since problems might not be solvable as fast as with the use of exact regions. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might cover safe states in their constraints. This makes the algorithm follow a more pessimistic approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be manifested in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to incorrect ``unrealizable'' results. In the context of this paper, and considering Lemma~\ref{lem:subset}, \aeval is able to provide exact regions of validity.
+\fi
 
 \subsection{Applying \jsynvg to the Cinderella-Stepmother game}
 \label{sec:algexample}
@@ -422,20 +527,21 @@ through the problem's input and output variables. The main input is Stepmother's
 distribution of one unit of water over five different input variables,
 \textit{i1} to \textit{i5}. While the node contains a sixth input argument,
 namely $e$, this is in fact used as the output of the system that we want to
-implement, representing Cinderella's choice at each of her turns. We make an
-explicit distinction on which node arguments are the system's inputs, using the \textit{REALIZABLE} statement towards the end of the contract. The contract's
+implement, representing Cinderella's choice at each of her turns.
+
+We make an explicit distinction on which node arguments are the system's inputs, using the \textit{REALIZABLE} statement towards the end of the contract. The contract's
 assumptions $A$ are defined using assertions over the input variables
 \textit{i1-i5}. We assume that there can be no negative input values, and the
 sum of \textit{i1} to \textit{i5} is equal to one unit of water. The specified node
 returns the value of a boolean variable \textit{guarantee}, which corresponds to
 the contract's guarantee $G$, and is explicitly defined to be such using the
-\textit{PROPERTY} statement.
-Finally, we define what each bucket's state should be through the entire
+\textit{PROPERTY} statement. Finally, we define what each bucket's state should be through the entire
 duration of the game, using the local variables \textit{b1} to \textit{b5}.
 Initially, each bucket is empty, and with each transition to a new state, the contents depend on
 whether Cinderella chose the specific bucket, or an adjacent one. If this is the
 case, the contents of the bucket $b_i$ become equal to the amount of water that
 Stepmother puts in the corresponding input variable $i$, during the next turn.
+
 If the bucket was not covered by Cinderella's choice, then its contents are
 updated by adding Stepmother's distribution to the volume of water that the
 bucket already had. The distinction between the initial state of each bucket,
@@ -447,6 +553,37 @@ should only be realizable if, assuming valid inputs given by the Stepmother
 (i.e. positive values to input variables that add up to one water unit),
 Cinderella can keep reacting indefinitely, by providing outputs that satisfy the
 guarantees (i.e. she empties buckets in order to prevent overflow in Stepmother's next turn).
+
+\begin{figure}[!t]
+\centering
+ \begin{Verbatim}[fontsize=\footnotesize]
+ ...
+(and ...
+ (or (not (<= (+ b2 i2) 3.0))
+  (<= (+ b2 i2) 2.0)
+  (and (<= (+ b2 i2) 3.0)
+   (not (<= (+ b2 i2) 2.0))
+   (or (and (not (>= (+ b1 i1) 3.0))
+        (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2)
+                       (* (- 1.0) i2))))
+    (and (not (<= (+ b2 i2) 0.0))
+     (not (>= (+ b3 i3) 3.0))
+     (not (>= i4 3.0))
+     (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2)
+                    (* (- 1.0) i2)))))))
+ (or (and %init (= i4 0.0)) (not %init))
+ (or (and %init (= i5 0.0)) (not %init))
+ (<= (+ b3 i3) 3.0)
+ (<= i4 3.0)
+ (<= i5 3.0)
+ ...)
+...
+ \end{Verbatim}
+\caption{Code snippet of the region of validity generated for the Cinderella-Stepmother
+example}
+\label{fg:snippet}
+\end{figure}
+
 We initiate our call to the procedure defined in Algorithm~\ref{alg:synthesis},
 by providing the contract in Figure~\ref{fg:cind} as input. The algorithm
 then enters an infinite loop, where it attempts to construct a fixpoint of
@@ -459,30 +596,11 @@ input variables, it might contain contraints over the inputs, which is an
 undesirable side-effect. Due to space restrictions, we are unable to show this
 in full effect, but Figure~\ref{fg:snippet} shows part of the generated
 $Q(s,i)$, in SMT-LIB format (pre-fix notation), where the input variables are
-part of the constraints. The variable \textit{\%init} is used in the underlying
+part of the constraints.~\footnote{The names in the snippet have been simplified to match the rest of the paper.} The variable \textit{\%init} is used in the underlying
 machinery as a flag to indicate whether the current state is initial or not
-(true and false, respectively). \andrew{Is there anything else we can
-  say about the code in the figure? Does it give us any insight into a
-  possible solution for cinderella?}
+(true and false, respectively). While the actual code is hundreds of lines long, looking at the specific snippet shows us how the valid subset may contain constraints over the inputs, that violate the assumptions. The conjunction in Figure~\ref{fg:snippet} contains the constraints $(<= i4 \ 3.0)$ and $(<= i5 \ 3.0)$. These conjuncts define a region where the contract assumptions are violated, since it is possible to assign values to $i4$ and $i5$ such that $i4 > 1$ and $i5 > 1.0$ respectively. This shows that $Q(s,i)$ is not necessarily a valid region that satisfies the assumptions in a strict manner, and it is imperative to extract a new region from $Q(s,i)$, that only provides constraints over the state variables.
 
-\begin{figure}[!t]
-\centering
- \begin{Verbatim}[fontsize=\footnotesize]
-(and (or (and %init (= (+ b1 i1) 0.0)) (not %init))
-  (or (and %init (= (+ b2 i2) 0.0)) (not %init))
-  (or (and %init (= (+ b3 i3) 0.0)) (not %init))
-  (or (and %init (= i4 0.0)) (not %init))
-  (or (and %init (= i5 0.0)) (not %init))
-  (<= (+ b1 i1) 2.0)
-  (<= (+ b2 i2) 2.0)
-  (<= (+ b3 i3) 2.0)
-  (<= i4 2.0)
-  (<= i5 2.0))
- \end{Verbatim}
-\caption{Code snippet of the region of validity generated for the Cinderella-Stepmother
-example}
-\label{fg:snippet}
-\end{figure}
+
 
 Considering the existence of undesirable constraints in $Q(s,i)$, the next step
 is to extract a region of validity that is only described using state variables.
@@ -499,12 +617,11 @@ explained above. For this particular example, the algorithm terminates after one
 more refinement, at depth 2. At that point, the refined version of
 $\phi$ is valid, and \aeval constructs a witness containing valid reactions to
 environment behavior. Figure~\ref{fg:witness} provides a snippet of
-that witness, after being translated to a C implementation. \andrew{What's with the 'if' in the middle of the 'else' block? Is it
-  suppose to be an 'else-if'?}
-In general,
-the witness is described through the use of an nested if-then-else block, where the conditions are subsets of the antecedent of
+that witness, after being translated to a C implementation.
+%\andrew{What's with the 'if' in the middle of the 'else' block? Is it suppose to be an 'else-if'?}
+In general, the witness is described through the use of nested \textit{if-then-else} blocks, following the structure of the Skolem witnesses, where the conditions are subsets of the antecedent of
 the implication in formula $\phi$, while the body contains valid assignments to
-state variables, for this particular subset.
+state variables to the corresponding subset.
 
 
 \begin{figure}[!t]
