@@ -24,16 +24,13 @@ validity-guided approach can lead to the solution of a bigger class of problems.
 \subsection{Future Work}
 Research in the area of program synthesis, and particularly the work presented in this paper, is rich with challenges and promising directions. We enlist the most important challenges that we would like to address as part of future work.
 
-\textbf{Algorithm Convergence}. The most interesting question is how we can possibly improve \jsynvg's
+\textbf{Optimizations and Machine-Checked Proofs}. The most interesting question is how we can possibly improve \jsynvg's
 speed of convergence. Not excluding techniques such as counterexample-guided
 refinement and predicate abstraction~\cite{walker2014predicate}, a potential
 improvement could be achieved through the use of a more compact transition
-relation. 
-
-\textbf{Proofs and Implementations}. A minor contribution is the development of a  machine-checked
-proof regarding the soundness of the fixpoint generation process, as well as the realizability results.
-Regarding the synthesized implementations, an interesting subproblem to examine the potential benefits of a subprocess that provides collections of equivalent implementations, rather than
-a single witness. Finally there are several promising concepts that can lead to further implementation optimization, such as the use of Inductive Validity Cores~\cite{Ghass16}, which can be potenitally used to identify the core elements in a synthesized implementation that lead to the satisfaction of the specification. Using only the core elements, we can effectively reduce the size of the implementations, and improve their performance. Another interesting direction in pursuing compact implementations exploited is to examine the effects of recent work in witness abstractions~\cite{jakobs2017compact}. 
+relation. Regarding the synthesized implementations, an interesting subproblem to examine the potential benefits of a subprocess that provides collections of equivalent implementations, rather than
+a single witness. There are several promising concepts that can lead to further implementation optimization, such as the use of Inductive Validity Cores~\cite{Ghass16}, which can be potenitally used to identify the core elements in a synthesized implementation that lead to the satisfaction of the specification. Using only the core elements, we can effectively reduce the size of the implementations, and improve their performance. Another interesting direction in pursuing compact implementations exploited is to examine the effects of recent work in witness abstractions~\cite{jakobs2017compact}. Finally, a short-term goal is the development of machine-checked
+proofs regarding the soundness of the fixpoint generation process, as well as the realizability results.
 
 \textbf{Test case generation}. \aeval's effectiveness in providing witnesses to the
 satisfiability of $\forall\exists$-formulas can be also exploited in terms of the
