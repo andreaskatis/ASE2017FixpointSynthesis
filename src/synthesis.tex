@@ -13,7 +13,7 @@
 %		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
 		\If{$\isValid(\aevalres)$}
             \State{$\init \gets SAT(G_{I}(s) \land F(s))$}
-            \If{$\isSat(\init) \ \land \ F(s) \neq  false$}
+            \If{$\isSat(\init)$}
 			%\If{$G_{I}(s) \land F(s) \neq false$}
 		        %\andreas{I'm not yet comfortable with the algorithm returning a model for the initial states. That could be misunderstood as the implementation starting from a single possible assignment. The Skolem may have multiple branches that may be used as initial state assignments\ldots}
 				\Return $\tuple{\realizable, \aevalres.\skolems, init.model, F}$;
@@ -192,6 +192,58 @@ Immediate from Lemma~\ref{lem:alg1-viable}.
 \end{theorem}
 
 Perhaps we don't even need to bring in Tarski...It could be done with just Hoare logic loop invariants.
+
+
+\subsection{Soundness}
+
+\andrew{First version of joint soundness result. Assume we already
+  have lemma~\ref{lem:alg1-viable} proven. }
+
+\begin{theorem}
+  The \realizable and \unrealizable results of
+  Algorithm~\ref{alg:synthesis} are sound.
+\end{theorem}
+
+\begin{proof}
+If Algorithm~\ref{alg:synthesis} terminates, then the
+formula for $\phi$ on Line 3 is valid. Rewritten, $F$
+satisfies the formula
+\begin{equation*}
+  \forall s.~F(s) \implies \left(\forall i.~ A(s,i) \implies \exists s'.G_{T}(s,i,s') \land F(s')\right)
+\end{equation*}
+This means $F$ is a post-fixed point of the defining equation for
+$\viable$ given in Equation~\ref{eq:viable}. Moreover $\viable$ is
+defined as the greatest fixed-point of this equation, thus by the
+Knaster-Tarski theorem we have $F(s) \implies \viable(s)$ for all $s$.
+Combining this with Lemma~\ref{lem:alg1-viable}, we have
+$F(s) = \viable(s)$. Therefore the check on Line 7 is equivalent to
+the check in Equation~\ref{eq:nonempty} for realizability.
+\end{proof}
+
+\begin{proof}
+If Algorithm~\ref{alg:synthesis} terminates, then the
+formula for $\phi$ on Line 3 is valid. Rewritten, $F$
+satisfies the formula
+\begin{equation}
+  \forall s.~F(s) \Rightarrow \left(\forall i.~ A(s,i) \Rightarrow \exists
+    s'.G_{T}(s,i,s') \land F(s')\right)
+  \label{eq:F-rewritten}
+\end{equation}
+Define the function $f$ over state predicates as
+  \begin{equation}
+    f = \lambda V. \lambda s.~ \forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land V(s')
+    \label{eq:f-fixed-point}
+  \end{equation}
+  State predicates are equivalent to subsets of the state space and
+  form a lattice in the natural way. Moreover, $f$ is monotone on this
+  lattice. From Equation~\ref{eq:F-rewritten} we have
+  $F \subseteq f(F)$. Thus $F$ is a post-fixed point of $f$. In
+  Equation~\ref{eq:viable}, $\viable$ is defined as the greated
+  fixed-point of $f$. Thus $f \subseteq \viable$ by the Knaster-Tarski
+  theorem. Combining this with Lemma~\ref{lem:alg1-viable}, we have
+  $F = \viable$. Therefore the check on Line 7 is equivalent to the
+  check in Equation~\ref{eq:nonempty} for realizability.
+\end{proof}
 
 \subsection{Termination on Finite Models}
 
