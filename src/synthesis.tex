@@ -514,20 +514,21 @@ through the problem's input and output variables. The main input is Stepmother's
 distribution of one unit of water over five different input variables,
 \textit{i1} to \textit{i5}. While the node contains a sixth input argument,
 namely $e$, this is in fact used as the output of the system that we want to
-implement, representing Cinderella's choice at each of her turns. We make an
-explicit distinction on which node arguments are the system's inputs, using the \textit{REALIZABLE} statement towards the end of the contract. The contract's
+implement, representing Cinderella's choice at each of her turns.
+
+We make an explicit distinction on which node arguments are the system's inputs, using the \textit{REALIZABLE} statement towards the end of the contract. The contract's
 assumptions $A$ are defined using assertions over the input variables
 \textit{i1-i5}. We assume that there can be no negative input values, and the
 sum of \textit{i1} to \textit{i5} is equal to one unit of water. The specified node
 returns the value of a boolean variable \textit{guarantee}, which corresponds to
 the contract's guarantee $G$, and is explicitly defined to be such using the
-\textit{PROPERTY} statement.
-Finally, we define what each bucket's state should be through the entire
+\textit{PROPERTY} statement. Finally, we define what each bucket's state should be through the entire
 duration of the game, using the local variables \textit{b1} to \textit{b5}.
 Initially, each bucket is empty, and with each transition to a new state, the contents depend on
 whether Cinderella chose the specific bucket, or an adjacent one. If this is the
 case, the contents of the bucket $b_i$ become equal to the amount of water that
 Stepmother puts in the corresponding input variable $i$, during the next turn.
+
 If the bucket was not covered by Cinderella's choice, then its contents are
 updated by adding Stepmother's distribution to the volume of water that the
 bucket already had. The distinction between the initial state of each bucket,
@@ -539,6 +540,37 @@ should only be realizable if, assuming valid inputs given by the Stepmother
 (i.e. positive values to input variables that add up to one water unit),
 Cinderella can keep reacting indefinitely, by providing outputs that satisfy the
 guarantees (i.e. she empties buckets in order to prevent overflow in Stepmother's next turn).
+
+\begin{figure}[!t]
+\centering
+ \begin{Verbatim}[fontsize=\footnotesize]
+ ...
+(and ...
+ (or (not (<= (+ b2 i2) 3.0)) 
+  (<= (+ b2 i2) 2.0) 
+  (and (<= (+ b2 i2) 3.0) 
+   (not (<= (+ b2 i2) 2.0)) 
+   (or (and (not (>= (+ b1 i1) 3.0))
+        (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2) 
+                       (* (- 1.0) i2)))) 
+    (and (not (<= (+ b2 i2) 0.0))
+     (not (>= (+ b3 i3) 3.0))
+     (not (>= i4 3.0))
+     (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2) 
+                    (* (- 1.0) i2)))))))
+ (or (and %init (= i4 0.0)) (not %init))
+ (or (and %init (= i5 0.0)) (not %init))
+ (<= (+ b3 i3) 3.0)
+ (<= i4 3.0)
+ (<= i5 3.0)
+ ...)
+...
+ \end{Verbatim}
+\caption{Code snippet of the region of validity generated for the Cinderella-Stepmother
+example}
+\label{fg:snippet}
+\end{figure}
+
 We initiate our call to the procedure defined in Algorithm~\ref{alg:synthesis},
 by providing the contract in Figure~\ref{fg:cind} as input. The algorithm
 then enters an infinite loop, where it attempts to construct a fixpoint of
@@ -551,30 +583,11 @@ input variables, it might contain contraints over the inputs, which is an
 undesirable side-effect. Due to space restrictions, we are unable to show this
 in full effect, but Figure~\ref{fg:snippet} shows part of the generated
 $Q(s,i)$, in SMT-LIB format (pre-fix notation), where the input variables are
-part of the constraints. The variable \textit{\%init} is used in the underlying
+part of the constraints.~\footnote{The names in the snippet have been simplified to match the rest of the paper.} The variable \textit{\%init} is used in the underlying
 machinery as a flag to indicate whether the current state is initial or not
-(true and false, respectively). \andrew{Is there anything else we can
-  say about the code in the figure? Does it give us any insight into a
-  possible solution for cinderella?}
+(true and false, respectively). While the actual code is hundreds of lines long, looking at the specific snippet shows us how the valid subset may contain constraints over the inputs, that violate the assumptions. The conjunction in Figure~\ref{fg:snippet} contains the constraints $(<= i4 \ 3.0)$ and $(<= i5 \ 3.0)$. These conjuncts define a region where the contract assumptions are violated, since it is possible to assign values to $i4$ and $i5$ such that $i4 > 1$ and $i5 > 1.0$ respectively. This shows that $Q(s,i)$ is not necessarily a valid region that satisfies the assumptions in a strict manner, and it is imperative to extract a new region from $Q(s,i)$, that only provides constraints over the state variables.
 
-\begin{figure}[!t]
-\centering
- \begin{Verbatim}[fontsize=\footnotesize]
-(and (or (and %init (= (+ b1 i1) 0.0)) (not %init))
-  (or (and %init (= (+ b2 i2) 0.0)) (not %init))
-  (or (and %init (= (+ b3 i3) 0.0)) (not %init))
-  (or (and %init (= i4 0.0)) (not %init))
-  (or (and %init (= i5 0.0)) (not %init))
-  (<= (+ b1 i1) 2.0)
-  (<= (+ b2 i2) 2.0)
-  (<= (+ b3 i3) 2.0)
-  (<= i4 2.0)
-  (<= i5 2.0))
- \end{Verbatim}
-\caption{Code snippet of the region of validity generated for the Cinderella-Stepmother
-example}
-\label{fg:snippet}
-\end{figure}
+
 
 Considering the existence of undesirable constraints in $Q(s,i)$, the next step
 is to extract a region of validity that is only described using state variables.
