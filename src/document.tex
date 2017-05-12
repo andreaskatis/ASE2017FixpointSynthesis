@@ -62,6 +62,12 @@
 \newcommand{\isUnSat}{\textsc{isUnsat}\xspace}
 
 \newcommand{\viable}{{\mathsf {Viable}}}
+\newcommand{\reachable}{{\mathsf {Reachable}}}
+
+\newcommand{\extend}{{\mathsf {Extend}}}
+\newcommand{\basecheck}{{\mathsf {BaseCheck}}}
+\newcommand{\extendcheck}{{\mathsf {ExtendCheck}}}
+
 \newcommand{\glb}{\textit {GLB}\xspace}
 \newcommand{\lub}{\textit {LUB}\xspace}
 \newcommand{\tuple}[1]{\langle #1 \rangle}
@@ -127,9 +133,12 @@ Email: agurfinkel@uwaterloo.ca}}
 %shortened version due to 200 word limit
 Automated synthesis of reactive systems using only
 specification knowledge is a popular and well
-explored subject in formal verification. A variety of approaches
+explored subject in formal verification. \andrew{The following
+  sentance is hard to read and I don't know what it means enough to
+  fix it.}
+A variety of approaches
 have been proposed in the recent years, through inductive
-and functional synthesis, while template-based, counterexample-guided and predicate abstraction techniques have been proved
+and functional synthesis, while template-based, counterexample-guided and predicate abstraction techniques have proved
 useful towards extending the applicability of such algorithms
 to solving difficult problems. In this paper, we propose a novel
 approach to program synthesis, which is based on the validity
@@ -139,7 +148,7 @@ Directed Reachability, and is completely automated. The original
 problem space is recursively refined by blocking out regions of
 unsafe states, with the goal being the discovery of a fixpont that
 describes safe reactions. If such a fixpoint
-is found, we construct a witness that is directly translated into a C implementation. We implemented the algorithm in the \jkind model checker, and exercised it against contracts written using
+is found, we construct a witness that is directly translated into an implementation. We implemented the algorithm in the \jkind model checker, and exercised it against contracts written using
 the Lustre specification language. Experimental results show
 how the new algorithm yields better performance as well as
 soundness for ``unrealizable'' results when compared to \jkind's

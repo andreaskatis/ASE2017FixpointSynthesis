@@ -1,14 +1,15 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Background}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Assume-Guarantee Contracts}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Formal Representation}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{AE-VAL}{section.2}% 5
-\BOOKMARK [1][-]{section.3}{Validity-Guided Synthesis from Assume-Guarantee Contracts}{}% 6
-\BOOKMARK [2][-]{subsection.3.1}{Algorithm}{section.3}% 7
-\BOOKMARK [2][-]{subsection.3.2}{Soundness}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.3}{Example: The Cinderella-Stepmother Game}{section.3}% 9
-\BOOKMARK [1][-]{section.4}{Implementation}{}% 10
-\BOOKMARK [1][-]{section.5}{Experimental Results}{}% 11
-\BOOKMARK [1][-]{section.6}{Related Work}{}% 12
-\BOOKMARK [1][-]{section.7}{Conclusion and Future Work}{}% 13
-\BOOKMARK [1][-]{section*.9}{References}{}% 14
+\BOOKMARK [1][-]{section.2}{Running Example: The Cinderella-Stepmother Game}{}% 2
+\BOOKMARK [1][-]{section.3}{Background}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Assume-Guarantee Contracts}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Formal Representation}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{AE-VAL}{section.3}% 6
+\BOOKMARK [1][-]{section.4}{Validity-Guided Synthesis from Assume-Guarantee Contracts}{}% 7
+\BOOKMARK [2][-]{subsection.4.1}{Algorithm}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.2}{Soundness}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.3}{Applying JSyn-vg to the Cinderella-Stepmother game}{section.4}% 10
+\BOOKMARK [1][-]{section.5}{Implementation}{}% 11
+\BOOKMARK [1][-]{section.6}{Experimental Results}{}% 12
+\BOOKMARK [1][-]{section.7}{Related Work}{}% 13
+\BOOKMARK [1][-]{section.8}{Conclusion and Future Work}{}% 14
+\BOOKMARK [1][-]{section*.9}{References}{}% 15

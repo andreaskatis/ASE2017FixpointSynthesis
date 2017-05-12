@@ -1,11 +1,30 @@
+\section{Running Example: The Cinderella-Stepmother Game}
+\label{sec:example}
+
+For the purposes of this paper, we will illustrate how the validity
+guided-synthesis algorithm works, using a variation of the minimum-backlog
+problem, the two player game between Cinderella and her wicked
+Stepmother, first  expressed by Bodlaender \textit{et
+al.}~\cite{bodlaender2012cinderella}.
+
+The main objective for Cinderella (i.e. the reactive system) is to prevent a
+collection of buckets from overflowing with water. On the other hand,
+Cinderella's Stepmother (i.e. the system's environment) refills the buckets with a predifined amount of water that is distributed in a random fashion between the buckets.
+For the running example, we chose an instance of the game that has been
+previously used in template-based synthesis~\cite{beyene2014constraint}. In this instance, the game is described
+using five buckets, where each bucket can contain up to two units of water.
+Cinderella has the option to empty two adjacent buckets at each of her turns,
+while the Stepmother distributes one unit of water over all five buckets. In the context of this paper we use this example to show how specification is expressed, as well as how we can synthesize an efficient implementation that describes reactions for Cinderella, such that an bucket overflow is always prevented.
+
+
+
 \section{Background}
 \label{sec:background}
-
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=3.5in]{agcontract-crop.pdf}
-\caption{A simple Assume-Guarantee Contract.}
+\caption{An Assume-Guarantee Contract.}
 \label{fg:agcontract}
 \end{figure}
 
@@ -19,31 +38,18 @@ describe the problem of synthesis in terms of discovering inductive invariants t
 \subsection{Assume-Guarantee Contracts}
 \label{sec:pre}
 
-For the purposes of this paper, we focus our interest on a mainstream variation
-for representing system requirements, using an \textit{Assume-Guarantee
+We focus our interest on a mainstream variation for representing system requirements, using an \textit{Assume-Guarantee
 Contract}. Requirements in this format contain two main types of constraints.
 The \emph{assumptions} of the contract restrict the possible inputs that the
 environment can provide to the system, while the \emph{guarantees} are used to
 describe what is considered a safe reaction of the system to the outside world.
 
-A simple example is shown in Figure~\ref{fg:agcontract}. The contract is defined using the assumption $A = \{x\neq
-y\}$ and the guarantee $G = \{x \leq y \Rightarrow z =
-\textit{true}, x \geq y \Rightarrow z = \textit{false}\}$. Variables
-$x$ and $y$ are the designated inputs while $z$ is the output. An implementation may or may not exist at the time the contract is written (i.e. questionmark in Figure~\ref{fg:agcontract}).
-Despite this, it is easy to show that at least one implementation exists which, for example, sets $z$ to true if $x < y$ and false otherwise. An alternative
-valid implementation could set $z$ to false if $x > y$, and true otherwise. The
-proof of existence of such an implementation  is the main concept behind the
-\emph{realizability} problem, while the automated construction of a witness
-implementation is the main focus of \emph{program synthesis}.
+A (conceptually) simple example is shown in Figure~\ref{fg:agcontract}. The contract describes a possible set of requirements for a specific instance of the Cinderella-Stepmother game that we introduced in Section~\ref{sec:example}. Our goal is to synthesize an implementation that describes Cinderella's winning region of the game. Cinderella in this case is the implementation, as shown by the middle box in Figure~\ref{fg:agcontract}. Cinderella's inputs are five different values $i_k, 1 \leq k \leq 5$, determined by a random distribution of one unit of water by the Stepmother. During each of her turns Cinderella has to make a choice denoted by the output variable $e$, such that the buckets $b_k$ do not overflow during the next action of her Stepmother. We define the contract using the set of assumptions $A = \{i_k \geq 0, \sum_{k=1}^{5} i_k = 1\}$ and the guarantees $G = \{b_k \leq 2, b_k = ite((e=k \lor e=k+1), 0, (b_k+i_k))\}$. For the particular example, it is possible to construct at least one implementation that satisfies the guarantee constraints, given the input assumptions. The proof of existence of such an implementation  is the main concept behind the \emph{realizability} problem, while the automated construction of a witness implementation is the main focus of \emph{program synthesis}.
 
 
-It is apparent that the example contract above is therefore \emph{realizable},
-and an efficient synthesis procedure would be capable of providing at least one
-implementation. Nevertheless, it is important to consider a variation of the
-example, where $A = \varnothing$. This is a practical case of an
-\emph{unrealizable} contract, as there is no feasible implementation that can
-correctly react to the environment assigning values to $x$ and $y$, such that
-$x = y$.
+Since the contract in Figure~\ref{fg:agcontract} is \emph{realizable}, an efficient synthesis procedure would be capable of providing at least one
+implementation. At this point it is important to consider a variation of the example, where $A = \varnothing$. This is a practical case of an
+\emph{unrealizable} contract, as there is no feasible Cinderella implementation that can correctly react to Stepmother's actions. The most apparent counterexample in this case is that the Stepmother is able to pour random amounts of water, and would be capable to overflow at least one bucket during every one of her turns.
 
 \subsection{Formal Representation}
 \label{sec:formals}
@@ -78,6 +84,8 @@ and only if:
 \label{eq:viable}
 \end{equation}
 
+This equation is recursive and we interpret it coinductively, i.e., as a
+greatest fixed-point.
 A necessary condition, finally, is that the set of viable states
 intersects with the set of initial states. As such, to conclude that a contract
 is realizable, we require that
@@ -88,6 +96,6 @@ is realizable, we require that
 \end{equation}
 
 The intuition behind our proposed algorithm in this paper relies on the
-discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extract a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
+discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extracting a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a sophisticated solver for $\forall\exists$-formulas.
 
 \input{aeval}
