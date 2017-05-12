@@ -11,8 +11,8 @@ match a certain shape (the template)~\cite{srivastava2013template}, while {\em i
 In this work, we describe a novel approach that can effectively synthesize
 programs using safety specifications written in the form of {\em
 assume/guarantee} contracts. The technique has been used to synthesize contracts involving linear real and integer arithmetic (LIRA),
-but remains generic enough to be extended into supporting additional theories 
-in the future, as well as to liveness properties that can be reduced to safety properties \andreas{filled in a reference to original paper.} (as in K-liveness~\cite{claessen2012liveness}).  Our approach is completely automated and requires no guidance to the tools in terms of user interaction (unlike~\cite{ryzhyk2014user,ryzhyk2016developing}), and is capable of providing solutions without the guidance of templates, as are used by Beyene et. al.
+but remains generic enough to be extended into supporting additional theories
+in the future, as well as to liveness properties that can be reduced to safety properties (as in K-liveness~\cite{claessen2012liveness}).  Our approach is completely automated and requires no guidance to the tools in terms of user interaction (unlike~\cite{ryzhyk2014user,ryzhyk2016developing}), and is capable of providing solutions without the guidance of templates, as are used by Beyene et. al.
 in~\cite{beyene2014constraint}.
 
 The main idea of the algorithm was inspired by frame-based inductive algorithms, the most prominent being the IC3/PDR algorithm~\cite{bradley2011sat,een2011efficient}. In PDR, the goal is to discover an inductive invariant for a property, by recursively blocking generalized regions describing unsafe states. In a similar concept, we attempt

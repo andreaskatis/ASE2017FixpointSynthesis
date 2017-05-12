@@ -22,13 +22,13 @@ Because no model exists in $A(s) \land \neg{R_2(s)}$ then there does not exist a
 If after some $n$ iterations, it happens that $A(s) \Rightarrow R_n(s)$; then $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is valid, and \aeval generates a Skolem function as described in~\cite{katis2016synthesis}.
 Intuitively, a Skolem function describes a connection between $s$ and $s'$; which, after conjoining to $A(s)$ and eliminating the existential quantifier in front of $G(s,s')$, makes the implication valid.
 
-We say that $A(s) \land R_n(s)$ is a \emph{region of validity}, because $\forall s \,.\,  A(s) \land R_n(s) \Rightarrow \exists s' . G(s,s')$ is always valid by construction.
+We say that $R_n(s)$ is a \emph{region of validity}, because $\forall s \,.\,  A(s) \land R_n(s) \Rightarrow \exists s' . G(s,s')$ is always valid by construction.
 In this work, we are interested in the \emph{maximal} regions of validity, i.e., the ones produced by disjoining all partitions produced by \aeval before termination and by conjoining it further with $A(s)$.
 Thus, throughout the paper, we assume that all regions of validity are maximal.
 % \john{It is a bit strange how we alternate using formulas that have no free variables along with formulas whose free variables are meant to be implicitly existentially quantified. I think we should either stick with a notation or explicitly say that free variables are interpreted to be existentially quantified.}
 
 \begin{lemma}
-If formula $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid, and $A(s) \land R_n(s)$ is the region of validity, then there is no other formula $S(s)$ such that $A(s) \land R_n(s) \Rightarrow S(s)$ and $\forall s \,.\,  S(s) \Rightarrow \exists s' . G(s,s')$.
+If formula $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid, and $R_n(s)$ is the region of validity, then there is no other formula $S(s)$ such that $A(s) \land R_n(s) \Rightarrow S(s)$ and $\forall s \,.\,  S(s) \Rightarrow \exists s' . G(s,s')$.
 \label{lem:subset}
 \end{lemma}
 
