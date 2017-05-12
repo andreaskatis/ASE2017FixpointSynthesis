@@ -210,12 +210,12 @@ If Algorithm~\ref{alg:synthesis} terminates, then the
 formula for $\phi$ on Line 3 is valid. Rewritten, $F$
 satisfies the formula
 \begin{equation*}
-  \forall s.~F(s) \implies \left(\forall i.~ A(s,i) \implies \exists s'.G_{T}(s,i,s') \land F(s')\right)
+  \forall s.~F(s) \Rightarrow \left(\forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s')\right)
 \end{equation*}
 This means $F$ is a post-fixed point of the defining equation for
 $\viable$ given in Equation~\ref{eq:viable}. Moreover $\viable$ is
 defined as the greatest fixed-point of this equation, thus by the
-Knaster-Tarski theorem we have $F(s) \implies \viable(s)$ for all $s$.
+Knaster-Tarski theorem we have $F(s) \Rightarrow \viable(s)$ for all $s$.
 Combining this with Lemma~\ref{lem:alg1-viable}, we have
 $F(s) = \viable(s)$. Therefore the check on Line 7 is equivalent to
 the check in Equation~\ref{eq:nonempty} for realizability.
