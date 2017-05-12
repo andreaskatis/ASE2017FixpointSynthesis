@@ -4,3 +4,4 @@ out/document.pdf
 *.gz
 .texlipse
 *.project
+tmp/document.out

@@ -555,25 +555,25 @@ guarantees (i.e. she empties buckets in order to prevent overflow in Stepmother'
 \begin{figure}[!t]
 \centering
  \begin{Verbatim}[fontsize=\footnotesize]
- ...
+...
 (and ...
- (or (not (<= (+ b2 i2) 3.0))
+ (or (not (<= (+ b2 i2) 2.0))
   (<= (+ b2 i2) 2.0)
-  (and (<= (+ b2 i2) 3.0)
+  (and (<= (+ b2 i2) 2.0)
    (not (<= (+ b2 i2) 2.0))
-   (or (and (not (>= (+ b1 i1) 3.0))
+   (or (and (not (>= (+ b1 i1) 2.0))
         (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2)
                        (* (- 1.0) i2))))
     (and (not (<= (+ b2 i2) 0.0))
-     (not (>= (+ b3 i3) 3.0))
-     (not (>= i4 3.0))
+     (not (>= (+ b3 i3) 2.0))
+     (not (>= i4 2.0))
      (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2)
                     (* (- 1.0) i2)))))))
  (or (and %init (= i4 0.0)) (not %init))
  (or (and %init (= i5 0.0)) (not %init))
- (<= (+ b3 i3) 3.0)
- (<= i4 3.0)
- (<= i5 3.0)
+ (<= (+ b3 i3) 2.0)
+ (<= i4 2.0)
+ (<= i5 2.0)
  ...)
 ...
  \end{Verbatim}
