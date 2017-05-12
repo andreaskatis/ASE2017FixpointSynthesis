@@ -11,7 +11,7 @@
 %\andreas{I believe the section can be a bit longer. I also think that the keyphrase ``region of validity'' needs to stand out more. Finally, a proof for Lemma 1, or at least an outline of it would be greatly appreciated.}
 
 We rely on the already established algorithm to decide the validity of $\forall\exists$-formulas and extract Skolem functions, called \aeval~\cite{fedyukovich2015automated}.
-It takes as input a formula of the form $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$, 
+It takes as input a formula of the form $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$,
 where $A(s)$ has only existential quantifiers, and $G(s,s')$ is quantifier-free.
 While deciding the validity, \aeval iteratively enumerates models of $A(s)$ and groups them into a set of partitions $\{T_i(s)\}$, such that each $T_i(s) \Rightarrow \exists s' . G (s, s')$.
 We say that after $n$ iterations, \aeval establishes a formula $R_n(s) \eqdef \bigvee_{i=1}^n T_i(s)$ which is by definition an under-approximation of $\exists s' . G (s, s')$.
@@ -24,7 +24,7 @@ Intuitively, a Skolem function describes a connection between $s$ and $s'$; whic
 
 We say that $A(s) \land R_n(s)$ is a \emph{region of validity}, because $\forall s \,.\,  A(s) \land R_n(s) \Rightarrow \exists s' . G(s,s')$ is always valid by construction.
 In this work, we are interested in the \emph{maximal} regions of validity, i.e., the ones produced by disjoining all partitions produced by \aeval before termination and by conjoining it further with $A(s)$.
-Thus, throughout the paper, we assume that all regions of validity are maximal. 
+Thus, throughout the paper, we assume that all regions of validity are maximal.
 % \john{It is a bit strange how we alternate using formulas that have no free variables along with formulas whose free variables are meant to be implicitly existentially quantified. I think we should either stick with a notation or explicitly say that free variables are interpreted to be existentially quantified.}
 
 \begin{lemma}
@@ -37,3 +37,10 @@ Suppose that $S(s)$ exists.
 Then $S(s) \land \neg{R_n(s)} \land A(s)$ is satisfiable, and its models are not contained in $R_n(s)$.
 It contradicts our assumption that \aeval has terminated since otherwise it would proceed for generating $T_{n+1}(s)$ which in turn would enlarge the region of validity.
 \end{proof}
+
+\begin{corollary}
+If formula $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid, and $A(s) \land R_n(s)$ is the region of validity, then 
+ $\forall s \,.\, R_n(s) \Leftrightarrow (A(s) \Rightarrow \exists s' . G(s,s'))$ 
+\label{cor:subset}
+\end{corollary}
+

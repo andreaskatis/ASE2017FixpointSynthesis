@@ -175,9 +175,24 @@ Furthermore, for finite-state problems, the algorithm is totally correct.  For t
 
 
 \begin{lemma}
-$\viable(s) \implies s \in F$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
+$\forall s. \viable(s) \implies F(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
 \label{lem:alg1-viable}
 \end{lemma}
+
+\begin{proof}
+The property is trivially true prior to the first iteration of the loop, because 
+$F(s) = true$.  Now, suppose $\forall s . \viable(s) \implies F(s)$ is true at the beginning of the loop.  We have three termination conditions for the loop: the loop exits at lines 8 and 10, and the loop continuation at line 16.  Neither of the termination conditions changes $F$, so these branches are discharged.
+
+What remains is the loop continuation at line 16.  Assuming $\forall s . \viable(s) \implies F(s)$, we must demonstrate $\forall s . \viable(s) \implies F(s) \land \lnot W(s)$.  We first examine the definition of viability: 
+\[
+    \viable(s) = \forall s,i. \ (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s') \land \viable(s'))
+\]
+Applying the assumption yields $(\forall s,i. \ (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s') \land F(s'))$ (Weakening).
+
+Fixing $s$ to $s_0$, by the induction hypothesis, we know $F(s_0)$.  Suppose $W(s_0)$.  In this case, by line (15) and $F(s_0)$, we know $\exists i. A(s_0, i) \land \lnot Q(s_0, i)$.  We fix $i$ to be some arbitrary constant $i_0$.  From Corollary~\ref{cor:subset}, we have
+$A(s_0, i_0) \land \lnot ((F(s_0) \land A(s_0,i_0)) \implies \exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  Since $F(s_0)$ and $A(s_0, i_0)$, simplifying 
+yields $\lnot (\exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  But this contradicts the weakened loop hypothesis.  Therefore $\lnot W(s_0)$.  Since $s_0$ was arbitrary, $\forall s . \viable(s) \implies F(s) \land \lnot W(s)$. 
+\end{proof}
 
 \begin{corollary}
 $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
