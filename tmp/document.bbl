@@ -55,6 +55,11 @@ V.~Kuncak, M.~Mayer, R.~Piskac, and P.~Suter, ``Functional synthesis for linear
   arithmetic and sets,'' \emph{International Journal on Software Tools for
   Technology Transfer}, vol.~15, no. 5-6, pp. 455--474, 2013.
 
+\bibitem{claessen2012liveness}
+K.~Claessen and N.~S{\"o}rensson, ``A liveness checking algorithm that
+  counts,'' in \emph{Formal Methods in Computer-Aided Design (FMCAD),
+  2012}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2012, pp. 52--59.
+
 \bibitem{ryzhyk2014user}
 L.~Ryzhyk, A.~Walker, J.~Keys, A.~Legg, A.~Raghunath, M.~Stumm, and M.~Vij,
   ``User-guided device driver synthesis.'' in \emph{OSDI}, 2014, pp. 661--676.
@@ -106,11 +111,6 @@ G.~Fedyukovich, A.~Gurfinkel, and N.~Sharygina, ``Automated discovery of
   Intelligence, and Reasoning}.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer, 2015, pp. 606--621.
 
-\bibitem{tarski1955lattice}
-A.~Tarski \emph{et~al.}, ``A lattice-theoretical fixpoint theorem and its
-  applications,'' \emph{Pacific journal of Mathematics}, vol.~5, no.~2, pp.
-  285--309, 1955.
-
 \bibitem{bodlaender2012cinderella}
 M.~H.~L. Bodlaender, C.~A. Hurkens, V.~J. Kusters, F.~Staals, G.~J. Woeginger,
   and H.~Zantema, ``Cinderella versus the wicked stepmother,'' in \emph{IFIP
@@ -126,15 +126,6 @@ E.~Jahier, P.~Raymond, and N.~Halbwachs, ``{The Lustre V6 Reference Manual}.''
 \bibitem{jkind}
 A.~Gacek, ``{JK}ind -- an infinite-state model checker for safety properties in
   {Lustre},'' \url{http://loonwerks.com/tools/jkind.html}, 2016.
-
-\bibitem{feiler2006architecture}
-P.~H. Feiler, D.~P. Gluch, and J.~J. Hudak, ``The architecture analysis \&
-  design language (aadl): An introduction,'' DTIC Document, Tech. Rep., 2006.
-
-\bibitem{NFM2012:CoGaMiWhLaLu}
-D.~D. Cofer, A.~Gacek, S.~P. Miller, M.~W. Whalen, B.~LaValley, and L.~Sha,
-  ``Compositional verification of architectural models,'' in \emph{NFM}.\hskip
-  1em plus 0.5em minus 0.4em\relax Springer-Verlag, 2012, pp. 126--140.
 
 \bibitem{manna1971toward}
 Z.~Manna and R.~J. Waldinger, ``Toward automatic program synthesis,''

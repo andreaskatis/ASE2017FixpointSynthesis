@@ -5,14 +5,14 @@ Program synthesis is one of the most challenging problems in computer science. T
 %
 %ever since it was first expressed, has enjoyed a considerable amount of contributions.
 %
-The first important attempt to synthesize reactive systems came from Pnueli and Rosner~\cite{pnueli1989synthesis}, but the problem has seen an increased popularity in the more recent years due to the increased capability of symbolic solvers, including Satisfiability Modulo Theories~\cite{BarFT-SMTLIB} tools. As a result, the problem has been well-studied for the area of propositional specifications (see Gulwani~\cite{gulwani2010dimensions} for a survey), and approaches have been proposed to tackle challenges involving richer specifications. Template-based techniques~\cite{srivastava2013template}, focus on synthesizing programs that
-match a certain shape (the template) while {\em inductive synthesis} uses the idea of refining the problem space using counterexamples, in order to converge to a solution~\cite{flener2001inductive}. A different category is that of \textit{Functional synthesis}, in which the goal is to fill in ``gaps'' in an already existing implementation, with synthesized code~\cite{kuncak2013functional}.
+The first important attempt to synthesize reactive systems came from Pnueli and Rosner~\cite{pnueli1989synthesis}, but the problem has seen increased popularity in more recent years due to the increased capability of symbolic solvers, including Satisfiability Modulo Theories~\cite{BarFT-SMTLIB} tools. As a result, the problem has been well-studied for the area of propositional specifications (see Gulwani~\cite{gulwani2010dimensions} for a survey), and approaches have been proposed to tackle challenges involving richer specifications. Template-based techniques focus on synthesizing programs that
+match a certain shape (the template)~\cite{srivastava2013template}, while {\em inductive synthesis} uses the idea of refining the problem space using counterexamples, to converge to a solution~\cite{flener2001inductive}. A different category is that of \textit{functional synthesis}, in which the goal is to fill in ``gaps'' in an already existing implementation with synthesized code~\cite{kuncak2013functional}.
 
 In this work, we describe a novel approach that can effectively synthesize
 programs using safety specifications written in the form of {\em
 assume/guarantee} contracts. The technique has been used to synthesize contracts involving linear real and integer arithmetic (LIRA),
 but remains generic enough to be extended into supporting additional theories 
-in the future, as well as to liveness properties that can be reduced to safety properties (as in K-liveness~\cite{}).  Our approach is completely automated and requires no guidance to the tools in terms of user interaction (unlike~\cite{ryzhyk2014user,ryzhyk2016developing}), and is capable of providing solutions without the guidance of templates, as are used by Beyene et. al.
+in the future, as well as to liveness properties that can be reduced to safety properties \andreas{filled in a reference to original paper.} (as in K-liveness~\cite{claessen2012liveness}).  Our approach is completely automated and requires no guidance to the tools in terms of user interaction (unlike~\cite{ryzhyk2014user,ryzhyk2016developing}), and is capable of providing solutions without the guidance of templates, as are used by Beyene et. al.
 in~\cite{beyene2014constraint}.
 
 The main idea of the algorithm was inspired by frame-based inductive algorithms, the most prominent being the IC3/PDR algorithm~\cite{bradley2011sat,een2011efficient}. In PDR, the goal is to discover an inductive invariant for a property, by recursively blocking generalized regions describing unsafe states. In a similar concept, we attempt
@@ -32,16 +32,15 @@ Katis~\textit{et al.} based on k-inductive proofs of a contract's
 realizability~\cite{gacek2015towards,katis2016towards,katis2016synthesis}.
 Our approach does not depend on k-induction, but is still based on the general
 concept of extracting a witness that satisfies a $\forall\exists$-formula, using
-the \aeval Skolemizer~\cite{fedyukovich2015automated}. To extract such a witness, we do not depend on a k-inductive proof, but instead use the \textit{regions of validity} that \aeval can generate from non-valid formulas,
+the \aeval Skolemizer~\cite{fedyukovich2015automated}. To extract such a witness, we do not depend on a k-inductive proof, but instead use the \textit{regions of validity} that \aeval can generate from invalid formulas
 to reach a fixpoint of satisfiable assignments to state variables.
 This approach is a direct improvement over the k-inductive method in two
 important aspects: performance, and soundness of `unrealizable' results. While
 the former is self-explanatory, with the latter we refer to cases where the
 k-inductive algorithm would spuriously report a contract as `unrealizable', when a correct
 implementation actually exists. This unsoundness stems from the pessimistic
-behavior of the k-inductive algorithm, as it is not capable of
-considering only a
-``safe'' subset of the state space. We were able to confirm our claims
+behavior of the k-inductive algorithm as it is not capable of
+considering only a ``safe'' subset of the state space. We were able to confirm our claims
 by comparing the two algorithms under a comprehensive benchmark suite containing
 contracts that were initially used in verification problems, as well as
 specification for industrial-level designs.
