@@ -117,7 +117,7 @@ certain assignments to input variables, for which the condition of viability doe
 hold, for any state. We leave the details regarding the meaning and usability
 of such counterexamples as potential future work.
 
-\subsection{Soundness of Realizable Results}
+\subsection{Notes}
 
 \mike{Here are my notes...sorry that these are disorganized}
 Things to fix:
@@ -161,17 +161,56 @@ Furthermore, for finite-state problems, the algorithm is totally correct.  For t
 
 \mike{End of Mike's notes}
 
+\subsection{Soundness of Realizable Results}
+
 
 \begin{lemma} $\reachable_A(s) \implies F(s)$
 \end{lemma}
 
+\begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\realizable, \skolems, I, F}$, then it is a {\em Realization} of the contract $(A, (G_{I}, G_{T}))$.
+\end{theorem}
 
 
-\begin{lemma} If Algorithm (1) terminates with $\tuple{\realizable, \skolems, I, F}$, then for any state $s \in F$
+\subsection{Soundness of Unrealizable Results}
 
+
+\begin{lemma}
+$\viable(s) \implies s \in F$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
+\label{lem:alg1-viable}
+\end{lemma}
+
+\begin{corollary}
+$s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{alg:synthesis} line (2).
+\label{cor:alg1-nonviable}
+\end{corollary}
+
+\begin{proof}
+Immediate from Lemma~\ref{lem:alg1-viable}.
+\end{proof}
+
+\begin{theorem} If Algorithm~\ref{alg:synthesis} terminates with $\tuple{\unrealizable, ?}$, then there is no $Viable$ state $s$.
+\end{theorem}
+
+Perhaps we don't even need to bring in Tarski...It could be done with just Hoare logic loop invariants.
+
+\subsection{Termination on Finite Models}
+
+\begin{lemma}
+Every loop iteration in Algorithm~\ref{alg:synthesis} either terminates or removes at least one state from $F$.
+\end{lemma}
+
+\begin{theorem}
+For finite models, Algorithm~\ref{alg:synthesis} terminates.
+\end{theorem}
+
+
+
+
+\iffalse
 The system $\mathfrak{U} = \tuple{S, \subseteq}$ is a complete lattice, where every subset $S' \subseteq S$ has a greatest lower bound  $\glb(S') = \cap S'$  and a least upper bound $\lub(S') = \cup S'$.
 \label{lem:altlattice}
-\end{lemma}
+%\end{lemma}
+\fi
 \begin{proof}
 Since the inclusion relation $\subseteq$ has been established over $S$, every subset $S' = \{M_k, M_{k+1}, \ldots M_{k+n}\}, n \in \mathbb{N}$ has a $\glb(S') = M_{k-1}$ and a $\lub(S') = M_{k+n+1}$. For the special case where $S' = S$ we have that $\glb(S) = M_0 = false$ and $\lub(S) = true$.
 \end{proof}
