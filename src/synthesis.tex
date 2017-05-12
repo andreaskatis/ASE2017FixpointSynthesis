@@ -12,7 +12,7 @@
 		\State $\aevalres \gets \aeval(\phi)$;
 %		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
 		\If{$\isValid(\aevalres)$}
-            \State{$\init \gets SAT(G_{I}(s) \land F(s))$}
+            \State{$\init \gets SAT(G_{I}(s) \land F(s))$;}
             \If{$\isSat(\init)$}
 			%\If{$G_{I}(s) \land F(s) \neq false$}
 				\Return $\tuple{\realizable, \aevalres.\skolems, init.model, F}$;
@@ -48,18 +48,19 @@
 \end{algorithmic}
 \end{algorithm*}
 
-The main contribution presented in this paper, is a novel idea that effectively
-uses the information provided by regions of validity to compute a
-greatest fixpoint of safe states. In our context, this fixpoint is not only
-usable as a proof to the realizability of a specification, but also leads to the
-construction of a witness that can be translated with a straightforward process
-into a functional and efficient implementation. The algorithm is
-presented in detail in Section~\ref{sec:alg} and we provide soundness
-proofs regarding the algorithm's capabilities of determining the
-realizability (unrealizability) of specification in
-Section~\ref{sec:soundness}. An illustrative example is used in
-Section~\ref{sec:example} to guide the reader through the process of
-synthesizing implementations, using a specification that describes the Cinderella-Stepmother game.
+The main contribution presented in this paper, is a novel idea that
+effectively uses the information provided by regions of validity to
+compute a greatest fixpoint of safe states. In our context, this
+fixpoint is not only usable as a proof to the realizability of a
+specification, but also leads to the construction of a witness that
+can be translated with a straightforward process into a functional and
+efficient implementation. The algorithm is presented in detail in
+Section~\ref{sec:alg} and we provide soundness proofs regarding the
+algorithm's capabilities of determining the realizability
+(unrealizability) of specification in Section~\ref{sec:soundness}. The
+example from Section~\ref{sec:example} is used to illustrate the
+process of synthesizing implementations, using a specification that
+describes the Cinderella-Stepmother game.
 
 \subsection{Algorithm}
 \label{sec:alg}
@@ -179,6 +180,7 @@ the existence of unsafe states in $F(s)$ for some input.  We remove this unsafe 
 
 
 \subsection{Soundness}
+\label{sec:soundness}
 
 \iffalse
 \andrew{TODO: This isn't really a lemma so much as an assumption about
@@ -212,16 +214,6 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{al
 \fi
 
 \begin{lemma}
-  Let $R$ be the region of validity for $\forall s.~ A(s) \Rightarrow
-  \exists s. G(s, s')$ as returned by AE-VAL. Then the following
-  formulas hold:
-  \begin{align*}
-  &\forall s.~ (A(s) \land W(s) \Rightarrow \exists s. G(s, s')) \\
-  &\forall s.~ (A(s) \land \neg W(s) \Rightarrow \neg \exists s. G(s, s')) \\
-  \end{align*}
-\end{lemma}
-
-\begin{lemma}
   $\viable \subseteq F$ is an invariant for
   Algorithm~\ref{alg:synthesis}.
 \label{lem:alg1-viable}
@@ -234,16 +226,19 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{al
   contradiction that the assignment on Line 16 violates the invariant.
   Then there exists $s_0$ such that $F(s_0)$, $W(s_0)$, and
   $\viable(s_0)$ all hold. Since $W$ is the region of validity for
-  $\phi'$ on Line 13, we have $F(s_0) \Rightarrow \exists i. A(s_0, i)
-  \land \neg Q(s_0, i)$. Given that $F(s_0)$ holds, let $i_0$ be such
-  that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$. Since $Q$ is the region
-  of validity for $\phi$ on Line 3, we have $F(s_0) \land A(s_0, i_0)
-  \Rightarrow \neg \exists s'. G_T(s, i, s') \land F(s')$. Since
-  $F(s_0$ and $A(s_0, i_0)$ hold we have $\neg \exists s'. G_T(s, i,
-  s') \land F(s')$. We know $\viable \subseteq F$ holds prior to Line
-  16, thus $\neg \exists s'. G_T(s, i, s') \land \viable(s')$. But
-  this is a contradiction since $\viable(s_0)$. Therefore the
-  invariant holds on Line 16.
+  $\phi'$ on Line 13, we have
+  $F(s_0) \Rightarrow \exists i. A(s_0, i) \land \neg Q(s_0, i)$
+  by Corollary~\ref{cor:subset}. Given that $F(s_0)$ holds, let $i_0$
+  be such that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$. Since $Q$ is the
+  region of validity for $\phi$ on Line 3, we have
+  $F(s_0) \land A(s_0, i_0) \Rightarrow \neg \exists s'. G_T(s, i, s')
+  \land F(s')$ by Corollary~\ref{cor:subset}. Since $F(s_0)$ and
+  $A(s_0, i_0)$ hold we have
+  $\neg \exists s'. G_T(s, i, s') \land F(s')$. We know
+  $\viable \subseteq F$ holds prior to Line 16, thus
+  $\neg \exists s'. G_T(s, i, s') \land \viable(s')$. But this is a
+  contradiction since $\viable(s_0)$. Therefore the invariant holds on
+  Line 16.
 \end{proof}
 
 
@@ -307,13 +302,15 @@ terminates or removes at least one state from $F$.
   towards contradiction that $F \cap W = \emptyset$. Since $W$ is the
   region of validity for $\phi'$ on Line 13, we know that $F$ lies
   completely outside the region of validity and therefore
-  $\forall s.~ \neg \exists i. A(s,i) \land \neg Q(s, i)$. Rewritten,
+  $\forall s.~ \neg \exists i. A(s,i) \land \neg Q(s, i)$
+  by Corollary~\ref{cor:subset}. Rewritten,
   $\forall s, i.~ A(s, i) \Rightarrow Q(s, i)$. Note that $Q$ is the
   region of validity for $\phi$ on Line 3. Thus $A$ is completely
   contained within the region of validity and formula $\phi$ is valid.
   This is a contradiction since if $\phi$ is valid then Line 16 will
-  not be executed in this iteration of the loop. Therefore $F \cap W
-  \neq \emptyset$ and at least one state is removed from $F$ on Line 16.
+  not be executed in this iteration of the loop. Therefore
+  $F \cap W \neq \emptyset$ and at least one state is removed from $F$
+  on Line 16.
 \end{proof}
 
 \begin{theorem}
