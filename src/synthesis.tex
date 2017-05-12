@@ -9,32 +9,40 @@
 	\State $F(s) \gets true$;\Comment{Fixpoint of viable states}
 	\While{true}
 		\State $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$;
-		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
-		\If{$\isValid(\subs)$}
-            \State{$init \gets SAT(G_{I}(s) \land F(s))$}
-            \If{$\isSat(init)$}
+		\State $\aevalres \gets \aeval(\phi)$;
+%		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
+		\If{$\isValid(\aevalres)$}
+            \State{$\init \gets SAT(G_{I}(s) \land F(s))$}
+            \If{$\isSat(\init) \ \land \ F(s) \neq  false$}
 			%\If{$G_{I}(s) \land F(s) \neq false$}
-				\Return $\tuple{\realizable, \skolems, init.model, F}$;
-			\Else{\Comment{Empty set of initial states}}
+		        \andreas{I'm not yet comfortable with the algorithm returning a model for the initial states. That could be misunderstood as the implementation starting from a single possible assignment. The Skolem may have multiple branches that may be used as initial state assignments\ldots}
+				\Return $\tuple{\realizable, \aevalres.\skolems, init.model, F}$;
+			\Else{\Comment{Empty set of initial or viable states}}
 		 		\Return $\tuple{\unrealizable, \varnothing}$;
 		 	\EndIf
 		\Else{\Comment{Extract region of validity $Q(s,i)$}}
-			\State $Q(s,i) \gets \subs$;
-			\If{$Q(s,i) = false$}
-				\Return $\tuple{\unrealizable, \varnothing}$;
-			\EndIf
+			\State $Q(s,i) \gets \aevalres.\subs$;
+%			\If{$Q(s,i) = false$}
+%				\Return $\tuple{\unrealizable, \varnothing}$;
+%			\EndIf
 			\State $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists i. A(s,i) \land \lnot
 			Q(s,i))$;
-			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
-			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
-				\Return $\tuple{\unrealizable, \skolems'}$;
-			\Else{}\Comment{Extract witnessing cex}
-				\State $W(s) \gets \subs'$;
-				\If{$W(s) = false$}
-					\Return $\tuple{\unrealizable, \varnothing}$;
-				\EndIf
-				\State $F(s) \gets F(s) \land \lnot W(s)$;\Comment{Refine set of viable states}
+			\State $\aevalres' \gets \aeval(\phi')$;
+%			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
+%			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
+%				\Return $\tuple{\unrealizable, \skolems'}$;
+%			\Else{}\Comment{Extract witnessing cex}
+			\State $W(s) \gets true$;
+			\If{$\isInvalid(\aevalres')$}
+				\State $W(s) \gets \aevalres.\subs'$;
 			\EndIf
+			\State $F(s) \gets F(s) \land \lnot W(s)$;\Comment{Refine set of viable states}	
+			
+%				\If{$W(s) = false$}
+%					\Return $\tuple{\unrealizable, \varnothing}$;
+%				\EndIf
+				
+%			\EndIf
 		\EndIf
 	\EndWhile
 %\EndProcedure
@@ -62,17 +70,19 @@ $true$. The algorithm then attempts to converge to a fixpoint $F(s)$
 that only contains viable states, considering Equation~\ref{eq:viable}
 and~\ref{eq:nonempty}.
 We therefore construct the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i)
-\Rightarrow \exists s'. G_{T}(s,i,s') \land F(s'))$, and provide it as an input to \aeval (Line 4). \aeval is particularly
+\Rightarrow \exists s'. G_{T}(s,i,s') \land F(s'))$, and provide it as an input to \aeval (Line 3). \aeval is particularly
 focused on determining the validity of $\phi$. If the formula is valid, then a witness
 \textit{Skolem} is constructed, containing valid assignments to the
 existentially quantified variables of $\phi$. In the context of viability, this
 witness is capable of providing viable states that can be used as a safe
 reaction, given a prior viable state and an input that
-satisfies the assumptions.
+satisfies the assumptions. With a valid formula at hand, it only remains to check that the fixpoint is not empty, and intersects with the initial states (Line 7).
+If the check passes, we have a realizable contract and the algorithm returns the extracted witness that can be used as an implementation. Otherwise, the contract is unrealizable, since either the are no states that satisfy the
+initial state guarantees $G_I$, or the set of viable states $F(s)$ is empty.
 
 If $\phi$ is not true for every possible assignment of the universally
 quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
-(Line 11).
+(Line 12).
 %an exact subset of $F(s) \land A(s,i)$, namely $Q(s,i)$, which, if plugged in
 % the original left-hand side of $\phi$, makes the resulting formula valid. We will refer to such subsets as \textit{regions of
 %validity}.
@@ -86,36 +96,26 @@ pre-defined strategy for the rest of the originally valid inputs.
 Fortunately, we can exploit \aeval's capability of providing regions of validity
 towards eliminating this issue.
 
-The main concept to properly refine $F(s)$, is to extract a region of validity
-that only involves constraints over state variables. To achieve this, we ask for
+The main concept to properly refine $F(s)$ is to extract a region of validity $W(s)$
+that only involves constraints over state variables. To achieve this, we ask \aeval to determine
 the validity of the formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
-i. A(s,i) \land \lnot Q(s,i))$ (Line 17). If $\phi'$ is a valid formula, then for
-any assignment of the state variables $s$, we have a valid input (i.e. that
-satisfies the assumptions), for which the states are do not satisfy the constraints defined by the region
-of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
-safe in this context. On the other hand, if $\phi'$ is not valid, \aeval computes
-a new region of validity, namely $W(s)$. The new region is a strict subset of
+i. A(s,i) \land \lnot Q(s,i))$ (Line 13). If $\phi'$ is invalid, \aeval computes
+a new region of validity and assigns it to $W(s)$. The new region is a strict subset of
 $F(s)$, is described using constraints only over state variables, and entails
 the existence of unsafe states in $F(s)$, considering valid inputs.
+On the other hand, if $\phi'$ is a valid formula, then for any assignment of the state variables $s$, we have a valid input (i.e. that
+satisfies the assumptions), for which the states are do not satisfy the constraints defined by the region
+of validity $Q(s,i)$. This is a case of an unrealizable contract, as no state is
+safe in this context and $W(s)$ gets assigned to $true$, eventually leading to a failed check in Line 7, during the next iteration.
 
-Having a new region of validity that is not equal to \textit{false} (Line 23),
-we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 25). Despite the fact that we now have a refined set of viable states, we are not yet done,
+Assuming that a region of validity is extracted ($W(s) \neq true$) we can finally refine $F(s)$, by conjucting to it the negation of $W(s)$ (Line 18).
+Despite the fact that we now have a refined set of viable states, we are not yet done,
 as $\lnot W(s)$ is not an exact region of validity, with respect to $Q(s,i)$. As
 such there might still be states in $Q(s,i)$ that are not covered by $\lnot W(s)$. Therefore, we reiterate the
 process by repeating the top-level \aeval query, with $F(s) \gets F(s) \land \lnot
 W(s)$. Eventually, we either reach a greatest fixpoint $F(s)$ that effectively
 describes the set of viable states, or reach the case where $F(s) = false$, and
 declare our contract to be unrealizable.
-
-\aeval's effectiveness in providing witnesses to the
-satisfiability of $\forall\exists$-formulas is also exploited in terms of the
-tool providing concrete counterexamples to unrealizable contracts, using line 19
-in Algorithm~\ref{alg:synthesis}. In this particular case, if $\phi'$ is a valid
-formula, we can extract a witness that can be essentially used as a test case to
-demonstrate the specification's unrealizability. The witness contains
-certain assignments to input variables, for which the condition of viability does not
-hold, for any state. We leave the details regarding the meaning and usability
-of such counterexamples as potential future work.
 
 \subsection{Notes}
 
@@ -129,11 +129,11 @@ Things to fix:
 
 %If the algorithm terminates with a $\realizable$ result, it is straightforward to establish that the generated Skolem function yields a realization.
 
-Lemmas / proof thoughts.  For soundness of realizable results: 
+Lemmas / proof thoughts.  For soundness of realizable results:
 \begin{itemize}
-    \item It is straightforward to show $Viable$ of the initial state proposed by 
+    \item It is straightforward to show $Viable$ of the initial state proposed by
         the algorithm, just by the definition of the fixpoint function, but this doesn't really show the correctness of the Realization (Transition system).
-    \item Showing Realization would be more interesting.  
+    \item Showing Realization would be more interesting.
     \item $\reachable_{A}(s) \implies F(s)$.  We can prove this with induction.  Base case is easy. Showing inductive case: $\reachable_{A}(s') \implies F(s')$ from pre-state is also, I think straightforward from:
         \begin{itemize}
             \item $\reachable_{A}(s) => F(s)$
@@ -142,7 +142,7 @@ Lemmas / proof thoughts.  For soundness of realizable results:
             \item $T(s, i, s')$
         \end{itemize}
         so this immediately implies $F(s')$
-    \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.  
+    \item Now we can address the Realization claims, which are all simple non-inductive proofs that follow from definition that T satisfies our fixpoint formula.
 \end{itemize}
 
 For soundness of unrealizable results:
@@ -154,7 +154,7 @@ For soundness of unrealizable results:
 
 Put these two results together and we have that the algorithm yields correct results when it terminates (partial correctness).
 
-Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg: 
+Furthermore, for finite-state problems, the algorithm is totally correct.  For this, we need another proof leg:
 \begin{itemize}
     \item Each iteration removes at least one state from $F$.  (Progress)
 \end{itemize}
