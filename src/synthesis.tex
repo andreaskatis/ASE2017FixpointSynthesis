@@ -15,10 +15,10 @@
             \State{$\init \gets SAT(G_{I}(s) \land F(s))$}
             \If{$\isSat(\init) \ \land \ F(s) \neq  false$}
 			%\If{$G_{I}(s) \land F(s) \neq false$}
-		        \andreas{I'm not yet comfortable with the algorithm returning a model for the initial states. That could be misunderstood as the implementation starting from a single possible assignment. The Skolem may have multiple branches that may be used as initial state assignments\ldots}
+		        %\andreas{I'm not yet comfortable with the algorithm returning a model for the initial states. That could be misunderstood as the implementation starting from a single possible assignment. The Skolem may have multiple branches that may be used as initial state assignments\ldots}
 				\Return $\tuple{\realizable, \aevalres.\skolems, init.model, F}$;
 			\Else{\Comment{Empty set of initial or viable states}}
-		 		\Return $\tuple{\unrealizable, \varnothing}$;
+		 		\Return $\tuple{\unrealizable}$;
 		 	\EndIf
 		\Else{\Comment{Extract region of validity $Q(s,i)$}}
 			\State $Q(s,i) \gets \aevalres.\subs$;
@@ -32,10 +32,10 @@
 %			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
 %				\Return $\tuple{\unrealizable, \skolems'}$;
 %			\Else{}\Comment{Extract witnessing cex}
-			\State $W(s) \gets true$;
-			\If{$\isInvalid(\aevalres')$}
+%			\State $W(s) \gets true$;
+%			\If{$\isInvalid(\aevalres')$}
 				\State $W(s) \gets \aevalres.\subs'$;
-			\EndIf
+%			\EndIf
 			\State $F(s) \gets F(s) \land \lnot W(s)$;\Comment{Refine set of viable states}	
 			
 %				\If{$W(s) = false$}
