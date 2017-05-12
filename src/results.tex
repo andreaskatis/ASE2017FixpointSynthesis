@@ -57,7 +57,7 @@ Implementation Performance (max - ms) & \textbf{464.359} & 485.197 \\
 \begin{table*}[!t]
 \centering
 \caption{Cinderella-Stepmother results}
-\label{my-label}
+\label{tbl:cindtbl}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
  & \multicolumn{3}{c|}{JSYN-VG} & \multicolumn{2}{c|}{CONSYNTH~\cite{beyene2014constraint}} \\ \hline
@@ -158,9 +158,11 @@ well as synthesize an implementation for each.
 \label{fg:cex}
 \end{figure}
 
+Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity $C$ is equal to 2 and 3. The performance is heavily affected when we exercise the variation for $C=2$, but \jsynvg is still able to synthesize a winning region for Cinderella. Regarding the synthesized implementations, their size remains analogous to the difficulty of the problem, in conjunction with the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same level across all the implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates drammatically increases the performance of the underlying synthesis procedure. Nevertheless, the automated approach in \jsynvg is able to synthesize solutions for the same problems in a reasonable time margin, when compared to \textsc{Consynth}.
+
+
 Overall, \jsynvg's validity-guided approach provides significant advantages
 over the k-inductive technique followed in \jsyn, and effectively expands
-\jkind's solving capabilities regarding specification realizability. The most
-significant contribution, however, is the applicability of this approach, as it
-is not tied to a specific environment since it can be extended to support more
+\jkind's solving capabilities regarding specification realizability. On top of that, it provides an efficient ``hands-off'' approach that is capable of solving complex games.
+The most significant contribution, however, is the applicability of this approach, as it is not tied to a specific environment since it can be extended to support more
 theories, as well as categories of specification.
