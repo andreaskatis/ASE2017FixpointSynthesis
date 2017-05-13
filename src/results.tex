@@ -22,7 +22,7 @@ In this section we evaluate \jsynvg by synthesizing implementations
 for 110 contracts that originate from a broad variety of contexts.~\footnote{An
 anonymized repository containing the benchmark contracts can be found at
 \url{https://tinyurl.com/mjtyxae }. We will replace this repository with the official for the camera-ready
-version of the paper.} Almost half of them, 54, come from a collection of contracts that were initally used for the verification of existing handwritten implementations. The second biggest collection in our suite contains 52 contracts that correspond to various industrial projects, such as a Quad-Redundant Flight Control System, a Generic Patient Controlled Analgesia infusion pump, as well as a collection of contracts
+version of the paper.} Almost half of them, 54, come from a collection of contracts that were initally used for the verification of existing handwritten implementations. The second biggest collection in our suite contains 46 contracts that correspond to various industrial projects, such as a Quad-Redundant Flight Control System, a Generic Patient Controlled Analgesia infusion pump, as well as a collection of contracts
 for a Microwave model, written by graduate students as part of a software
 engineering class. The remaining nine models contain variations of the
 Cinderella-Stepmother game and the example in Section~\ref{sec:pre}.
@@ -54,13 +54,14 @@ Implementation Performance (max - ms) & 466.195 & \textbf{406.109} \\
 \end{table}
 
 
+
 \begin{table*}[!t]
 \centering
 \caption{Cinderella-Stepmother results}
 \label{tbl:cindtbl}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
- & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \hline
+\multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
  & Implementation Size (LoC) & Implementation Performance (ms) & Time & Time (Z3) & Time (Barcelogic) \\ \hline
 Cinderella (C = 3) & 92 & 262.84 & 35s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
 Cinderella2 (C = 3) & 222 & 309.24 & 2m9s &  &  \\ \hline
@@ -68,6 +69,22 @@ Cinderella (C = 2) & 102 & 196.57 & 24s & \multirow{2}{*}{1m52s} & \multirow{2}{
 Cinderella2 (C = 2) & 272 & 230.16 & 2m9s &  &  \\ \hline
 \end{tabular}
 \end{table*}
+
+
+% \begin{table*}[!t]
+% \centering
+% \caption{Cinderella-Stepmother results}
+% \label{tbl:cindtbl}
+% \begin{tabular}{|c|c|c|c|c|c|}
+% \hline
+%  & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \hline
+%  & Implementation Size (LoC) & Implementation Performance (ms) & Time & Time (Z3) & Time (Barcelogic) \\ \hline
+% Cinderella (C = 3) & 92 & 262.84 & 35s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
+% Cinderella2 (C = 3) & 222 & 309.24 & 2m9s &  &  \\ \hline
+% Cinderella (C = 2) & 102 & 196.57 & 24s & \multirow{2}{*}{1m52s} & \multirow{2}{*}{1m52s} \\ \cline{1-4}
+% Cinderella2 (C = 2) & 272 & 230.16 & 2m9s &  &  \\ \hline
+% \end{tabular}
+% \end{table*}
 
 A listing of the statistics that we tracked while running experiments is
 presented in Table~\ref{tbl:stats}.
