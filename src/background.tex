@@ -1,7 +1,8 @@
 \section{Running Example: The Cinderella-Stepmother Game}
 \label{sec:example}
 
-For the purposes of this paper, we will illustrate how the validity-guided synthesis algorithm works, using a variation of the minimum-backlog
+For the purposes of this paper, we will illustrate how the validity
+guided-synthesis algorithm works, using a variation of the minimum-backlog
 problem, the two player game between Cinderella and her wicked
 Stepmother, first  expressed by Bodlaender \textit{et
 al.}~\cite{bodlaender2012cinderella}.
@@ -64,8 +65,13 @@ and a set of \emph{guarantees} $G$. The latter is further decomposed into two
 distinct subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
 inputs \rightarrow state \rightarrow bool$. $G_I$ defines the set of valid
 initial states, and $G_T$ contains constraints that need to be satisfied in
+<<<<<<< HEAD
 every transition between two states. An important note at this point is that we
 do not make any distinction between internal state variables and outputs in the
+=======
+every transition between two states. An important note at this point is that
+we do not make any distinction between internal state variables and outputs in the
+>>>>>>> e03f39560ea3a3e4f21bb9bbf37cb11a2cb71c1b
 formalism. This alone allows us to use state variables to (in some cases)
 simplify the specification of guarantees, since we do not expect a contract
 to be always defined over all variables in the transition system.

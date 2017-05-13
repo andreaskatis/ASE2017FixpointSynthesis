@@ -27,11 +27,15 @@ for a Microwave model, written by graduate students as part of a software
 engineering class. The remaining nine models contain variations of the
 Cinderella-Stepmother game and the example in Section~\ref{sec:pre}.
 
-Since \jkind already supports synthesis through \jsyn, we were able to directly
-compare \jsynvg against \jsyn's k-inductive approach.
-The comparison spans over multiple factors, including
-algorithm performance, number of problems solved and, finally, performance
-of C implementations through the translation of witnesses using \smtlibtoc. We
+The goal of this experiment was to determine the performance and generality of the \jsynvg algorithm.  We compared against the existing \jsyn algorithm, and for the Cinderella model, we compared against~\cite{beyene2014constraint} (this was the only synthesis problem in the paper).  We examined the following aspects: 
+\begin{itemize}
+    \item Time required to synthesize an implementation
+    \item Size of generated implementations (in SLOC)
+    \item Execution speed of generated C implementations derived from the synthesis procedure.
+    \item Number of contracts that could be synthesized by each approach
+\end{itemize}
+\noindent Since \jkind already supports synthesis through \jsyn, we were able to directly
+compare \jsynvg against \jsyn's k-inductive approach. We
 ran the experiments using a computer with Intel Core i3-4010U 1.70GHz CPU and
 16GB RAM.
 
