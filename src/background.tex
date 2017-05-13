@@ -14,7 +14,7 @@ For the running example, we chose an instance of the game that has been
 previously used in template-based synthesis~\cite{beyene2014constraint}. In this instance, the game is described
 using five buckets, where each bucket can contain up to two units of water.
 Cinderella has the option to empty two adjacent buckets at each of her turns,
-while the Stepmother distributes one unit of water over all five buckets. In the context of this paper we use this example to show how specification is expressed, as well as how we can synthesize an efficient implementation that describes reactions for Cinderella, such that an bucket overflow is always prevented.
+while the Stepmother distributes one unit of water over all five buckets. In the context of this paper we use this example to show how specification is expressed, as well as how we can synthesize an efficient implementation that describes reactions for Cinderella, such that a bucket overflow is always prevented.
 
 
 
@@ -65,13 +65,8 @@ and a set of \emph{guarantees} $G$. The latter is further decomposed into two
 distinct subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
 inputs \rightarrow state \rightarrow bool$. $G_I$ defines the set of valid
 initial states, and $G_T$ contains constraints that need to be satisfied in
-<<<<<<< HEAD
 every transition between two states. An important note at this point is that we
 do not make any distinction between internal state variables and outputs in the
-=======
-every transition between two states. An important note at this point is that
-we do not make any distinction between internal state variables and outputs in the
->>>>>>> e03f39560ea3a3e4f21bb9bbf37cb11a2cb71c1b
 formalism. This alone allows us to use state variables to (in some cases)
 simplify the specification of guarantees, since we do not expect a contract
 to be always defined over all variables in the transition system.
