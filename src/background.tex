@@ -8,7 +8,7 @@ al.}~\cite{bodlaender2012cinderella}.
 
 The main objective for Cinderella (i.e. the reactive system) is to prevent a
 collection of buckets from overflowing with water. On the other hand,
-Cinderella's Stepmother (i.e. the system's environment) refills the buckets with a predifined amount of water that is distributed in a random fashion between the buckets.
+Cinderella's Stepmother (i.e. the system's environment) refills the buckets with a predefined amount of water that is distributed in a random fashion between the buckets.
 For the running example, we chose an instance of the game that has been
 previously used in template-based synthesis~\cite{beyene2014constraint}. In this instance, the game is described
 using five buckets, where each bucket can contain up to two units of water.
@@ -65,7 +65,7 @@ distinct subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
 inputs \rightarrow state \rightarrow bool$. $G_I$ defines the set of valid
 initial states, and $G_T$ contains constraints that need to be satisfied in
 every transition between two states. An important note at this point is that we
-we do not make any distinction between internal state variables and outputs in the
+do not make any distinction between internal state variables and outputs in the
 formalism. This alone allows us to use state variables to (in some cases)
 simplify the specification of guarantees, since we do not expect a contract
 to be always defined over all variables in the transition system.

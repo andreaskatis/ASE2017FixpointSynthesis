@@ -57,8 +57,8 @@ can be translated with a straightforward process into a functional and
 efficient implementation. The algorithm is presented in detail in
 Section~\ref{sec:alg} and we provide soundness proofs regarding the
 algorithm's capabilities of determining the realizability
-(unrealizability) of specification in Section~\ref{sec:soundness}. The
-example from Section~\ref{sec:example} is used to illustrate the
+(unrealizability) of specification in Sections~\ref{sec:soundness} and~\ref{sec:termfinal}. The
+example from Section~\ref{sec:example} is used in Section~\ref{sec:algexample} to illustrate the
 process of synthesizing implementations, using a specification that
 describes the Cinderella-Stepmother game.
 
@@ -288,7 +288,7 @@ Define the function $f$ over state predicates as
 \end{proof}
 
 \subsection{Termination on Finite Models}
-
+\label{sec:termfinal}
 \begin{lemma}
 Every loop iteration in Algorithm~\ref{alg:synthesis} either
 terminates or removes at least one state from $F$.
