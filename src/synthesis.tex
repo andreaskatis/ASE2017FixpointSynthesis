@@ -202,7 +202,7 @@ What remains is the loop continuation at line 16.  Assuming $\forall s . \viable
 \]
 Applying the assumption yields $(\forall s,i. \ (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s') \land F(s'))$ (Weakening).
 
-Fixing $s$ to $s_0$, by the induction hypothesis, we know $F(s_0)$.  Suppose $W(s_0)$.  In this case, by line (15) and $F(s_0)$, we know $\exists i. A(s_0, i) \land \lnot Q(s_0, i)$.  We fix $i$ to be some arbitrary constant $i_0$.  From Corollary~\ref{cor:subset}, we have
+Fixing $s$ to $s_0$, by the induction hypothesis, we know $F(s_0)$.  Suppose $W(s_0)$.  In this case, by line (15) and $F(s_0)$, we know $\exists i. A(s_0, i) \land \lnot Q(s_0, i)$.  We fix $i$ to be some arbitrary constant $i_0$.  From Lemma~\ref{lem:aeval}, we have
 $A(s_0, i_0) \land \lnot ((F(s_0) \land A(s_0,i_0)) \implies \exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  Since $F(s_0)$ and $A(s_0, i_0)$, simplifying
 yields $\lnot (\exists s'.G_{T}(s_0,i_0,s') \land F(s'))$.  But this contradicts the weakened loop hypothesis.  Therefore $\lnot W(s_0)$.  Since $s_0$ was arbitrary, $\forall s . \viable(s) \implies F(s) \land \lnot W(s)$.
 \end{proof}
@@ -228,11 +228,11 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{al
   $\viable(s_0)$ all hold. Since $W$ is the region of validity for
   $\phi'$ on Line 13, we have
   $W(s_0) \land F(s_0) \Rightarrow \exists i. A(s_0, i) \land \neg Q(s_0, i)$
-  by Corollary~\ref{cor:intermediate}. Given that $W(s_0)$ and $F(s_0)$ hold, let $i_0$
+  by Lemma~\ref{lem:aeval}. Given that $W(s_0)$ and $F(s_0)$ hold, let $i_0$
   be such that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$. Since $Q$ is the
   region of validity for $\phi$ on Line 3, we have
   $Q(s_0) \land F(s_0) \land A(s_0, i_0) \Leftrightarrow \exists s'. G_T(s, i, s')
-  \land F(s')$ by Corollary~\ref{cor:intermediate}. Thus, we have
+  \land F(s')$ by Lemma~\ref{lem:aeval}. Thus, we have
   $\neg \exists s'. G_T(s, i, s') \land F(s')$. We know
   $\viable \subseteq F$ holds prior to Line 16, thus
   $\neg \exists s'. G_T(s, i, s') \land \viable(s')$. But this is a
@@ -302,7 +302,7 @@ terminates or removes at least one state from $F$.
   region of validity for $\phi'$ on Line 13, we know that $F$ lies
   completely outside the region of validity and therefore
   $\forall s.~ \neg \exists i. A(s,i) \land \neg Q(s, i)$
-  by Corollary~\ref{cor:intermediate}. Rewritten,
+  by Lemma~\ref{lem:aeval}. Rewritten,
   $\forall s, i.~ A(s, i) \Rightarrow Q(s, i)$. Note that $Q$ is the
   region of validity for $\phi$ on Line 3. Thus $A$ is completely
   contained within the region of validity and formula $\phi$ is valid.
