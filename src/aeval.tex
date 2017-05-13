@@ -20,7 +20,7 @@ Figure~\ref{fg:aeval} shows a Venn diagram for an example of the (invalid) formu
 Because no model exists in $A(s) \land \neg{R_2(s)}$ then there does not exist a partition $T_3$, and \aeval terminates.
 % \john {Because we are are already using $A$ and $G$ to represent meaningful formulas I suggest that we use different symbols here so it is not confusing. Especially because the symbols have different signatures in these locations.}
 
-If after some $n$ iterations, it happens that
+More generally, if after some $n$ iterations
 $A(s) \land \exists s'. G(s, s') \land \neg R_n(s)$ has no models,
 then \aeval terminates and returns a Skolem function witnessing
 $\forall s.~ R_n(s) \Rightarrow \exists s' .
