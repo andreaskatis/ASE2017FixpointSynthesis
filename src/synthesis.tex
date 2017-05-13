@@ -268,12 +268,12 @@ formula for $\phi$ on Line 3 is valid. Rewritten, $F$
 satisfies the formula
 \begin{equation}
   \forall s.~F(s) \Rightarrow \left(\forall i.~ A(s,i) \Rightarrow \exists
-    s'.G_{T}(s,i,s') \land F(s')\right)
+    s'.G_{T}(s,i,s') \land F(s')\right).
   \label{eq:F-rewritten}
 \end{equation}
 Define the function $f$ over state predicates as
   \begin{equation}
-    f = \lambda V. \lambda s.~ \forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land V(s')
+    f = \lambda V. \lambda s.~ \forall i.~ A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land V(s').
     \label{eq:f-fixed-point}
   \end{equation}
   State predicates are equivalent to subsets of the state space and

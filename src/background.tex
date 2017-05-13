@@ -81,7 +81,7 @@ and only if:
 \begin{split}
   \viable(s) &= \\
   \forall s,i. \ & (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s')
-\land \viable(s'))
+\land \viable(s')).
 \label{eq:viable}
 \end{split}
 \end{align}
@@ -91,7 +91,7 @@ A necessary condition, finally, is that the set of viable states
 intersects with the set of initial states. As such, to conclude that a contract
 is realizable, we require that
 \begin{equation}
-\exists s. G_I(s) \land \viable(s)
+\exists s. G_I(s) \land \viable(s).
 \label{eq:nonempty}
 \end{equation}
 
