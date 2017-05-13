@@ -39,8 +39,24 @@ It contradicts our assumption that \aeval has terminated since otherwise it woul
 \end{proof}
 
 \begin{corollary}
+If formula $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid, and $R_n(s)$ is the region of validity, then $A(s) \land R_n(s) \Leftrightarrow \exists s' . G(s,s')$.
+\label{cor:intermediate}
+\end{corollary}
+
+\begin{proof}
+($\Rightarrow$) is immediate from the definition of region of validity.
+($\Leftarrow$).  Suppose towards contradiction that $s$ satisfies $\exists s' . G(s,s')$ but not $A(s) \land R_n(s)$.  If we define $S = s$, we violate Lemma~\ref{lem:subset}.
+\end{proof} 
+
+\iffalse
+\begin{corollary}
 If formula $\forall s \,.\,  A(s) \Rightarrow \exists s' . G(s,s')$ is invalid, and $A(s) \land R_n(s)$ is the region of validity, then 
  $\forall s \,.\, R_n(s) \Leftrightarrow (A(s) \Rightarrow \exists s' . G(s,s'))$ 
 \label{cor:subset}
 \end{corollary}
 
+\begin{proof}
+($\Rightarrow$) Given $s$, suppose $R_n(s)$ is true.  If $A(s)$ is false, then by Corollary~\ref{cor:intermediate},  $\exists s' . G(s,s')$ is false, so the implication holds.  Simlarly for $A(s)$ true.
+($\Leftarrow$) Suppose $A(s) \Rightarrow \exists s' . G(s,s')$ is true.  Suppose $A(s)$ is false.  Then $G(s, s')$ might be true and $R_n(s)$ might be false, violating our equivalence.  Boo!
+\end{proof}
+\fi

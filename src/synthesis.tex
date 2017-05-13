@@ -76,7 +76,7 @@ focused on determining the validity of $\phi$. If the formula is valid, then a w
 existentially quantified variables of $\phi$. In the context of viability, this
 witness is capable of providing viable states that can be used as a safe
 reaction, given an input that
-satisfies the assumptions. 
+satisfies the assumptions.
 
 With a valid formula at hand, it remains to check that the fixpoint intersects with the initial states (Line 7).  If the check passes, we have a realizable contract and the algorithm returns the extracted witness and a model for the initial state that can be directly combined and used towards an implementation of the system. Otherwise, the contract is unrealizable, since either the are no states that satisfy the
 initial state guarantees $G_I$, or the set of viable states $F$ is empty.
@@ -227,13 +227,12 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Algorithm~\ref{al
   Then there exists $s_0$ such that $F(s_0)$, $W(s_0)$, and
   $\viable(s_0)$ all hold. Since $W$ is the region of validity for
   $\phi'$ on Line 13, we have
-  $F(s_0) \Rightarrow \exists i. A(s_0, i) \land \neg Q(s_0, i)$
-  by Corollary~\ref{cor:subset}. Given that $F(s_0)$ holds, let $i_0$
+  $W(s_0) \land F(s_0) \Rightarrow \exists i. A(s_0, i) \land \neg Q(s_0, i)$
+  by Corollary~\ref{cor:intermediate}. Given that $W(s_0)$ and $F(s_0)$ hold, let $i_0$
   be such that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$. Since $Q$ is the
   region of validity for $\phi$ on Line 3, we have
-  $F(s_0) \land A(s_0, i_0) \Rightarrow \neg \exists s'. G_T(s, i, s')
-  \land F(s')$ by Corollary~\ref{cor:subset}. Since $F(s_0)$ and
-  $A(s_0, i_0)$ hold we have
+  $Q(s_0) \land F(s_0) \land A(s_0, i_0) \Leftrightarrow \exists s'. G_T(s, i, s')
+  \land F(s')$ by Corollary~\ref{cor:intermediate}. Thus, we have
   $\neg \exists s'. G_T(s, i, s') \land F(s')$. We know
   $\viable \subseteq F$ holds prior to Line 16, thus
   $\neg \exists s'. G_T(s, i, s') \land \viable(s')$. But this is a
