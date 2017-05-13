@@ -46,16 +46,9 @@ is realizable, then the entirety of the input space is covered by the greatest f
 supported, is of particular interest to us and we will be looking forward to
 achieving this as part of future work.
 
-Finally, an interesting work was recently published by Preiner \textit{et
-al.}~\cite{preiner2017counterexample}, where the authors construct candidate
-witnesses and proceed to check their validity with respect to the specification.
-Internally, a counterexample-guided refinement process is
-used~\cite{reynolds2015counterexample} for the purposes of quantifier
-elimination.  Our approach does not follow the basic principles followed in counterexample-guided techniques, since it takes a different direction by
-examining the use case of valid subsets of the original formula.
-since the witnesses constructed for the most complex contracts are described by
-nested if-then-else expressions of depth (i.e. number of branches) 10-20.
-Enumeration of Skolem functions, a technique that is also followed in the E-HSF
-engine~\cite{beyene2014constraint} is not an optimal strategy for these cases,
-since the space of of candidate solutions explodes.
+More recently, Preiner \textit{et al}. presented their work on counterexample-guided model synthesis (CEGMS)~\cite{preiner2017counterexample}. In CEGMS, candidate witnesses are being constructed, their validity is checked with respect to the specification. Internally, a counterexample-guided refinement process is used~\cite{reynolds2015counterexample} for the purposes of quantifier
+elimination, and enumerative learning is applied to generalize witnesses. Enumerative learning is a syntax-based technique that enumerates expressions, checks their truth against
+ground test cases, and proceeds to generalize the expressions by constructing larger ones. In constrast to the principle of enumerative learning, our approach is syntax-insensitive in terms of generating regions of validity.
+On top of that, CEGMS has only been tested against the theory of Boolean Vectors (BV, and BV$_{LNIRA}$), while \jsynvg supports the mixed theories of linear integer and real arithmetic.
+In general, enumeration techniques such as the one used in \textsc{ConSynth}'s underlying E-HSF engine~\cite{beyene2014constraint} is not an optimal strategy for our class of problems, since the witnesses constructed for the most complex contracts are described by nested if-then-else expressions of depth (i.e. number of branches) 10-20, a point at which space explosion is difficult to handle since the number of candidate solutions is significantly large.
 

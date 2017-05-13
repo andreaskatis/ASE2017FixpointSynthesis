@@ -127,6 +127,11 @@ E.~Jahier, P.~Raymond, and N.~Halbwachs, ``{The Lustre V6 Reference Manual}.''
 A.~Gacek, ``{JK}ind -- an infinite-state model checker for safety properties in
   {Lustre},'' \url{http://loonwerks.com/tools/jkind.html}, 2016.
 
+\bibitem{DBLP:conf/popl/BeyeneCPR14}
+T.~A. Beyene, S.~Chaudhuri, C.~Popeea, and A.~Rybalchenko, ``A constraint-based
+  approach to solving games on infinite graphs,'' in \emph{POPL}.\hskip 1em
+  plus 0.5em minus 0.4em\relax ACM, 2014, pp. 221--234.
+
 \bibitem{manna1971toward}
 Z.~Manna and R.~J. Waldinger, ``Toward automatic program synthesis,''
   \emph{Communications of the ACM}, vol.~14, no.~3, pp. 151--165, 1971.
