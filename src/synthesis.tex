@@ -470,37 +470,24 @@ Notice how the Theorems on the soundness of the results provided by the validity
 
 \begin{figure}[!t]
 \centering
- \begin{Verbatim}[fontsize=\footnotesize]
+ \begin{Verbatim}[fontsize=\scriptsize]
 const C = 2.0;
 
 -- empty buckets e and e+1 each round
-node game(i1,i2,i3,i4,i5: real; e: int)
-	returns (guarantee: bool);
+node game(i1,i2,i3,i4,i5: real; e: int) returns (guarantee: bool);
 var
   b1, b2, b3, b4, b5 : real;
 let
-  assert i1 >= 0.0 and i2 >= 0.0 and
- 	i3 >= 0.0 and i4 >= 0.0 and i5 >= 0.0;
+  assert i1 >= 0.0 and i2 >= 0.0 and i3 >= 0.0 and i4 >= 0.0 and i5 >= 0.0;
   assert i1 + i2 + i3 + i4 + i5 = 1.0;
 
-  b1 = 0.0 ->
-       (if (e = 5 or e = 1) then i1
-                            else (pre(b1) + i1));
-  b2 = 0.0 ->
-       (if (e = 1 or e = 2) then i2
-                            else (pre(b2) + i2));
-  b3 = 0.0 ->
-       (if (e = 2 or e = 3) then i3
-                            else (pre(b3) + i3));
-  b4 = 0.0 ->
-       (if (e = 3 or e = 4) then i4
-                            else (pre(b4) + i4));
-  b5 = 0.0 ->
-       (if (e = 4 or e = 5) then i5
-                            else (pre(b5) + i5));
+  b1 = 0.0 -> (if (e = 5 or e = 1) then i1 else (pre(b1) + i1));
+  b2 = 0.0 -> (if (e = 1 or e = 2) then i2 else (pre(b2) + i2));
+  b3 = 0.0 -> (if (e = 2 or e = 3) then i3 else (pre(b3) + i3));
+  b4 = 0.0 -> (if (e = 3 or e = 4) then i4 else (pre(b4) + i4));
+  b5 = 0.0 -> (if (e = 4 or e = 5) then i5 else (pre(b5) + i5));
 
-  guarantee = b1 <= C and b2 <= C and b3 <= C and
-  	    b4 <= C and b5 <= C;
+  guarantee = b1 <= C and b2 <= C and b3 <= C and b4 <= C and b5 <= C;
 
   --%REALIZABLE i1, i2, i3, i4, i5;
   --%PROPERTY guarantee;
@@ -547,24 +534,18 @@ should only be realizable if, assuming valid inputs given by the Stepmother
 (i.e. positive values to input variables that add up to one water unit),
 Cinderella can keep reacting indefinitely, by providing outputs that satisfy the
 guarantees (i.e. she empties buckets in order to prevent overflow in Stepmother's next turn).
-
+\iffalse
 \begin{figure}[!t]
 \centering
- \begin{Verbatim}[fontsize=\footnotesize]
+ \begin{Verbatim}[fontsize=\scriptsize]
 ...
 (and ...
- (or (not (<= (+ b2 i2) 2.0))
-  (<= (+ b2 i2) 2.0)
-  (and (<= (+ b2 i2) 2.0)
-   (not (<= (+ b2 i2) 2.0))
-   (or (and (not (>= (+ b1 i1) 2.0))
-        (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2)
-                       (* (- 1.0) i2))))
-    (and (not (<= (+ b2 i2) 0.0))
-     (not (>= (+ b3 i3) 2.0))
-     (not (>= i4 2.0))
-     (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2)
-                    (* (- 1.0) i2)))))))
+ (or (not (<= (+ b2 i2) 2.0)) (<= (+ b2 i2) 2.0) (and (<= (+ b2 i2) 2.0)
+     (not (<= (+ b2 i2) 2.0)) 
+     (or (and (not (>= (+ b1 i1) 2.0)) 
+   	          (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2) (* (- 1.0) i2))))
+         (and (not (<= (+ b2 i2) 0.0)) (not (>= (+ b3 i3) 2.0))  (not (>= i4 2.0)) 
+              (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2) (* (- 1.0) i2)))))))
  (or (and %init (= i4 0.0)) (not %init))
  (or (and %init (= i5 0.0)) (not %init))
  (<= (+ b3 i3) 2.0)
@@ -577,7 +558,7 @@ guarantees (i.e. she empties buckets in order to prevent overflow in Stepmother'
 example}
 \label{fg:snippet}
 \end{figure}
-
+\fi
 We initiate our call to the procedure defined in Algorithm~\ref{alg:synthesis},
 by providing the contract in Figure~\ref{fg:cind} as input. The algorithm
 then enters an infinite loop, where it attempts to construct a fixpoint of
@@ -587,13 +568,15 @@ satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
 a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
 which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
 input variables, it might contain contraints over the inputs, which is an
-undesirable side-effect. Due to space restrictions, we are unable to show this
-in full effect, but Figure~\ref{fg:snippet} shows part of the generated
+undesirable side-effect\footnote{Due to space restrictions, we are unable to show this
+in full effect}.
+\iffalse
+but Figure~\ref{fg:snippet} shows part of the generated
 $Q(s,i)$, in SMT-LIB format (pre-fix notation), where the input variables are
 part of the constraints.~\footnote{The names in the snippet have been simplified to match the rest of the paper.} The variable \textit{\%init} is used in the underlying
 machinery as a flag to indicate whether the current state is initial or not
 (true and false, respectively). While the actual code is hundreds of lines long, looking at the specific snippet shows us how the valid subset may contain constraints over the inputs, that violate the assumptions. The conjunction in Figure~\ref{fg:snippet} contains the constraints $(<= i4 \ 2.0)$ and $(<= i5 \ 2.0)$. These conjuncts define a region where the contract assumptions are violated, since it is possible to assign values to $i4$ and $i5$ such that $i4 > 1.0$ and $i5 > 1.0$ respectively. This shows that $Q(s,i)$ is not necessarily a region that satisfies the assumptions in a strict manner, and it is imperative to extract a new region, that only provides constraints over the state variables.
-
+\fi
 
 
 Considering the existence of undesirable constraints in $Q(s,i)$, the next step
@@ -610,11 +593,13 @@ From this point on, the algorithm reiterates the process following the steps
 explained above. For this particular example, the algorithm terminates after one
 more refinement, at depth 2. At that point, the refined version of
 $\phi$ is valid, and \aeval constructs a witness containing valid reactions to
-environment behavior. Figure~\ref{fg:witness} provides a snippet of
+environment behavior. 
+\iffalse
+Figure~\ref{fg:witness} provides a snippet of
 that witness, after being translated to a C implementation.
+\fi
 %\andrew{What's with the 'if' in the middle of the 'else' block? Is it suppose to be an 'else-if'?}
-In general, the witness is described through the use of nested \textit{if-then-else} blocks, following the structure of the Skolem witnesses, where the conditions are subsets of the antecedent of
-the implication in formula $\phi$, while the body contains valid assignments to
+In general, the witness is described through the use of nested \textit{if-then-else} blocks, where the conditions are subsets of the antecedent of the implication in formula $\phi$, while the body contains valid assignments to
 state variables to the corresponding subset.
 
 
@@ -627,31 +612,31 @@ able to synthesize implementations for the Cinderella-Stepmother game for any
 value of $C \geq 2$, using a completely automatic approach\footnote{The region $1.5\leq C < 2$ is a particularly hard problem - no results for this region are presented in Beyene, and our algorithm does not converge given a timeout of seven hours.}. %This fact alone,
 %provided us with solid foundations regarding the algorithm's effectiveness in
 %solving complex problems.
-
+\iffalse
 \begin{figure}[!t]
 \centering
- \begin{Verbatim}[fontsize=\footnotesize]
+ \begin{Verbatim}[fontsize=\scriptsize]
 ...
 if (!(b1 + i1 <= 0.0) || !((b2 + i2) <= 0.0) || ...)
-  e = 3;
-  b1 = b1 + i1;
-  b2 = b2 + i2;
-  b3 = i3;
-  b4 = i4;
-  b5 = b5 + i5;
+    e = 3;
+    b1 = b1 + i1;
+    b2 = b2 + i2;
+    b3 = i3;
+    b4 = i4;
+    b5 = b5 + i5;
 } else {
-  if (!(i1 <= 0.0) || !((b2 + i2) <= 0.0) || ...)
-  e = 5;
-  b1 = i1;
-  b2 = b2 + i2;
-  b3 = b3 + i3;
-  b4 = b4 + i4;
-  b5 = i5;
-} else {
+    if (!(i1 <= 0.0) || !((b2 + i2) <= 0.0) || ...)
+      e = 5;
+      b1 = i1;
+      b2 = b2 + i2;
+      b3 = b3 + i3;
+      b4 = b4 + i4;
+      b5 = i5;
+    } else {
 ...
  \end{Verbatim}
 \caption{Code snippet of the synthesized implementation for the Cinderella-Stepmother
 example}
 \label{fg:witness}
 \end{figure}
-
+\fi

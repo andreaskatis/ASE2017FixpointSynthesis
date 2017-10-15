@@ -1,6 +1,6 @@
 %%This is a very basic article template.
 %%There is just one section and two subsections.
-\documentclass[10pt,conference]{IEEEtran}
+\documentclass[10pt,conference]{llncs}
 
 %to handle ranges of citations in IEEEtran
 \usepackage[noadjust]{cite}
@@ -47,15 +47,17 @@
 \usepackage{framed}
 \usepackage{multirow}
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}
-\newtheorem{corollary}{Corollary}
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{corollary}{Corollary}
 
 \newcommand{\aeval}{\textsc{AE-VAL}\xspace}
 \newcommand{\jkind}{\textsc{JKind}\xspace}
 
 \newcommand{\jsyn}{\textsc{JSyn}\xspace}
-\newcommand{\jsynvg}{\textsc{Jvgs}\xspace}
+
+\newcommand{\jsynvg}{\textsc{JSyn-vg}\xspace}
+% \newcommand{\jsynvg}{\textsc{Jvgs}\xspace}
 \newcommand{\smtlibtoc}{\textsc{SMTLib2C}\xspace}
 \newcommand{\lustrev}{\textsc{LustreV6}\xspace}
 
@@ -113,9 +115,9 @@
 \title{Validity-Guided Synthesis of Reactive Systems from Assume-Guarantee Contracts}
 
 \iffalse
-\author{\IEEEauthorblockN{Andreas Katis\IEEEauthorrefmark{1}, Grigory Fedyukovich\IEEEauthorrefmark{2}, Andrew Gacek\IEEEauthorrefmark{3}\\ John
-Backes\IEEEauthorrefmark{3}, Arie Gurfinkel\IEEEauthorrefmark{4}, Huajun
-Guo\IEEEauthorrefmark{1} and
+\author{\IEEEauthorblockN{Andreas Katis\IEEEauthorrefmark{1}, Grigory Fedyukovich\IEEEauthorrefmark{2},  Huajun
+Guo\IEEEauthorrefmark{1}, Andrew Gacek\IEEEauthorrefmark{3}\\ John
+Backes\IEEEauthorrefmark{3}, Arie Gurfinkel\IEEEauthorrefmark{4} and
 Michael W. Whalen\IEEEauthorrefmark{1}}
 \IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Computer Science and
 Engineering,
@@ -130,7 +132,25 @@ Engineering, University of Waterloo\\
 Email: agurfinkel@uwaterloo.ca}}
 \fi 
 
-\author{\IEEEauthorblockN{Authors anonymized for submission to ASE}}
+\author{Andreas Katis\inst{1}, Grigory Fedyukovich\inst{2}, Huajun Guo\inst{1}, 
+  Andrew Gacek\inst{3}, John Backes\inst{3}, Arie Gurfinkel\inst{4}, Michael
+  W. Whalen\inst{1}}%
+
+\institute{
+Department of Computer Science and Engineering, University of Minnesota\\
+\email{\{katis001,guoxx663\}@umn.edu, whalen@cs.umn.edu}
+\and
+University of Washington Paul G. Allen School of Computer Science \& Engineering\\
+\email{grigory@cs.washington.edu}
+\and
+Rockwell Collins Advanced Technology Center\\
+\email{\{andrew.gacek,john.backes\}@rockwellcollins.com}
+\and
+Department of Electrical and Computer Engineering, University of Waterloo\\
+\email{agurfinkel@uwaterloo.ca}
+}
+
+%\author{\IEEEauthorblockN{Authors anonymized for submission to ASE}}
 
 
 \maketitle
