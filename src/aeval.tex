@@ -3,7 +3,7 @@
 
 \begin{figure}[!t]
 \centering
-\includegraphics[scale=0.5]{aeval_invalid}
+\includegraphics[scale=0.35]{aeval_invalid}
 \caption{Region of validity computed for an example requiring \aeval to iterate two times.}
 \label{fg:aeval}
 \end{figure}
@@ -24,7 +24,11 @@ More generally, if after some $n$ iterations
 $A(s) \land \exists s'. G(s, s') \land \neg R_n(s)$ has no models,
 then \aeval terminates and returns a Skolem function witnessing
 $\forall s.~ R_n(s) \Rightarrow \exists s' .
-G(s,s')$~\cite{katis2016synthesis}. Intuitively, a Skolem function
+G(s,s')$.
+\iffalse
+~\cite{katis2016synthesis}.
+\fi 
+Intuitively, a Skolem function
 describes how $s'$ is computed from $s$ in order to satisfy the
 previous formula.
 

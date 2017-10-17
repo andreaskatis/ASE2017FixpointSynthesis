@@ -23,12 +23,12 @@ while the Stepmother distributes one unit of water over all five buckets. In the
 
 \begin{figure}[!t]
 \centering
-\includegraphics[scale=0.5]{agcontract-crop.pdf}
+\includegraphics[scale=0.55]{agcontracttilted-crop.pdf}
 \caption{An Assume-Guarantee Contract.}
 \label{fg:agcontract}
 \end{figure}
 
-
+\iffalse
 In this section we define Assume-Guarantee contracts (Section~\ref{sec:pre}),
 describe the problem of synthesis in terms of discovering inductive invariants that imply the realizability of the given specification (Section~\ref{sec:formals}), and give a background on our main solving engine (Section~\ref{sec:aeval}).
 %Finally, we enrich our formal definitions with an informal proof of the
@@ -37,6 +37,7 @@ describe the problem of synthesis in terms of discovering inductive invariants t
 
 \subsection{Assume-Guarantee Contracts}
 \label{sec:pre}
+\fi
 
 We focus our interest on a mainstream variation for representing system requirements, using an \textit{Assume-Guarantee
 Contract}. Requirements in this format contain two main types of constraints.
@@ -96,6 +97,6 @@ is realizable, we require that
 \end{equation}
 
 The intuition behind our proposed algorithm in this paper relies on the
-discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extracting a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, the solver for $\forall\exists$-formulas.
+discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extracting a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation, as well as the witness extraction, we depend on \aeval, a solver for $\forall\exists$-formulas.
 
 \input{aeval}

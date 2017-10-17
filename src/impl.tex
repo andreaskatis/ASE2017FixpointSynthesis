@@ -18,11 +18,14 @@ framework~\cite{NFM2012:CoGaMiWhLaLu}.
 %https://github.com/andrewkatis/jkind-1/tree/synthesis. \aeval needs to be
 %installed separately from https://github.com/grigoryfedyukovich/aeval.}.
 During the internal process, \jsynvg translates Lustre specifications to
-the SMT-LIB language, with which the $\forall\exists$-formulas, regions of
-validity, as well as the witnesses are expressed. The underlying solver that is
+the SMT-LIB language.
+\iffalse
+, with which the $\forall\exists$-formulas, regions of
+validity, as well as the witnesses are expressed.
+\fi
+The underlying solver that is
 used is the \aeval Skolemizer, which currently supports
-$\forall\exists$-formulas expressed using linear real (LRA) and integer (LIA) arithmetic, as well as
-their combination (LIRA).
+$\forall\exists$-formulas expressed using linear real and integer arithmetic (LIRA).
 %
 For realizable specification, and considering Algorithm~\ref{alg:synthesis}, we
 recursively use regions of validity to block out unsafe states from the search
@@ -30,13 +33,9 @@ space.
 Eventually, we reach a fixpoint that is sufficient to use in order to extract
 a Skolem function that witnesses the realizability of the specification. Given
 the generated function, what remains is its translation
-into an efficient and practical implementation. To achieve this we use
+into an efficient and practical implementation. To compare the quality of implementations against \jsyn, we use
 \smtlibtoc, a tool that has been specifically developed to translate
-similar \aeval Skolem functions to C implementations. The choice of C for
-the target language is not due to limitations, but mostly to provide a complete
-comparison against the previous work on \jsyn.
-The Skolem functions are simple enough to be used as an intermediate
-representation to any mainstream programming language.
+similar \aeval Skolem functions to C implementations.
 
 %In future work,
 %we intend to further improve on this, and

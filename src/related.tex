@@ -22,13 +22,15 @@ templates~\cite{srivastava2013template,beyene2014constraint}, or environments wh
 interpretations~\cite{ryzhyk2016developing}. We differentiate from this
 direction by providing a completely automatic approach that does not require
 human ingenuity to find a solution and most importantly, the user
-does not need to be deeply familiar with the problem at hand. A ``hands-off''
-approach has been proposed in the past by Katis \textit{et
+does not need to be deeply familiar with the problem at hand.
+\iffalse
+ A ``hands-off'' approach has been proposed in the past by Katis \textit{et
 al.}~\cite{gacek2015towards,katis2016towards,katis2016synthesis}. The work is
-based on the concept of extracting collections of reactions that witness the satisfaction of a k-inductive proof on the contract's realizability. In
-Section~\ref{sec:results} we were able to effectively show in practice how a
+based on the concept of extracting collections of reactions that witness the satisfaction of a k-inductive proof on the contract's realizability.
+In Section~\ref{sec:results} we were able to effectively show in practice how a
 validity-guided approach significantly improves upon this work, by using a
 fixpoint-generating technique rather than the principle of k-induction.
+\fi
 
 The concept of synthesizing implementations by discovering fixpoints was mostly
 inspired by the IC3 algorithm, the technique also known as Property Directed
@@ -46,9 +48,11 @@ is realizable, then the entirety of the input space is covered by the greatest f
 supported, is of particular interest to us and we will be looking forward to
 achieving this as part of future work.
 
-More recently, Preiner \textit{et al}. presented their work on counterexample-guided model synthesis (CEGMS)~\cite{preiner2017counterexample}. In CEGMS, candidate witnesses are being constructed, their validity is checked with respect to the specification. Internally, a counterexample-guided refinement process is used~\cite{reynolds2015counterexample} for the purposes of quantifier
+More recently, Preiner \textit{et al}. presented their work on counterexample-guided model synthesis (CEGMS)~\cite{preiner2017counterexample}. In CEGMS, candidate witnesses are being constructed and their validity is checked with respect to the specification. Internally, a counterexample-guided refinement process is used~\cite{reynolds2015counterexample} for the purposes of quantifier
 elimination, and enumerative learning is applied to generalize witnesses. Enumerative learning is a syntax-based technique that enumerates expressions, checks their truth against
 ground test cases, and proceeds to generalize the expressions by constructing larger ones. In constrast to the principle of enumerative learning, our approach is syntax-insensitive in terms of generating regions of validity.
+\iffalse
 On top of that, CEGMS has only been tested against the theory of Boolean Vectors (BV, and BV$_{LNIRA}$), while \jsynvg supports the mixed theories of linear integer and real arithmetic.
+\fi
 In general, enumeration techniques such as the one used in \textsc{ConSynth}'s underlying E-HSF engine~\cite{beyene2014constraint} is not an optimal strategy for our class of problems, since the witnesses constructed for the most complex contracts are described by nested if-then-else expressions of depth (i.e. number of branches) 10-20, a point at which space explosion is difficult to handle since the number of candidate solutions is significantly large.
 

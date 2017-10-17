@@ -48,22 +48,26 @@
 \end{algorithmic}
 \end{algorithm*}
 
+\iffalse
 The main contribution presented in this paper, is a novel idea that
 effectively uses the information provided by regions of validity to
 compute a greatest fixpoint of safe states. In our context, this
 fixpoint is not only usable as a proof to the realizability of a
 specification, but also leads to the construction of a witness that
 can be translated with a straightforward process into a functional and
-efficient implementation. The algorithm is presented in detail in
-Section~\ref{sec:alg} and we provide soundness proofs regarding the
+efficient implementation.
+
+In this section we present the algorithm in detail (Section~\ref{sec:alg}) and we provide soundness proofs regarding the
 algorithm's capabilities of determining the realizability
 (unrealizability) of specification in Sections~\ref{sec:soundness} and~\ref{sec:termfinal}. The
 example from Section~\ref{sec:example} is used in Section~\ref{sec:algexample} to illustrate the
 process of synthesizing implementations, using a specification that
 describes the Cinderella-Stepmother game.
 
+
 \subsection{Algorithm}
 \label{sec:alg}
+\fi
 Algorithm~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:formals} and is provided as an input to the algorithm.
 Line 1 initializes the process by defining the fixpoint $F$ to be equal to
 $true$. The algorithm then attempts to converge to a fixpoint $F(s)$
@@ -493,10 +497,10 @@ let
   --%PROPERTY guarantee;
 tel;
  \end{Verbatim}
+\vspace{-1em}
 \caption{An Assume-Guarantee contract for the Cinderella-Stepmother game in Lustre}
 \label{fg:cind}
 \end{figure}
-
 Figure~\ref{fg:cind} shows one possible interpretation of the contract designed
 for the instance of the Cinderella-Stepmother game that we introduced in Section~\ref{sec:example}. The contract
 is expressed using Lustre~\cite{lustrev6}, a language
@@ -568,8 +572,8 @@ satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
 a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
 which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
 input variables, it might contain contraints over the inputs, which is an
-undesirable side-effect\footnote{Due to space restrictions, we are unable to show this
-in full effect}.
+undesirable side-effect
+%\footnote{Due to space restrictions, we are unable to show this in full effect}.
 \iffalse
 but Figure~\ref{fg:snippet} shows part of the generated
 $Q(s,i)$, in SMT-LIB format (pre-fix notation), where the input variables are
@@ -602,14 +606,16 @@ that witness, after being translated to a C implementation.
 In general, the witness is described through the use of nested \textit{if-then-else} blocks, where the conditions are subsets of the antecedent of the implication in formula $\phi$, while the body contains valid assignments to
 state variables to the corresponding subset.
 
-
+\iffalse
 As is discussed by Beyene \textit{et al.}~\cite{beyene2014constraint}, the
 Cinderella-Stepmother is a rather challenging game. In particular, for the
 cases where $1.5 \leq C \leq 3.0$, the problem becomes non-trivial, and their
 work showed how familiarity with the problem can help alleviate this complexity
 through the use of pre-defined templates. Despite this, we were still
 able to synthesize implementations for the Cinderella-Stepmother game for any
-value of $C \geq 2$, using a completely automatic approach\footnote{The region $1.5\leq C < 2$ is a particularly hard problem - no results for this region are presented in Beyene, and our algorithm does not converge given a timeout of seven hours.}. %This fact alone,
+value of $C \geq 2$, using a completely automatic approach\footnote{The region $1.5\leq C < 2$ is a particularly hard problem - no results for this region are presented in Beyene, and our algorithm does not converge given a timeout of seven hours.}. 
+\fi
+%This fact alone,
 %provided us with solid foundations regarding the algorithm's effectiveness in
 %solving complex problems.
 \iffalse

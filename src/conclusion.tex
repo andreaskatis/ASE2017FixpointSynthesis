@@ -1,14 +1,17 @@
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
 
-\subsection{Summary}
+% \subsection{Summary}
 
-In this paper, we presented a novel and elegant approach towards the synthesis
-of reactive system implementations, using only the knowledge provided by the
-system specification expressed in linear integer and real arithmetic. The approach is
+We presented a novel and elegant approach towards the synthesis
+of reactive systems, using only the knowledge provided by the
+system specification expressed in infinite theories.
+\iffalse
+ The approach is
 directly inspired from previous work on Property Directed Reachability, with the objective being the construction of inductive
-invariants that can be used as a proof to the specification's realizability. The
-main goal is to converge to a fixpoint by iteratively blocking subsets of
+invariants that can be used as a proof to the specification's realizability.
+\fi
+The main goal is to converge to a fixpoint by iteratively blocking subsets of
 unsafe states from the problem space. This is achieved through the continuous
 extraction of regions of validity which hint towards subsets of states that
 lead to a candidate implementation.
@@ -17,10 +20,9 @@ This is the first complete attempt, to the best of our knowledge, on handling
 valid subsets of a $\forall\exists$-formula to construct a greatest fixpoint,
 while the specification is expressed using infinite theories. We were able to
 prove its effectiveness in practice, by comparing it to an already existing
-approach that focuses on constructing k-inductive proofs of realizability. The
-results showed a dramatic improvement on performance, and indicated how the
-validity-guided approach can lead to the solution of a bigger class of problems.
+approach that focuses on constructing k-inductive proofs of realizability. We showed how the new algorithm performs better than the k-inductive approach, both on raw performance as well as the soundness of results. For the future, we would like to extend the applicability of this algorithm to other areas in formal verification, such as invariant generation. Finally, a particularly interesting challenge is that of mapping infinite theories to finite counterparts, enabling the synthesis of secure and safe implementations. 
 
+\iffalse
 \subsection{Future Work}
 Research in the area of program synthesis, and particularly the work presented in this paper, is rich with challenges and promising directions. We enlist the most important challenges that we would like to address as part of future work.
 
@@ -32,13 +34,13 @@ relation. Regarding the synthesized implementations, an interesting subproblem t
 a single witness. There are several promising concepts that can lead to further implementation optimization, such as the use of Inductive Validity Cores~\cite{Ghass16}, which can be potenitally used to identify the core elements in a synthesized implementation that lead to the satisfaction of the specification. Using only the core elements, we can effectively reduce the size of the implementations, and improve their performance. Another interesting direction in pursuing compact implementations exploited is to examine the effects of recent work in witness abstractions~\cite{jakobs2017compact}. Finally, a short-term goal is the development of machine-checked
 proofs regarding the soundness of the fixpoint generation process, as well as the realizability results.
 
+\iffalse
 \textbf{Test case generation}. \aeval's effectiveness in providing witnesses to the
 satisfiability of $\forall\exists$-formulas can be also exploited in terms of the
 tool providing concrete counterexamples to a subset of unrealizable contracts that relate to formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists i. A(s,i) \land \lnot Q(s,i))'$ being valid (Algorithm~\ref{alg:synthesis}, Line 16). 
 In this particular case, if $\phi'$ is a valid formula, it is possible a witness that can be essentially used as a test case to demonstrate the specification's unrealizability. The witness contains
 certain assignments to input variables, for which the condition of viability does not hold, for any state. In conjunction with the potential capabilities of generating collections of equivalent implementations, this problem may lead to the creation of an elegant process that constructs test suites against the contract's realizability. Such a test suite can then be used as a complementary collection to testing procedures that take place towards the end of the system's development.    
-
+\fi
 \textbf{Mapping infinite theories to finite representations}. A particularly challenging topic of research, is how we can transition from implementations that use
 infinite types through SMT, to equivalent ones using finite representations, without violating the specification. The SMT community has already kickstarted a project towards achieving this, through a recently introduced theory on Floating-Point Arithmetic~\cite{brain2015automatable}. The problem is particularly interesting for the cases where the high-end user has to define secure contracts that contain properties for memory allocation, representation of floats, and overflow handling.
-
-
+\fi
