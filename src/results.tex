@@ -29,10 +29,10 @@ ran the experiments using a computer with Intel Core i3-4010U 1.70GHz CPU and
 \begin{tabular}{@{}lll@{}}
 \toprule
  & \jsyn & \jsynvg \\ \midrule
-Problems solved & 105 & \textbf{110} \\
-Performance (avg - seconds) & 1.51 & \textbf{0.70} \\
+Problems solved & 113 & \textbf{124} \\
+Performance (avg - seconds) & 4.7 & \textbf{2.1} \\
 Performance (max - seconds) & 26.06 & \textbf{12.85} \\
-Implementation Size (avg - Lines of Code) & 51.15 & \textbf{49.74} \\
+Implementation Size (avg - Lines of Code) & 72.9 & \textbf{69.8} \\
 Implementation Size (max - Lines of Code) & 694 & 694 \\
 Implementation Performance (avg - ms) & \textbf{58.83} & 60.91 \\
 Implementation Performance (max - ms) & 466.195 & \textbf{406.109} \\
@@ -96,7 +96,7 @@ This may be in part because \jsyn creates separate skolem functions for the init
 % expressions, mainly due to the refinement process.
 
 Figure~\ref{fg:results} does not cover the entirety of the
-benchmark suite. From the original 110 problems, five of them cannot be
+benchmark suite. From the original 124 problems, eleven of them cannot be
 solved by \jsyn's k-inductive approach. Four of these files are variations of
 the cinderella-stepmother game that we described in Section~\ref{sec:example}, using different representations of the game, as well as two different values
 for the bucket capacity (2 and 3). Using the variation that we included in the
