@@ -40,6 +40,16 @@ Claessen, K., S{\"o}rensson, N.: A liveness checking algorithm that counts. In:
   Formal Methods in Computer-Aided Design (FMCAD), 2012. pp. 52--59. IEEE
   (2012)
 
+\bibitem{dillig2013inductive}
+Dillig, I., Dillig, T., Li, B., McMillan, K.: Inductive invariant generation
+  via abductive inference. In: Acm Sigplan Notices. vol.~48, pp. 443--456. ACM
+  (2013)
+
+\bibitem{dillig2014optimal}
+Dillig, T., Dillig, I., Chaudhuri, S.: Optimal guard synthesis for memory
+  safety. In: International Conference on Computer Aided Verification. pp.
+  491--507. Springer (2014)
+
 \bibitem{een2011efficient}
 Een, N., Mishchenko, A., Brayton, R.: Efficient implementation of property
   directed reachability. In: Formal Methods in Computer-Aided Design (FMCAD),
