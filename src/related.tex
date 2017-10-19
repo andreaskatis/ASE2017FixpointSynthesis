@@ -13,7 +13,7 @@ contributions under numerous contexts. Gulwani~\cite{gulwani2010dimensions}
 presented an extended survey, hinting future research directions. Synthesis
 algorithms have been proposed for simple LTL specification~\cite{Bohy12,Tini03}
 subsets of it~\cite{Klein10,ehlers2010symbolic,cheng2016structural}, as well as under other temporal logics~\cite{monmege2016real,Hamza10}, such as SIS~\cite{Aziz95}.
-Chatterjee and Henzinger~\cite{Chatterjee07} proposed a novel component-based approach using the notion of Assume-Guarantee contracts. 
+Chatterjee and Henzinger~\cite{Chatterjee07} proposed a novel component-based approach using the notion of Assume-Guarantee contracts.
 \fi
 The work presented in this paper is closely related to approaches that attempt
 to construct infinite-state implementations. Some focus on the continuous
@@ -32,7 +32,7 @@ validity-guided approach significantly improves upon this work, by using a
 fixpoint-generating technique rather than the principle of k-induction.
 \fi
 
-The technique that we presented in this paper follows similar directions of previous work on abductive inference~\cite{dillig2013inductive, dillig2014optimal}. Dillig \textit{et al.} showed how abduction can be effectively used in invariant generation and guard synthesis. Their approach focuses on checking the validity of quantifier-free formulas of the form $\phi \implies \psi$, using a refinement process that generates candidate invariants in the form of maximum universal subsets (MUS). While the most general candidate may be sufficient to prove validity, it may also mislead the invariant search. For this reason, the authors use a backtracking procedure that effectively discovers new subsets while avoiding spurious results. Comparing this work to our case, the problem of synthesizing reactive systems involves the use of mixed-quantifier formulas, which are not supported, while the regions of validity that we generate are maximal and by construction cannot mislead the refinement process into unsound results, therefore making the use of any backtracking unnecessary. Most impontantly, in the context of reactive synthesis, a modification in the MUS algorithm would be necessary, since it is crucial that the generated subsets do not impose constraints over input variables. In our work, the ability to generate precise regions of validity lead to a very simple refinement process that is solely based on the input variables being existentially quantified.
+The technique in this paper follows similar directions on abductive inference~\cite{dillig2013inductive, dillig2014optimal}. Dillig \textit{et al.} showed how abduction can be used to build an inductive frame for invariant generation and guard synthesis. Their approach focuses on checking the validity of quantifier-free formulas of the form $\phi \implies \psi$ via a refinement process that generates candidate invariants in the form of maximum universal subsets (MUS).  While a MUS may be sufficient to prove validity, it may also mislead the invariant search, so the authors use a backtracking procedure that discovers new subsets while avoiding spurious results. By comparison, in our approach the regions of validity are maximal and therefore backtracking is not required.  More importantly, reactive synthesis requires mixed-quantifier formulas, and it requires that inputs are unconstrained (other than by the contract assumptions), so substantial modifications to the MUS algorithm would be necessary to apply the approach of~\cite{dillig2014optimal} for reactive synthesis.  %In our work, the ability to generate precise regions of validity lead to a very simple refinement process that is solely based on the input variables being existentially quantified.
 
 The concept of synthesizing implementations by discovering fixpoints was mostly
 inspired by the IC3 algorithm, the technique also known as Property Directed
@@ -40,15 +40,13 @@ Reachability~\cite{bradley2011sat,een2011efficient}, which was first introduced
 in the context of verification. Work from Cimatti \textit{et al.} effectively
 applied this idea for synthesis, albeit that of parameters, in the
 \textsc{HyComp} model checker~\cite{DBLP:conf/fmcad/CimattiGMT13, cimatti2015hycomp}.
-Discovering fixpoints to synthesize reactive designs, instead, was first
+Discovering fixpoints to synthesize reactive designs was first
 extensively covered by Piterman \textit{et al.}~\cite{piterman2006synthesis}
 who proved that the problem can be solved in cubic time for the class of GR(1) specifications.
 However, their proposed algorithm is significantly different from this paper. It
 requires the discovery of least fixpoints for the state variables,
 each one covering a greatest fixpoint of the input variables. If the specification
-is realizable, then the entirety of the input space is covered by the greatest fixpoints. For the purposes of our work, we only attempt to compute a single greatest, instead of least, fixpoint over the system's outputs, and we avoid the partitioning of the input space. A straightforward comparison between the two techniques, while not currently
-supported, is of particular interest to us and we will be looking forward to
-achieving this as part of future work.
+is realizable, then the entirety of the input space is covered by the greatest fixpoints. By comparison, we compute a single greatest fixpoint over the system's outputs, and we avoid the partitioning of the input space.  As the tools use different notations and support different logical fragments, comparisons are not straightforward; nevertheless we hope to perform a comparison in future work.
 
 More recently, Preiner \textit{et al}. presented their work on counterexample-guided model synthesis (CEGMS)~\cite{preiner2017counterexample}. In CEGMS, candidate witnesses are being constructed and their validity is checked with respect to the specification. Internally, a counterexample-guided refinement process is used~\cite{reynolds2015counterexample} for the purposes of quantifier
 elimination, and enumerative learning is applied to generalize witnesses. Enumerative learning is a syntax-based technique that enumerates expressions, checks their truth against
