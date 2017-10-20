@@ -87,6 +87,12 @@ Hagen, G., Tinelli, C.: Scaling up the formal verification of lustre programs
 Jahier, E., Raymond, P., Halbwachs, N.: {The Lustre V6 Reference Manual},
   \url{http://www-verimag.imag.fr/Lustre-V6.html}
 
+\bibitem{KatisFGBGW16}
+Katis, A., Fedyukovich, G., Gacek, A., Backes, J.D., Gurfinkel, A., Whalen,
+  M.W.: {Synthesis from Assume-Guarantee Contracts using Skolemized Proofs of
+  Realizability}. CoRR  abs/1610.05867 (2016),
+  \url{http://arxiv.org/abs/1610.05867}
+
 \bibitem{katis2016towards}
 Katis, A., Gacek, A., Whalen, M.W.: Towards synthesis from assume-guarantee
   contracts involving infinite theories: a preliminary report. In: Formal

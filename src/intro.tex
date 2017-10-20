@@ -1,19 +1,22 @@
 
 \section{Introduction}
 
-Program synthesis is one of the most challenging problems in computer science. The objective is to describe an efficient process to automatically derive efficient implementations that are guaranteed to comply with specifications expressed in the form of logic formulas.
-\grigory{IMHO, efficiency is not the main problem as the task is undecidable. The main problem in synthesis is to find a reasonably small and at the same time representative search space (by e.g., templates or DSLs).}
+Program synthesis is one of the most challenging problems in computer science. The objective is to define a process to automatically derive implementations that are guaranteed to comply with specifications expressed in the form of logic formulas. The problem has seen increased popularity in the recent years, mainly due
+%\grigory{IMHO, efficiency is not the main problem as the task is undecidable. The main problem in synthesis is to find a reasonably small and at the same time representative search space (by e.g., templates or DSLs).}
+\iffalse
  Program synthesis owes its origins to Church~\cite{church1962logic} (otherwise known as Church's Problem), and has long been an important area of research.
 %
 %ever since it was first expressed, has enjoyed a considerable amount of contributions.
 %
 After the seminal paper by Pnueli and Rosner~\cite{pnueli1989synthesis} on reactive synthesis, the problem has seen increased popularity 
 \grigory{Actually, the synthesis got popular after the death of Pnueli. Pnueli himself was very skeptical about this idea.}
-in more recent years due to the increased capability of symbolic solvers, including Satisfiability Modulo Theories (SMT)~\cite{BarFT-SMTLIB} tools.\grigory{Anyway, for the interest of space, I do not think you need to mention these ancient papers. Start just with SMT. Everyone is doing so.}
+\fi
+to the capabilities of modern symbolic solvers, including Satisfiability Modulo Theories (SMT)~\cite{BarFT-SMTLIB} tools, to compute compact and precise regions that describe under which conditions an implementation exists for the given specification.
+%\grigory{Anyway, for the interest of space, I do not think you need to mention these ancient papers. Start just with SMT. Everyone is doing so.}
  As a result, the problem has been well-studied for the area of propositional specifications (see Gulwani~\cite{gulwani2010dimensions} for a survey), and approaches have been proposed to tackle challenges involving richer specifications. Template-based techniques focus on synthesizing programs that
 match a certain shape (the template)~\cite{srivastava2013template}, while {\em inductive synthesis} uses the idea of refining the problem space using counterexamples, to converge to a solution~\cite{flener2001inductive}. 
-\grigory{fill the ``gaps'' -- it is template-based synthesis. functional synthesis is about skolems, and not necessarily ``gaps''. Please revise this sentence. Also, there are some recent papers by Moshe Vardi regarding functional synthesis -- you may borrow the description from them.}
-A different category is that of \textit{functional synthesis}, in which the goal is to fill in ``gaps'' in an already existing implementation with synthesized code~\cite{kuncak2013functional}.
+%\grigory{fill the ``gaps'' -- it is template-based synthesis. functional synthesis is about skolems, and not necessarily ``gaps''. Please revise this sentence. Also, there are some recent papers by Moshe Vardi regarding functional synthesis -- you may borrow the description from them.}
+A different category is that of \textit{functional synthesis}, in which the goal is to construct functions from pre-defined input/output relations~\cite{kuncak2013functional}.
 
 In this work, we propose a novel approach that can effectively synthesize
 programs using safety specifications written in the form of {\em
@@ -24,15 +27,15 @@ in the future, as well as to liveness properties that can be reduced to safety p
 The main idea of the algorithm was inspired by induction-based model checking, and in particular by IC3 / Property Directed Reachability (PDR)~\cite{bradley2011sat,een2011efficient}. In PDR, the goal is to discover an inductive invariant for a property, by recursively blocking generalized regions describing unsafe states. In a similar concept, we attempt
 to reach a greatest fixpoint that contains states usable indefinitely by the
 system, in order to react to unpredictable environment behavior, while
-complying to well-defined specification. As such, starting from the entire
+complying to well-defined specification. Formally, the greatest fixpoint is sufficient to prove the validity of a $\forall\exists$ formula. In reactive synthesis, the formula states that for any state and environment input, there exists a system reaction that complies with the specification. As such, starting from the entire
 problem space, we recursively block regions of states that violate the contract, using \textit{regions of validity} that are
 generated by invalid $\forall\exists$-formulas. 
-\grigory{At this point, it is not clear when do you get the $\forall\exists$-formulas. Please revise.}
+%\grigory{At this point, it is not clear when do you get the $\forall\exists$-formulas. Please revise.}
 If the refined
 $\forall\exists$-formula is valid, we reach a fixpoint which can effectively be used by the specified transition relation, to
 provide safe reactions to environment inputs. We then extract a witness for the
 formula's satisfiability
-\grigory{again, not clear which particular formula is meant. What does it encode?}
+%\grigory{again, not clear which particular formula is meant. What does it encode?}
 , which can be directly transformed into the
 language intended for the system's implementation.
 
@@ -42,8 +45,10 @@ Gacek~\textit{et al.} based on k-inductive proofs of a contract's
 realizability~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
 Our approach does not depend on k-induction, but is still based on the general
 concept of extracting a witness that satisfies a $\forall\exists$-formula, using
-the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. To extract such a witness, we do not depend on a k-inductive proof, \grigory{This needs more work. You say that we do not depend on k-induction two times. But you do not say why it is bad.} but instead use the \textit{regions of validity} that \aeval can generate from invalid formulas to reach a fixpoint of satisfiable assignments to state variables.
-\grigory{Then, I think the conceptual differences between this work and~\cite{KatisFGBGW16} should be formulated in a separate paragraph and placed \emph{before} you describe inplementation. This is the selling point, and the reviewers should should immediately understand the differences with the prior work.}
+the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. To extract such a witness, we
+%do not depend on a k-inductive proof, \grigory{This needs more work. You say that we do not depend on k-induction two times. But you do not say why it is bad.}
+instead use \textit{regions of validity} that \aeval can generate from invalid formulas to reach a fixpoint of satisfiable assignments to state variables.
+%\grigory{Then, I think the conceptual differences between this work and~\cite{KatisFGBGW16} should be formulated in a separate paragraph and placed \emph{before} you describe inplementation. This is the selling point, and the reviewers should should immediately understand the differences with the prior work.}
 
 We evaluate the fixpoint algorithm against the k-inductive approach using a comprehensive benchmark suite containing contracts that were initially used in verification problems, as well as specification for industrial-level designs and versions of the ``Cinderella'' problem from~\cite{beyene2014constraint}.  The experiment demonstrates that this approach is a direct improvement over the k-inductive method in two important aspects: performance and generality.  On all models that can be synthesized by k-induction, the new algorithm always outperforms the k-inductive algorithm in terms of time required for synthesis (on average, 53.64\% faster) while yielding roughly approximate code sizes and execution times for the generated C code.  The new algorithm can synthesize a strictly larger set of benchmark models, and comes with an improved termination guarantee: unlike the k-inductive algorithm, if the algorithm terminates with an `unrealizable' result, then there is no possible realization of the contract.
 

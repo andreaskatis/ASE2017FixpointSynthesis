@@ -565,7 +565,7 @@ example}
 \fi
 We initiate our call to the procedure defined in Algorithm~\ref{alg:synthesis},
 by providing the contract in Figure~\ref{fg:cind} as input. The algorithm
-then enters an infinite loop, where it attempts to construct a fixpoint of
+then enters a loop, where it attempts to construct a fixpoint of
 viable states that can use the transition relation to new, viable states,
 while complying to the specification. Initially $F(s) = true$, and we ask \aeval for the validiity of the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
 satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
