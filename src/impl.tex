@@ -1,8 +1,9 @@
-\section{Implementation}
+\section{Implementation and Evaluation}
 \label{sec:impl}
 
 The implementation of the algorithm has been added to a branch of the  \jkind~\cite{jkind} model checker.  \jkind already unofficially supports synthesis,
-using a k-inductive approach, named \jsyn. For clarity, we named
+\grigory{Unofficially? We have the Tech Report, it is all official ;)}
+using a k-inductive approach, named \jsyn~\cite{KatisFGBGW16}. For clarity, we named
 our validity-guided technique \jsynvg. \jkind uses Lustre~\cite{lustrev6} as its specification and implementation language.
 \iffalse
 , which functions as an intermediate representation to the Architecture Analysis and Design Language (\textsc{AADL})~\cite{feiler2006architecture}.
@@ -12,30 +13,37 @@ framework~\cite{NFM2012:CoGaMiWhLaLu}.
 \andrew{it seems strange to be talking about AADL and maybe even AGREE  at all here.}
 
 \fi
-
+%
 %\footnote{An unofficial release of \jkind
 %including our synthesis algorithm is available to download at
 %https://github.com/andrewkatis/jkind-1/tree/synthesis. \aeval needs to be
 %installed separately from https://github.com/grigoryfedyukovich/aeval.}.
-During the internal process, \jsynvg translates Lustre specifications to
-the SMT-LIB language.
-\iffalse
-, with which the $\forall\exists$-formulas, regions of
-validity, as well as the witnesses are expressed.
-\fi
-The underlying solver that is
-used is the \aeval Skolemizer, which currently supports
-$\forall\exists$-formulas expressed using linear real and integer arithmetic (LIRA).
+%During the internal process, 
+\jsynvg encodes Lustre specifications in the language of
+linear real and integer arithmetic (LIRA)
+% first order logic 
+and communicates them to \aeval.
+%f the SMT-LIB language,
+%, with which the $\forall\exists$-formulas, regions of
+%validity, as well as the witnesses are expressed.
+%The underlying solver that is
+%used is the \aeval Skolemizer, 
+%which currently supports
+%$\forall\exists$-formulas expressed using 
+%linear real and integer arithmetic (LIRA).
 %
-For realizable specification, and considering Algorithm~\ref{alg:synthesis}, we
-recursively use regions of validity to block out unsafe states from the search
-space.
-Eventually, we reach a fixpoint that is sufficient to use in order to extract
-a Skolem function that witnesses the realizability of the specification. Given
-the generated function, what remains is its translation
+%
+%For realizable specifications, and considering Alg.~\ref{alg:synthesis}, we
+%recursively use regions of validity to block out unsafe states from the search
+%space.
+%Eventually, we reach a fixpoint that is sufficient to use in order to extract a 
+Skolem functions returned by \aeval get then translated %that witnesses the realizability of the specification. Given
+%the generated function, what remains is its translation
 into an efficient and practical implementation. To compare the quality of implementations against \jsyn, we use
 \smtlibtoc, a tool that has been specifically developed to translate
-similar \aeval Skolem functions to C implementations.
+  Skolem functions to C implementations.
+\grigory{There used to be a rehash of Alg.~\ref{alg:synthesis}; no need to repeat it here.}
+\grigory{Also, you probably need to refer the reader that more info about implementation is in~\cite{KatisFGBGW16}.}
 
 %In future work,
 %we intend to further improve on this, and
