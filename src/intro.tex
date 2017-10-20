@@ -18,11 +18,21 @@ match a certain shape (the template)~\cite{srivastava2013template}, while {\em i
 %\grigory{fill the ``gaps'' -- it is template-based synthesis. functional synthesis is about skolems, and not necessarily ``gaps''. Please revise this sentence. Also, there are some recent papers by Moshe Vardi regarding functional synthesis -- you may borrow the description from them.}
 A different category is that of \textit{functional synthesis}, in which the goal is to construct functions from pre-defined input/output relations~\cite{kuncak2013functional}.
 
-In this work, we propose a novel approach that can effectively synthesize
-programs using safety specifications written in the form of {\em
-Assume-Guarantee} contracts. The technique has been used to synthesize contracts involving linear real and integer arithmetic (LIRA),
+\grigory{start this paragraph with the introduction to the \emph{problem} (not the approach) you are solving. Motivate it by saying that there are various industrial projects, and that the handwritten implementations are buggy, and whatever you actually believe in.}
+Our goal is to effectively synthesize programs using safety specifications written in the form of {\em
+Assume-Guarantee} contracts....
+
+In prior work, we developed a solution to the synthesis problem which is based on k-induction~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
+\grigory{then, briefly describe it here and mention that it has soundness issues.}
+Despite showing somewhat promising results, the approach suffers from ....
+
+In this work, we propose a novel approach that can overcome these issues...
+\grigory{And finally, here you can start introducing your contribution. The most crucial outcomes first. The low-level algorithmic details second.}
+
+The technique has been used to synthesize contracts involving linear real and integer arithmetic (LIRA),
 but remains generic enough to be extended into supporting additional theories
 in the future, as well as to liveness properties that can be reduced to safety properties (as in K-liveness~\cite{claessen2012liveness}).  Our approach is completely automated and requires no guidance to the tools in terms of user interaction (unlike~\cite{ryzhyk2014user,ryzhyk2016developing}), and it is capable of providing solutions without requiring any templates, as in e.g., work by Beyene et. al.~\cite{beyene2014constraint}.  We were able to automatically solve problems that were ``hard'' and required hand-written templates specialized to the problem in~\cite{beyene2014constraint}.
+
 
 The main idea of the algorithm was inspired by induction-based model checking, and in particular by IC3 / Property Directed Reachability (PDR)~\cite{bradley2011sat,een2011efficient}. In PDR, the goal is to discover an inductive invariant for a property, by recursively blocking generalized regions describing unsafe states. In a similar concept, we attempt
 to reach a greatest fixpoint that contains states usable indefinitely by the
@@ -40,9 +50,9 @@ formula's satisfiability
 language intended for the system's implementation.
 
 The algorithm was implemented as a feature in the \jkind model checker, which
-already had support for program synthesis according to work from
+already had support \grigory{after you've done with the restructuring, you can clean the repetitions here.} for program synthesis according to work from
 Gacek~\textit{et al.} based on k-inductive proofs of a contract's
-realizability~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
+realizability.
 Our approach does not depend on k-induction, but is still based on the general
 concept of extracting a witness that satisfies a $\forall\exists$-formula, using
 the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. To extract such a witness, we
@@ -60,7 +70,8 @@ The contributions of the paper are therefore:
 \end{itemize}
 
 The rest of the paper is organized as follows. Sect.~\ref{sec:example} briefly describes the Cinderella-Stepmother problem that we use as an example throughout the paper. In Sect.~\ref{sec:background}, we provide the necessary formal definitions to describe the synthesis algorithm, which is presented then in Sect.~\ref{sec:synthesis}.
-An outline of the algorithm's implementation in \jkind is described in Sect.~\ref{sec:impl}. Sect.~\ref{sec:results} describes the performance of the algorithm on a large benchmark suite, comparing it against a method based on k-induction that exists using the same input language.  We discuss the differences of our work with closely related ideas in Sect.~\ref{sec:related} and we conclude by providing potential directions for future work in Sect.~\ref{sec:conclusion}.
+We present an evaluation in Sect.~\ref{sec:impl} and comparison against a method based on k-induction that exists using the same input language.  
+Finally, we discuss the differences of our work with closely related ideas in Sect.~\ref{sec:related} and conclude in Sect.~\ref{sec:conclusion}.
 
 	
 %%% Local Variables:
