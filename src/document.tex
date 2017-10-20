@@ -157,10 +157,19 @@ Department of Electrical and Computer Engineering, University of Waterloo\\
 \begin{abstract}
 
 %shortened version due to 200 word limit
-Automated synthesis of reactive systems from specifications has been a topic of research for decades.  Recently, a variety of approaches have been proposed to extend synthesis of reactive systems from propositional specifications towards specifications over rich theories.  Such approaches include inductive synthesis, template-based synthesis, counterexample-guided synthesis, and predicate abstraction 
-techniques.  In this paper, we propose a novel approach to program synthesis based on the validity of $\forall\exists$-formulas.  The approach is inspired by verification
-techniques that construct inductive invariants, like IC3 / Property Directed Reachability, and is completely automated. The original problem space is recursively refined by blocking out regions of unsafe states, with the goal being the discovery of a fixpoint that describes safe reactions. If such a fixpoint is found, we construct a witness that is directly translated into an implementation.  We have implemented the algorithm in the \jkind model checker, and exercised it against contracts written using
-the Lustre specification language. Experimental results show how the new algorithm yields better performance as well as soundness for ``unrealizable'' results when compared to \jkind's existing synthesis procedure, an approach based on the construction of k-inductive proofs of realizability.
+Automated synthesis of reactive systems from specifications has been a topic of research for decades.  Recently, a variety of approaches have been proposed to extend synthesis of reactive systems from propositional specifications towards specifications over rich theories. 
+%Such approaches include inductive synthesis, template-based synthesis, counterexample-guided synthesis, and predicate abstraction techniques. In this paper, w
+We propose a novel, completely automated approach to program synthesis which reduces the problem to deciding the validity of a set of $\forall\exists$-formulas. 
+In spirit of 
+%Inspired by verification techniques that construct inductive invariants, like 
+IC3 / PDR, our problem space is recursively refined by blocking out regions of unsafe states, aiming to discover a fixpoint that describes safe reactions.
+If such a fixpoint is found, we construct a witness that is directly translated into an implementation. 
+We implemented the algorithm on top of the \jkind model checker, and exercised it against contracts written using
+the Lustre specification language. 
+Experimental results confirm that the new algorithm outperforms 
+the synthesis procedure based on the k-inductive proofs of realizability.
+\grigory{did not follow the  message about ``soundness for unrealizable results'' and dropped it for a while. Perhaps you could rephrase it and possibly move towards the beginning of the abstract.}
+%Experimental results show how the new algorithm yields better performance as well as soundness for ``unrealizable'' results when compared to \jkind's existing synthesis procedure, an approach based on the construction of k-inductive proofs of realizability.
 
 \iffalse
 Automated synthesis of reactive systems using only specification knowledge is one of

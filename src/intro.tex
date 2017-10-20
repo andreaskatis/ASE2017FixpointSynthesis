@@ -1,38 +1,49 @@
 
 \section{Introduction}
 
-Program synthesis is one of the most challenging problems in computer science. The objective is to describe an efficient process to automatically derive efficient implementations that are guaranteed to comply with specifications expressed in the form of logic formulas. Program synthesis owes its origins to Church~\cite{church1962logic} (otherwise known as Church's Problem), and has long been an important area of research.
+Program synthesis is one of the most challenging problems in computer science. The objective is to describe an efficient process to automatically derive efficient implementations that are guaranteed to comply with specifications expressed in the form of logic formulas.
+\grigory{IMHO, efficiency is not the main problem as the task is undecidable. The main problem in synthesis is to find a reasonably small and at the same time representative search space (by e.g., templates or DSLs).}
+ Program synthesis owes its origins to Church~\cite{church1962logic} (otherwise known as Church's Problem), and has long been an important area of research.
 %
 %ever since it was first expressed, has enjoyed a considerable amount of contributions.
 %
-The first important attempt to synthesize reactive systems came from Pnueli and Rosner~\cite{pnueli1989synthesis}, but the problem has seen increased popularity in more recent years due to the increased capability of symbolic solvers, including Satisfiability Modulo Theories~\cite{BarFT-SMTLIB} tools. As a result, the problem has been well-studied for the area of propositional specifications (see Gulwani~\cite{gulwani2010dimensions} for a survey), and approaches have been proposed to tackle challenges involving richer specifications. Template-based techniques focus on synthesizing programs that
-match a certain shape (the template)~\cite{srivastava2013template}, while {\em inductive synthesis} uses the idea of refining the problem space using counterexamples, to converge to a solution~\cite{flener2001inductive}. A different category is that of \textit{functional synthesis}, in which the goal is to fill in ``gaps'' in an already existing implementation with synthesized code~\cite{kuncak2013functional}.
+After the seminal paper by Pnueli and Rosner~\cite{pnueli1989synthesis} on reactive synthesis, the problem has seen increased popularity 
+\grigory{Actually, the synthesis got popular after the death of Pnueli. Pnueli himself was very skeptical about this idea.}
+in more recent years due to the increased capability of symbolic solvers, including Satisfiability Modulo Theories (SMT)~\cite{BarFT-SMTLIB} tools.\grigory{Anyway, for the interest of space, I do not think you need to mention these ancient papers. Start just with SMT. Everyone is doing so.}
+ As a result, the problem has been well-studied for the area of propositional specifications (see Gulwani~\cite{gulwani2010dimensions} for a survey), and approaches have been proposed to tackle challenges involving richer specifications. Template-based techniques focus on synthesizing programs that
+match a certain shape (the template)~\cite{srivastava2013template}, while {\em inductive synthesis} uses the idea of refining the problem space using counterexamples, to converge to a solution~\cite{flener2001inductive}. 
+\grigory{fill the ``gaps'' -- it is template-based synthesis. functional synthesis is about skolems, and not necessarily ``gaps''. Please revise this sentence. Also, there are some recent papers by Moshe Vardi regarding functional synthesis -- you may borrow the description from them.}
+A different category is that of \textit{functional synthesis}, in which the goal is to fill in ``gaps'' in an already existing implementation with synthesized code~\cite{kuncak2013functional}.
 
-In this work, we describe a novel approach that can effectively synthesize
+In this work, we propose a novel approach that can effectively synthesize
 programs using safety specifications written in the form of {\em
 Assume-Guarantee} contracts. The technique has been used to synthesize contracts involving linear real and integer arithmetic (LIRA),
 but remains generic enough to be extended into supporting additional theories
-in the future, as well as to liveness properties that can be reduced to safety properties (as in K-liveness~\cite{claessen2012liveness}).  Our approach is completely automated and requires no guidance to the tools in terms of user interaction (unlike~\cite{ryzhyk2014user,ryzhyk2016developing}), and is capable of providing solutions without the guidance of templates, as are used by Beyene et. al.
-in~\cite{beyene2014constraint}.  We were able to automatically solve problems that were ``hard'' and required hand-written templates specialized to the problem in~\cite{beyene2014constraint}.
+in the future, as well as to liveness properties that can be reduced to safety properties (as in K-liveness~\cite{claessen2012liveness}).  Our approach is completely automated and requires no guidance to the tools in terms of user interaction (unlike~\cite{ryzhyk2014user,ryzhyk2016developing}), and it is capable of providing solutions without requiring any templates, as in e.g., work by Beyene et. al.~\cite{beyene2014constraint}.  We were able to automatically solve problems that were ``hard'' and required hand-written templates specialized to the problem in~\cite{beyene2014constraint}.
 
-The main idea of the algorithm was inspired by frame-based inductive algorithms, the most prominent being the IC3/PDR algorithm~\cite{bradley2011sat,een2011efficient}. In PDR, the goal is to discover an inductive invariant for a property, by recursively blocking generalized regions describing unsafe states. In a similar concept, we attempt
+The main idea of the algorithm was inspired by induction-based model checking, and in particular by IC3 / Property Directed Reachability (PDR)~\cite{bradley2011sat,een2011efficient}. In PDR, the goal is to discover an inductive invariant for a property, by recursively blocking generalized regions describing unsafe states. In a similar concept, we attempt
 to reach a greatest fixpoint that contains states usable indefinitely by the
 system, in order to react to unpredictable environment behavior, while
-complying to well-defined specification. As such, beginning from the entire
+complying to well-defined specification. As such, starting from the entire
 problem space, we recursively block regions of states that violate the contract, using \textit{regions of validity} that are
-generated by invalid $\forall\exists$-formulas. If the refined
+generated by invalid $\forall\exists$-formulas. 
+\grigory{At this point, it is not clear when do you get the $\forall\exists$-formulas. Please revise.}
+If the refined
 $\forall\exists$-formula is valid, we reach a fixpoint which can effectively be used by the specified transition relation, to
 provide safe reactions to environment inputs. We then extract a witness for the
-formula's satisfiability, which can be directly transformed into the
+formula's satisfiability
+\grigory{again, not clear which particular formula is meant. What does it encode?}
+, which can be directly transformed into the
 language intended for the system's implementation.
 
 The algorithm was implemented as a feature in the \jkind model checker, which
 already had unofficial support for program synthesis according to work from
 Gacek~\textit{et al.} based on k-inductive proofs of a contract's
-realizability~\cite{gacek2015towards,katis2016towards,katis2016synthesis}.
+realizability~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
 Our approach does not depend on k-induction, but is still based on the general
 concept of extracting a witness that satisfies a $\forall\exists$-formula, using
-the \aeval Skolemizer~\cite{fedyukovich2015automated}. To extract such a witness, we do not depend on a k-inductive proof, but instead use the \textit{regions of validity} that \aeval can generate from invalid formulas to reach a fixpoint of satisfiable assignments to state variables.
+the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. To extract such a witness, we do not depend on a k-inductive proof, \grigory{This needs more work. You say that we do not depend on k-induction two times. But you do not say why it is bad.} but instead use the \textit{regions of validity} that \aeval can generate from invalid formulas to reach a fixpoint of satisfiable assignments to state variables.
+\grigory{Then, I think the conceptual differences between this work and~\cite{KatisFGBGW16} should be formulated in a separate paragraph and placed \emph{before} you describe inplementation. This is the selling point, and the reviewers should should immediately understand the differences with the prior work.}
 
 We evaluate the fixpoint algorithm against the k-inductive approach using a comprehensive benchmark suite containing contracts that were initially used in verification problems, as well as specification for industrial-level designs and versions of the ``Cinderella'' problem from~\cite{beyene2014constraint}.  The experiment demonstrates that this approach is a direct improvement over the k-inductive method in two important aspects: performance and generality.  On all models that can be synthesized by k-induction, the new algorithm always outperforms the k-inductive algorithm in terms of time required for synthesis (on average, 53.64\% faster) while yielding roughly approximate code sizes and execution times for the generated C code.  The new algorithm can synthesize a strictly larger set of benchmark models, and comes with an improved termination guarantee: unlike the k-inductive algorithm, if the algorithm terminates with an `unrealizable' result, then there is no possible realization of the contract.
 
@@ -43,8 +54,8 @@ The contributions of the paper are therefore:
     \item an experiment over a large suite of benchmark models demonstrating the effectiveness of the approach.
 \end{itemize}
 
-The rest of the paper is organized as follows: section~\ref{sec:example} briefly describes the Cinderella-Stepmother problem that we will use as an example throughout the paper. In Section~\ref{sec:background} we provide the necessary formal definitions to describe the synthesis algorithm, which is presented in Section~\ref{sec:synthesis}.
-An outline of the algorithm's implementation in \jkind is described in Section~\ref{sec:impl}. Section~\ref{sec:results} describes the performance of the algorithm on a large benchmark suite, comparing it against a method based on k-induction that exists using the same input language.  We discuss the differences of our work with closely related ideas in Section~\ref{sec:related} and we conclude by providing potential directions for future work in Section~\ref{sec:conclusion}.
+The rest of the paper is organized as follows. Sect.~\ref{sec:example} briefly describes the Cinderella-Stepmother problem that we use as an example throughout the paper. In Sect.~\ref{sec:background}, we provide the necessary formal definitions to describe the synthesis algorithm, which is presented then in Sect.~\ref{sec:synthesis}.
+An outline of the algorithm's implementation in \jkind is described in Sect.~\ref{sec:impl}. Sect.~\ref{sec:results} describes the performance of the algorithm on a large benchmark suite, comparing it against a method based on k-induction that exists using the same input language.  We discuss the differences of our work with closely related ideas in Sect.~\ref{sec:related} and we conclude by providing potential directions for future work in Sect.~\ref{sec:conclusion}.
 
 	
 %%% Local Variables:
