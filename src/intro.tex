@@ -18,16 +18,15 @@ match a certain shape (the template)~\cite{srivastava2013template}, while {\em i
 %\grigory{fill the ``gaps'' -- it is template-based synthesis. functional synthesis is about skolems, and not necessarily ``gaps''. Please revise this sentence. Also, there are some recent papers by Moshe Vardi regarding functional synthesis -- you may borrow the description from them.}
 A different category is that of \textit{functional synthesis}, in which the goal is to construct functions from pre-defined input/output relations~\cite{kuncak2013functional}.
 
-\grigory{start this paragraph with the introduction to the \emph{problem} (not the approach) you are solving. Motivate it by saying that there are various industrial projects, and that the handwritten implementations are buggy, and whatever you actually believe in.}
-Our goal is to effectively synthesize programs using safety specifications written in the form of {\em
-Assume-Guarantee} contracts....
-
-In prior work, we developed a solution to the synthesis problem which is based on k-induction~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
-\grigory{then, briefly describe it here and mention that it has soundness issues.}
-Despite showing somewhat promising results, the approach suffers from ....
-
-In this work, we propose a novel approach that can overcome these issues...
-\grigory{And finally, here you can start introducing your contribution. The most crucial outcomes first. The low-level algorithmic details second.}
+%\grigory{start this paragraph with the introduction to the \emph{problem} (not the approach) you are solving. Motivate it by saying that there are various industrial projects, and that the handwritten implementations are buggy, and whatever you actually believe in.}
+Our goal is to effectively synthesize programs from safety specifications written in the form of {\em
+Assume-Guarantee} contracts. In prior work, we developed a solution to the synthesis problem which is based on k-induction~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
+%\grigory{then, briefly describe it here and mention that it has soundness issues.}
+Despite showing somewhat promising results, the approach suffers from soundness problems with respect to unrealizable results; a contract could be declared as unrealizable, while an actual implementation exists.
+In this work, we propose a novel approach that is a direct improvement over the k-inductive method in two important aspects: performance and generality.  On all models that can be synthesized
+by k-induction, the new algorithm always outperforms in terms of synthesis time while yielding roughly approximate code sizes and execution times for the generated code. More importantly, the new algorithm can synthesize a strictly larger set of benchmark models,
+and comes with an improved termination guarantee: unlike in k-induction, if the algorithm terminates with an ``unrealizable'' result, then there is no possible realization of the contract.
+%\grigory{And finally, here you can start introducing your contribution. The most crucial outcomes first. The low-level algorithmic details second.}
 
 The technique has been used to synthesize contracts involving linear real and integer arithmetic (LIRA),
 but remains generic enough to be extended into supporting additional theories
@@ -49,18 +48,16 @@ formula's satisfiability
 , which can be directly transformed into the
 language intended for the system's implementation.
 
-The algorithm was implemented as a feature in the \jkind model checker, which
-already had support \grigory{after you've done with the restructuring, you can clean the repetitions here.} for program synthesis according to work from
-Gacek~\textit{et al.} based on k-inductive proofs of a contract's
-realizability.
-Our approach does not depend on k-induction, but is still based on the general
+The algorithm was implemented as a feature in the \jkind model checker and is based on the general
 concept of extracting a witness that satisfies a $\forall\exists$-formula, using
-the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. To extract such a witness, we
+the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. While \aeval was mainly used as a query-solving and skolem-extracting tool in our k-inductive approach, in this paper we also take advantage of its capability to generate
 %do not depend on a k-inductive proof, \grigory{This needs more work. You say that we do not depend on k-induction two times. But you do not say why it is bad.}
-instead use \textit{regions of validity} that \aeval can generate from invalid formulas to reach a fixpoint of satisfiable assignments to state variables.
+\textit{regions of validity} from invalid formulas to reach a fixpoint of satisfiable assignments to state variables.
 %\grigory{Then, I think the conceptual differences between this work and~\cite{KatisFGBGW16} should be formulated in a separate paragraph and placed \emph{before} you describe inplementation. This is the selling point, and the reviewers should should immediately understand the differences with the prior work.}
 
+\iffalse
 We evaluate the fixpoint algorithm against the k-inductive approach using a comprehensive benchmark suite containing contracts that were initially used in verification problems, as well as specification for industrial-level designs and versions of the ``Cinderella'' problem from~\cite{beyene2014constraint}.  The experiment demonstrates that this approach is a direct improvement over the k-inductive method in two important aspects: performance and generality.  On all models that can be synthesized by k-induction, the new algorithm always outperforms the k-inductive algorithm in terms of time required for synthesis (on average, 53.64\% faster) while yielding roughly approximate code sizes and execution times for the generated C code.  The new algorithm can synthesize a strictly larger set of benchmark models, and comes with an improved termination guarantee: unlike the k-inductive algorithm, if the algorithm terminates with an `unrealizable' result, then there is no possible realization of the contract.
+\fi
 
 The contributions of the paper are therefore:
 \begin{itemize}
