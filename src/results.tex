@@ -28,26 +28,47 @@ compare \jsynvg against \jsyn's k-inductive approach. We
 ran the experiments using a computer with Intel Core i3-4010U 1.70GHz CPU and
 16GB RAM.
 
-\begin{table}[!t]
-\centering
-\caption{Benchmark Statistics}
-\label{tbl:stats}
-\resizebox{0.5\textwidth}{!}{%
-\begin{tabular}{@{}lll@{}}
-\toprule
- & \jsyn & \jsynvg \\ \midrule
-Problems solved & 113 & \textbf{124} \\
-Performance (avg - seconds) & 5.72 & \textbf{2.78} \\
-Performance (max - seconds) & 352.1 & \textbf{167.55} \\
-Implementation Size (avg - Lines of Code) & 72.88 & \textbf{70.66} \\
-Implementation Size (max - Lines of Code) & 2322 & \textbf{2142} \\
-Implementation Performance (avg - ms) & 57.84 & \textbf{56.32} \\
-Implementation Performance (max - ms) & 485.88 & \textbf{459.95} \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
-
+% \begin{table}[!t]
+% \centering
+% \hspace{-25pt}
+% \begin{minipage}{0.4\textwidth}
+% %\begin{table}[!t]
+% \centering
+% \caption{Benchmark Statistics}
+% \label{tbl:stats}
+% \resizebox{\textwidth}{!}{%
+% \begin{tabular}{@{}lll@{}}
+% \toprule
+%  & \jsyn & \jsynvg \\ \midrule
+% Problems solved & 113 & \textbf{124} \\
+% Performance (avg - seconds) & 5.72 & \textbf{2.78} \\
+% Performance (max - seconds) & 352.1 & \textbf{167.55} \\
+% Implementation Size (avg - Lines of Code) & 72.88 & \textbf{70.66} \\
+% Implementation Size (max - Lines of Code) & 2322 & \textbf{2142} \\
+% Implementation Performance (avg - ms) & 57.84 & \textbf{56.32} \\
+% Implementation Performance (max - ms) & 485.88 & \textbf{459.95} \\
+% \bottomrule
+% \end{tabular}
+% }
+% %\end{table}
+% \end{minipage}
+% \begin{minipage}{0.55\textwidth}
+% %\begin{table*}[!t]
+% \centering
+% \caption{Cinderella-Stepmother results}
+% \label{tbl:cindtbl}
+% \resizebox{1.1\textwidth}{!}{%
+% \begin{tabular}{|c|c|c|c|c|c|}
+% \hline
+% \multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
+%  & \begin{tabular}[c]{@{}c@{}}Impl. Size\\ (LoC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Impl. Performance\\ (ms)\end{tabular} & Time & \begin{tabular}[c]{@{}c@{}}Time\\ (Z3)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Time\\ (Barcelogic)\end{tabular} \\ \hline
+% Cind (C = 3) & 204 & 128.09 & 4.5s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
+% Cind2 (C = 3) & 2081 & 160.87 & 28.7s &  &  \\ \hline
+% Cind (C = 2) & 202 & 133.04 & 4.7s & \multirow{2}{*}{1m52s} & \multirow{2}{*}{1m52s} \\ \cline{1-4}
+% Cind2 (C = 2) & 1873 & 182.19 & 27.2s &  &  \\ \hline
+% \end{tabular}
+% }
+%\end{table*}
 A listing of the statistics that we tracked while running experiments is
 presented in Table~\ref{tbl:stats}.
 Fig.~\ref{fg:performance} shows the time allocated by \jsyn and \jsynvg to solve each problem, with \jsynvg
@@ -68,24 +89,50 @@ has direct implications to the way that the $\forall\exists$-formulas are
 constructed in \jsyn's underlying machinery, where the assumptions are ``baked''
 into the transition relation, affecting thus the performance of \aeval.
 
-\begin{figure}[!t]
+\begin{table}[!t]
 \centering
-\subfloat[Performance Comparison]{
-\includegraphics[width=2in]{overhead-crop}
-\label{fg:performance}}
-%\hspace{+6.5em}
-\quad
-\subfloat[Size of Implementations]{\includegraphics[width=2in]{loc-crop}
-\label{fg:size}}
-\quad
-\subfloat[Performance of Implementations]{\includegraphics[width=2in]{performance-crop}
-\label{fg:implperformance}}
-\caption{Experimental results}
-\label{fg:results}
-\end{figure}
-
- One last statistic that we tracked was the performance of the synthesized C
- implementations, which can be seen in Fig.~\ref{fg:implperformance}.
+\hspace{-25pt}
+\begin{minipage}{0.4\textwidth}
+%\begin{table}[!t]
+\centering
+\caption{Benchmark Statistics}
+\label{tbl:stats}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lll@{}}
+\toprule
+ & \jsyn & \jsynvg \\ \midrule
+Problems solved & 113 & \textbf{124} \\
+Performance (avg - seconds) & 5.72 & \textbf{2.78} \\
+Performance (max - seconds) & 352.1 & \textbf{167.55} \\
+Implementation Size (avg - Lines of Code) & 72.88 & \textbf{70.66} \\
+Implementation Size (max - Lines of Code) & 2322 & \textbf{2142} \\
+Implementation Performance (avg - ms) & 57.84 & \textbf{56.32} \\
+Implementation Performance (max - ms) & 485.88 & \textbf{459.95} \\
+\bottomrule
+\end{tabular}
+}
+%\end{table}
+\end{minipage}
+\begin{minipage}{0.55\textwidth}
+%\begin{table*}[!t]
+\centering
+\caption{Cinderella-Stepmother results}
+\label{tbl:cindtbl}
+\resizebox{1.1\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
+ & \begin{tabular}[c]{@{}c@{}}Impl. Size\\ (LoC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Impl. Performance\\ (ms)\end{tabular} & Time & \begin{tabular}[c]{@{}c@{}}Time\\ (Z3)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Time\\ (Barcelogic)\end{tabular} \\ \hline
+Cind (C = 3) & 204 & 128.09 & 4.5s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
+Cind2 (C = 3) & 2081 & 160.87 & 28.7s &  &  \\ \hline
+Cind (C = 2) & 202 & 133.04 & 4.7s & \multirow{2}{*}{1m52s} & \multirow{2}{*}{1m52s} \\ \cline{1-4}
+Cind2 (C = 2) & 1873 & 182.19 & 27.2s &  &  \\ \hline
+\end{tabular}
+}
+\end{minipage}
+\end{table}
+One last statistic that we tracked was the performance of the synthesized C
+implementations, which can be seen in Fig.~\ref{fg:implperformance}.
  \iffalse
   For this purpose, we translated the
  generated witnesses from \jsyn and \jsynvg solutions using
@@ -104,6 +151,24 @@ and subsequent evaluations, whereas currently \jsynvg uses a single function for
 % difference in complexity of the Model-Based Projections that get generated by
 % \aeval using \jsyn and \jsynvg, with the latter versions containing richer
 % expressions, mainly due to the refinement process.
+
+\begin{figure}[!t]
+\centering
+\subfloat[Performance Comparison]{
+\includegraphics[width=2in]{overhead-crop}
+\label{fg:performance}}
+%\hspace{+6.5em}
+\quad
+\subfloat[Size of Implementations]{\includegraphics[width=2in]{loc-crop}
+\label{fg:size}}
+\quad
+\subfloat[Performance of Implementations]{\includegraphics[width=1.8in]{performance-crop}
+\label{fg:implperformance}}
+\caption{Experimental results}
+\vspace{-5pt}
+\label{fg:results}
+\end{figure}
+
 
 Fig.~\ref{fg:results} does not cover the entirety of the
 benchmark suite. From the original 124 problems, eleven of them cannot be
@@ -157,21 +222,21 @@ well as synthesize an implementation for each.
 \label{fg:cex}
 \end{figure}
 
-\begin{table*}[!t]
-\centering
-\caption{Cinderella-Stepmother results}
-\label{tbl:cindtbl}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
- & Implementation Size (LoC) & Implementation Performance (ms) & Time & Time (Z3) & Time (Barcelogic) \\ \hline
-Cinderella (C = 3) & 204 & 128.09 & 4.5s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
-Cinderella2 (C = 3) & 2081 & 160.87 & 28.7s &  &  \\ \hline
-Cinderella (C = 2) & 202 & 133.04 & 4.7s & \multirow{2}{*}{1m52s} & \multirow{2}{*}{1m52s} \\ \cline{1-4}
-Cinderella2 (C = 2) & 1873 & 182.19 & 27.2s &  &  \\ \hline
-\end{tabular}}
-\end{table*}
+% \begin{table*}[!t]
+% \centering
+% \caption{Cinderella-Stepmother results}
+% \label{tbl:cindtbl}
+% \resizebox{0.7\textwidth}{!}{%
+% \begin{tabular}{|c|c|c|c|c|c|}
+% \hline
+% \multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
+%  & \begin{tabular}[c]{@{}c@{}}Impl. Size\\ (LoC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Impl. Performance\\ (ms)\end{tabular} & Time & \begin{tabular}[c]{@{}c@{}}Time\\ (Z3)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Time\\ (Barcelogic)\end{tabular} \\ \hline
+% Cind (C = 3) & 204 & 128.09 & 4.5s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
+% Cind2 (C = 3) & 2081 & 160.87 & 28.7s &  &  \\ \hline
+% Cind (C = 2) & 202 & 133.04 & 4.7s & \multirow{2}{*}{1m52s} & \multirow{2}{*}{1m52s} \\ \cline{1-4}
+% Cind2 (C = 2) & 1873 & 182.19 & 27.2s &  &  \\ \hline
+% \end{tabular}}
+% \end{table*}
 % \begin{table*}[!t]
 % \centering
 % \caption{Cinderella-Stepmother results}
