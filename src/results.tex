@@ -1,12 +1,19 @@
-\section{Experimental Results}
+\subsection{Experimental Results}
 \label{sec:results}
 
-In this section we evaluate \jsynvg by synthesizing implementations
-for 124 contracts that originate from a broad variety of contexts.~\footnote{All of the benchmark contracts can be found at
-\url{https://goo.gl/2p4sT9}} Almost half of them, 59, correspond to various industrial projects, such as a Quad-Redundant Flight Control System, a Generic Patient Controlled Analgesia infusion pump, as well as a collection of contracts
+We evaluated \jsynvg by synthesizing implementations
+for 124 contracts%
+\footnote{All of the benchmark contracts can be found at
+\url{https://goo.gl/2p4sT9}}
+originated from a broad variety of contexts:
+\begin{itemize}
+\item 59 contracts correspond to various industrial projects, such as a Quad-Redundant Flight Control System, a Generic Patient Controlled Analgesia infusion pump, as well as a collection of contracts
 for a Microwave model, written by graduate students as part of a software
-engineering class.. The second biggest collection in our suite contains 54 contracts that were initally used for the verification of existing handwritten implementations~\cite{hagen2008scaling}. The remaining eleven models contain variations of the
+engineering class;
+\item 54 contracts were initially used for the verification of existing handwritten implementations~\cite{hagen2008scaling};
+\item 11 models contain variations of the
 Cinderella-Stepmother game, as well as examples that we created.
+\end{itemize}
 All of the synthesized implementations were verified against the original contracts using \jkind.
 
 The goal of this experiment was to determine the performance and generality of the \jsynvg algorithm.  We compared against the existing \jsyn algorithm, and for the Cinderella model, we compared against~\cite{beyene2014constraint} (this was the only synthesis problem in the paper).  We examined the following aspects: 
@@ -43,15 +50,15 @@ Implementation Performance (max - ms) & 485.88 & \textbf{459.95} \\
 
 A listing of the statistics that we tracked while running experiments is
 presented in Table~\ref{tbl:stats}.
-Figure~\ref{fg:performance} shows the time allocated by \jsyn and \jsynvg to solve each problem, with \jsynvg
+Fig.~\ref{fg:performance} shows the time allocated by \jsyn and \jsynvg to solve each problem, with \jsynvg
 outperforming \jsyn for the vast majority of the benchmark suite, often times by a margin greater than
-50\%. Figure~\ref{fg:size} on the other hand, depicts small differences in the
+50\%. Fig.~\ref{fg:size} on the other hand, depicts small differences in the
 overall size between the synthesized implementations. While it would be
 reasonable to conclude that there are no noticable improvements, the big picture is different. The key factor that is not apparent from this figure, is the length of the k-inductive proof. For the majority of the benchmarks in the suite, \jsyn proves their realizability by constructing proofs of length $k=0$, which essentially means that the entire space of states is an inductive invariant. For these cases, both algorithms generate a single Skolem function. In the general case though, the size of \jsyn solutions is directly
 dependent on $k$, since each implementation is composed of $k$ Skolem
 functions ($k-1$ to initialize the system, and one last for the inductive step),
 where the equivalent solution from \jsynvg is always just one.
-Figure~\ref{fg:size} hints towards this intuition, through several spikes
+Fig.~\ref{fg:size} hints towards this intuition, through several spikes
 in \jsyn implementation size. Despite this, we also noticed cases where \jsyn
 implementations are shorter. This provides us with another interesting
 observation regarding the formulation of the problem for $k=0$ proofs. In
@@ -59,8 +66,7 @@ these cases, \jsyn proves the existence of viable states, starting from a set
 of \textit{pre-initial} states, where the contract does not need to hold. This
 has direct implications to the way that the $\forall\exists$-formulas are
 constructed in \jsyn's underlying machinery, where the assumptions are ``baked''
-into the transition relation, affecting thus the creation of Model-Based
-Projections by \aeval.
+into the transition relation, affecting thus the performance of \aeval.
 
 \begin{figure}[!t]
 \centering
@@ -79,7 +85,7 @@ Projections by \aeval.
 \end{figure}
 
  One last statistic that we tracked was the performance of the synthesized C
- implementations, which can be seen in Figure~\ref{fg:implperformance}.
+ implementations, which can be seen in Fig.~\ref{fg:implperformance}.
  \iffalse
   For this purpose, we translated the
  generated witnesses from \jsyn and \jsynvg solutions using
@@ -99,16 +105,18 @@ and subsequent evaluations, whereas currently \jsynvg uses a single function for
 % \aeval using \jsyn and \jsynvg, with the latter versions containing richer
 % expressions, mainly due to the refinement process.
 
-Figure~\ref{fg:results} does not cover the entirety of the
+Fig.~\ref{fg:results} does not cover the entirety of the
 benchmark suite. From the original 124 problems, eleven of them cannot be
-solved by \jsyn's k-inductive approach. Four of these files are variations of
-the cinderella-stepmother game that we described in Section~\ref{sec:example}, using different representations of the game, as well as two different values
-for the bucket capacity (2 and 3). Using the variation in Figure~\ref{fg:cind} as an input to \jsyn, we receive an ``unrealizable'' answer, with the counterexample shown
-in Figure~\ref{fg:cex}. Reading through the feedback provided by \jsyn, it is
+solved by \jsyn's k-inductive approach. 
+\grigory{ideally, a summary of these observations should be pulled all the way towards the intro. Even more, It should probably be the main motivation of the entire work.}
+Four of these files are variations of
+the Cinderella-Stepmother game using different representations of the game, as well as two different values
+for the bucket capacity (2 and 3). Using the variation in Fig.~\ref{fg:cind} as an input to \jsyn, we receive an ``unrealizable'' answer, with the counterexample shown
+in Fig.~\ref{fg:cex}. Reading through the feedback provided by \jsyn, it is
 apparent that the underlying SMT solver is incapable of choosing the correct
 buckets to empty, leading eventually to a state where an overflow occurs for the
 third bucket. As we already discussed though, a winning strategy exists for the
-cinderella, as long as the bucket capacity $c$ is between 1.5 and 3. This
+cinderella, as long as the bucket capacity \texttt{C} is between 1.5 and 3. This
 provides an excellent demonstration regarding the inherent weakness of \jsyn
 in providing sound ``unrealizable'' results. \jsynvg's validity-guided approach,
 on the other hand, was able to prove the realizability for these contracts, as
@@ -180,7 +188,7 @@ Cinderella2 (C = 2) & 1873 & 182.19 & 27.2s &  &  \\ \hline
 % \end{table*}
 
 
-Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity $C$ is equal to 2 and 3. Regarding the synthesized implementations, their size is analogous to the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same levels across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates yields better performance for the case of $C = 3$, but our approach overperforms \textsc{Consynth} when it comes to solving the harder case of $C = 2$. 
+Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity  \texttt{C} is equal to 2 and 3. Regarding the synthesized implementations, their size is analogous to the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same levels across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates yields better performance for the case of $C = 3$, but our approach overperforms \textsc{Consynth} when it comes to solving the harder case of $C = 2$. 
 
 Overall, \jsynvg's validity-guided approach provides significant advantages
 over the k-inductive technique followed in \jsyn, and effectively expands

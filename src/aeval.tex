@@ -16,7 +16,7 @@ where $A(s)$ has only existential quantifiers, and $G(s,s')$ is quantifier-free.
 While deciding the validity, \aeval iteratively enumerates models of
 $A(s) \land \exists s'. G(s, s')$ and groups them into a set of partitions $\{T_i(s)\}$, such that each $T_i(s) \Rightarrow \exists s' . G (s, s')$.
 We say that after $n$ iterations, \aeval establishes a formula $R_n(s) \eqdef \bigvee_{i=1}^n T_i(s)$ which is by definition an under-approximation of $\exists s' . G (s, s')$.
-Figure~\ref{fg:aeval} shows a Venn diagram for an example of the (invalid) formula and $R_2 = T_1 \lor T_2$.
+Fig.~\ref{fg:aeval} shows a Venn diagram for an example of the (invalid) formula and $R_2 = T_1 \lor T_2$.
 Because no model exists in $A(s) \land \neg{R_2(s)}$ then there does not exist a partition $T_3$, and \aeval terminates.
 % \john {Because we are are already using $A$ and $G$ to represent meaningful formulas I suggest that we use different symbols here so it is not confusing. Especially because the symbols have different signatures in these locations.}
 
@@ -49,11 +49,11 @@ Thus, throughout the paper, we assume that all regions of validity are maximal.
 % \end{proof}
 
 \begin{lemma}\label{lem:aeval}
-  Let $R_n(s)$ be the region of validity returned by AE-VAL for $\forall
+  Let $R_n(s)$ be the region of validity returned by \aeval for  formula $\forall
   s.~ A(s) \Rightarrow \exists s'. G(s, s')$. Then
-  \begin{equation*}
-  \forall s.~ A(s) \Rightarrow (R_n(s) \Leftrightarrow \exists s'. G(s, s')).
-  \end{equation*}
+%  \begin{equation*}
+$  \forall s.~ A(s) \Rightarrow (R_n(s) \Leftrightarrow \exists s'. G(s, s'))$.
+%  \end{equation*}
 \end{lemma}
 \begin{proof}
   ($\Rightarrow$) By construction of $R_n(s)$.
