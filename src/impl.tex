@@ -1,8 +1,8 @@
 \section{Implementation and Evaluation}
 \label{sec:impl}
 
-The implementation of the algorithm has been added to a branch of the  \jkind~\cite{jkind} model checker.  \jkind already unofficially supports synthesis,
-\grigory{Unofficially? We have the Tech Report, it is all official ;)}
+The implementation of the algorithm has been added to a branch of the  \jkind~\cite{jkind} model checker.  \jkind officially supports synthesis
+%\grigory{Unofficially? We have the Tech Report, it is all official ;)}
 using a k-inductive approach, named \jsyn~\cite{KatisFGBGW16}. For clarity, we named
 our validity-guided technique \jsynvg. \jkind uses Lustre~\cite{lustrev6} as its specification and implementation language.
 \iffalse
@@ -42,8 +42,8 @@ Skolem functions returned by \aeval get then translated %that witnesses the real
 into an efficient and practical implementation. To compare the quality of implementations against \jsyn, we use
 \smtlibtoc, a tool that has been specifically developed to translate
   Skolem functions to C implementations.
-\grigory{There used to be a rehash of Alg.~\ref{alg:synthesis}; no need to repeat it here.}
-\grigory{Also, you probably need to refer the reader that more info about implementation is in~\cite{KatisFGBGW16}.}
+%\grigory{There used to be a rehash of Alg.~\ref{alg:synthesis}; no need to repeat it here.}
+%\grigory{Also, you probably need to refer the reader that more info about implementation is in~\cite{KatisFGBGW16}.}
 
 %In future work,
 %we intend to further improve on this, and

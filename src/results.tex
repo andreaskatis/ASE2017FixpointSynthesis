@@ -108,7 +108,7 @@ and subsequent evaluations, whereas currently \jsynvg uses a single function for
 Fig.~\ref{fg:results} does not cover the entirety of the
 benchmark suite. From the original 124 problems, eleven of them cannot be
 solved by \jsyn's k-inductive approach. 
-\grigory{ideally, a summary of these observations should be pulled all the way towards the intro. Even more, It should probably be the main motivation of the entire work.}
+%\grigory{ideally, a summary of these observations should be pulled all the way towards the intro. Even more, It should probably be the main motivation of the entire work.}
 Four of these files are variations of
 the Cinderella-Stepmother game using different representations of the game, as well as two different values
 for the bucket capacity (2 and 3). Using the variation in Fig.~\ref{fg:cind} as an input to \jsyn, we receive an ``unrealizable'' answer, with the counterexample shown
@@ -188,7 +188,7 @@ Cinderella2 (C = 2) & 1873 & 182.19 & 27.2s &  &  \\ \hline
 % \end{table*}
 
 
-Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity  \texttt{C} is equal to 2 and 3. Regarding the synthesized implementations, their size is analogous to the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same levels across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates yields better performance for the case of $C = 3$, but our approach overperforms \textsc{Consynth} when it comes to solving the harder case of $C = 2$. 
+Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity  \texttt{C} is equal to 2 and 3. Regarding the synthesized implementations, their size is analogous to the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same levels across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates yields better performance for the case of $C = 3$, but our approach overperforms \textsc{Consynth} when it comes to solving the harder case of $C = 2$. As a final remark, the original paper for \textsc{Consynth} also explores the synthesis of winning strategies for Stepmother using the liveness property that a bucket will eventually overflow. While \jkind does not natively support liveness properties, we were successful at synthesizing an implementation for Stepmother, using a bounded notion of liveness with counters. We leave an evaluation of this category of specifications for future work.
 
 Overall, \jsynvg's validity-guided approach provides significant advantages
 over the k-inductive technique followed in \jsyn, and effectively expands
