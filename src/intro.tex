@@ -11,7 +11,7 @@ Program synthesis is one of the most challenging problems in computer science. T
 After the seminal paper by Pnueli and Rosner~\cite{pnueli1989synthesis} on reactive synthesis, the problem has seen increased popularity 
 \grigory{Actually, the synthesis got popular after the death of Pnueli. Pnueli himself was very skeptical about this idea.}
 \fi
-to the capabilities of modern symbolic solvers, including Satisfiability Modulo Theories (SMT)~\cite{BarFT-SMTLIB} tools, to compute compact and precise regions that describe under which conditions an implementation exists for the given specification.
+to the capabilities of modern symbolic solvers, including Satisfiability Modulo Theories (SMT)~\cite{BarFT-SMTLIB} tools, to compute compact and precise regions that describe under which conditions an implementation exists for the given specification~\cite{reynolds2015counterexample}.
 %\grigory{Anyway, for the interest of space, I do not think you need to mention these ancient papers. Start just with SMT. Everyone is doing so.}
  As a result, the problem has been well-studied for the area of propositional specifications (see Gulwani~\cite{gulwani2010dimensions} for a survey), and approaches have been proposed to tackle challenges involving richer specifications. Template-based techniques focus on synthesizing programs that
 match a certain shape (the template)~\cite{srivastava2013template}, while {\em inductive synthesis} uses the idea of refining the problem space using counterexamples, to converge to a solution~\cite{flener2001inductive}. 

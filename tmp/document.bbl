@@ -21,10 +21,6 @@ Bradley, A.R.: Sat-based model checking without unrolling. In: International
   Workshop on Verification, Model Checking, and Abstract Interpretation. pp.
   70--87. Springer (2011)
 
-\bibitem{church1962logic}
-Church, A.: Logic, arithmetic and automata. In: Proceedings of the
-  international congress of mathematicians. pp. 23--35 (1962)
-
 \bibitem{DBLP:conf/fmcad/CimattiGMT13}
 Cimatti, A., Griggio, A., Mover, S., Tonetta, S.: Parameter synthesis with
   {IC3}. In: {FMCAD}. pp. 165--168. {IEEE} (2013)
@@ -93,6 +89,11 @@ Katis, A., Fedyukovich, G., Gacek, A., Backes, J.D., Gurfinkel, A., Whalen,
   Realizability}. CoRR  abs/1610.05867 (2016),
   \url{http://arxiv.org/abs/1610.05867}
 
+\bibitem{katis2018tacasartifact}
+Katis, A., Fedyukovich, G., Guo, H., Gacek, A., Backes, J., Gurfinkel, A.,
+  Whalen, M.W.: Validity-guided synthesis of reactive systems from
+  assume-guarantee contracts. Figshare  (2018)
+
 \bibitem{katis2016towards}
 Katis, A., Gacek, A., Whalen, M.W.: Towards synthesis from assume-guarantee
   contracts involving infinite theories: a preliminary report. In: Formal
@@ -108,11 +109,6 @@ Kuncak, V., Mayer, M., Piskac, R., Suter, P.: Functional synthesis for linear
 Piterman, N., Pnueli, A., Sa’ar, Y.: Synthesis of reactive (1) designs. In:
   International Workshop on Verification, Model Checking, and Abstract
   Interpretation. pp. 364--380. Springer (2006)
-
-\bibitem{pnueli1989synthesis}
-Pnueli, A., Rosner, R.: On the synthesis of a reactive module. In: Proceedings
-  of the 16th ACM SIGPLAN-SIGACT symposium on Principles of programming
-  languages. pp. 179--190. ACM (1989)
 
 \bibitem{preiner2017counterexample}
 Preiner, M., Niemetz, A., Biere, A.: Counterexample-guided model synthesis. In:

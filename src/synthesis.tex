@@ -279,7 +279,7 @@ terminates or removes at least one state from $F$.
 \end{lemma}
 \begin{proof}
   It suffices to show that at least one state is removed from $F$ on
-  line~\ref{alg:rem}. That is, we want to that $F \cap W \neq \varnothing$ since
+  line~\ref{alg:rem}. That is, we want to show that $F \cap W \neq \varnothing$ since
   this intersection is what is removed from $F$ by line~\ref{alg:rem}. Suppose
   towards contradiction that $F \cap W = \varnothing$. Since $W$ is the
   region of validity for $\phi'$ on line~\ref{alg:ae2}, we know that $F$ lies
@@ -551,7 +551,7 @@ satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
 a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
 which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
 input variables, it might contain constraints over the inputs, which is an
-undesirable side-effect
+undesirable side-effect.
 %\footnote{Due to space restrictions, we are unable to show this in full effect}.
 \iffalse
 but Fig.~\ref{fg:snippet} shows part of the generated
