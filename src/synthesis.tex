@@ -49,7 +49,7 @@
 \end{algorithm*}
 
 
-Alg.~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:formals} and is provided as an input to the algorithm.
+Alg.~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:background} and is provided as an input to the algorithm.
 The algorithm maintains formula $F(s)$ which is initially assigned to $true$ (line~\ref{alg:init}).
 It then attempts to strengthen $F(s)$ until it only contains viable states (recall Eqs.~\ref{eq:viable}
 and~\ref{eq:nonempty}), i.e., a greatest fixpoint is reached.
