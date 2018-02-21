@@ -6,34 +6,33 @@
 \label{alg:synthesis}
 \begin{algorithmic}[1]
 %\Procedure{\jsynvg}{A : assumptions, G : guarantees}
-	\State $F(s) \gets true$\label{alg:init};\Comment{Fixpoint of viable states}
-	\While{true}
+	\State $F(s) \gets \mathit{true}$\label{alg:init};\Comment{Fixpoint of viable states}
+	\While{$\mathit{true}$}
 		\State $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$\label{alg:ae1};
-		\State $\aevalres \gets \aeval(\phi)$;
+		\State $\tuple{\mathit{valid}, \subs, \skolems} \gets \aeval(\phi) \label{alg:val1}$;
 %		\State $\tuple{\skolems, \subs} \gets \aeval(\phi)$;
-		\If{$\isValid(\aevalres)$}
-            \State{$\init \gets SAT(G_{I}(s) \land F(s))$;}
-            \If{$\isSat(\init)$\label{alg:issat}}
+		\If{$\mathit{valid}$\label{alg:val2}}
+            \If{$\exists s . G_{I}(s) \land F(s)$}
 			%\If{$G_{I}(s) \land F(s) \neq false$}
-				\Return $\tuple{\realizable, \aevalres.\skolems, init.model, F}$;
+				\Return $\tuple{\realizable, \skolems, s, F}$\label{alg:issat};
 			\Else{\Comment{Empty set of initial or viable states}}
-		 		\Return $\tuple{\unrealizable}$;
+		 		\Return $\unrealizable$;
 		 	\EndIf
 		\Else{\Comment{Extract region of validity $Q(s,i)$}}
-			\State $Q(s,i) \gets \aevalres.\subs$\label{alg:valreg};
+			\State $Q(s,i) \gets \subs$\label{alg:valreg};
 %			\If{$Q(s,i) = false$}
 %				\Return $\tuple{\unrealizable, \varnothing}$;
 %			\EndIf
 			\State $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists i. A(s,i) \land \lnot
 			Q(s,i))$\label{alg:ae2};
-			\State $\aevalres' \gets \aeval(\phi')$;
+			\State $\tuple{\mathit{valid}', \subs', \skolems'} \gets \aeval(\phi')$;
 %			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
 %			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
 %				\Return $\tuple{\unrealizable, \skolems'}$;
 %			\Else{}\Comment{Extract witnessing cex}
 %			\State $W(s) \gets true$;
 %			\If{$\isInvalid(\aevalres')$}
-				\State $W(s) \gets \aevalres.\subs'$;
+				\State $W(s) \gets \subs'$;
 %			\EndIf
 			\State $F(s) \gets F(s) \land \lnot W(s)$\label{alg:rem};\Comment{Refine set of viable states}	
 			
@@ -50,18 +49,18 @@
 
 
 Alg.~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:background} and is provided as an input to the algorithm.
-The algorithm maintains formula $F(s)$ which is initially assigned to $true$ (line~\ref{alg:init}).
+The algorithm maintains formula $F(s)$ which is initially assigned $\mathit{true}$ (line~\ref{alg:init}).
 It then attempts to strengthen $F(s)$ until it only contains viable states (recall Eqs.~\ref{eq:viable}
 and~\ref{eq:nonempty}), i.e., a greatest fixpoint is reached.
-We therefore construct formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i)
-\Rightarrow \exists s'. G_{T}(s,i,s') \land F(s'))$, and provide it as an input to \aeval (line~\ref{alg:ae1}).
-\aeval is particularly focused on determining the validity of $\phi$. If the formula is valid, then a witness
-\textit{Skolem} is constructed, containing valid assignments to the
-existentially quantified variables of $\phi$. In the context of viability, this
-witness is capable of providing viable states that can be used as a safe
+We first encode Eq.~\ref{eq:viable} in a formula $\phi$ and then provide it as input to \aeval (line~\ref{alg:val1}) which determines its validity (line~\ref{alg:val2}).
+If the formula is valid, then a witness $\skolems$ is non-empty.
+By construction, it contains valid assignments to the existentially quantified variables of $\phi$.
+In the context of viability, this witness is capable of providing viable states that can be used as a safe
 reaction, given an input that satisfies the assumptions.
 
-With a valid formula at hand, it remains to check that the fixpoint intersects with the initial states (line~\ref{alg:issat}).  If the check passes, we have a realizable contract and the algorithm returns the extracted witness and a model for the initial state that can be directly combined and used towards an implementation of the system. Otherwise, the contract is unrealizable since either the are no states that satisfy the
+With the valid formula $\phi$ at hand, it remains to check that the fixpoint intersects with the initial states, i.e., to find a model of formula in Eq.~\ref{eq:nonempty} by a simple satisfiability check.
+If a model exists, it is directly combined with the extracted witness and used towards an implementation of the system, and the algorithm terminates (line~\ref{alg:issat}).
+Otherwise, the contract is unrealizable since either the are no states that satisfy the
 initial state guarantees $G_I$, or the set of viable states $F$ is empty.
 
 
