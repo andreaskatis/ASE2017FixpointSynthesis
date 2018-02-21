@@ -1,4 +1,4 @@
-\section{Running Example: The Cinderella-Stepmother Game}
+\section{Overview: The Cinderella-Stepmother Game}
 \label{sec:example}
 
 We illustrate the flow of the validity guided-synthesis algorithm using a variation of the minimum-backlog
@@ -13,18 +13,12 @@ using five buckets, where each bucket can contain up to two units of water.
 Cinderella has the option to empty two adjacent buckets at each of her turns,
 while the Stepmother distributes one unit of water over all five buckets. In the context of this paper we use this example to show how specification is expressed, as well as how we can synthesize an efficient implementation that describes reactions for Cinderella, such that a bucket overflow is always prevented.
 
-
-
-\section{Background}
-\label{sec:background}
-
 \begin{figure}[!t]
 \centering
 \includegraphics[scale=0.55]{agcontracttilted-crop.pdf}
 \caption{An Assume-Guarantee Contract.}
 \label{fg:agcontract}
 \end{figure}
-
 
 We focus our interest on a mainstream variation for representing system requirements using an \textit{Assume-Guarantee
 Contract}. Requirements in this format contain two main types of constraints.
@@ -40,8 +34,9 @@ are seeking for an efficient synthesis procedure that could provide it.
 On the other hand, consider a variation of the example, where $A = \varnothing$. This is a practical case of an
 \emph{unrealizable} contract, as there is no feasible Cinderella implementation that can correctly react to Stepmother's actions. The most apparent counterexample in this case is that the Stepmother is able to pour random amounts of water, and would be capable to overflow at least one bucket during every one of her turns.
 
-\subsection{Formal representation}
-\label{sec:formals}
+\section{Background}
+\label{sec:background}
+%\label{sec:formals}
 We use two disjoint sets, $state$ and $inputs$, to describe a system.
 A straightforward and intuitive way to represent an \emph{implementation} is by
 defining a \emph{transition system}, composed of an initial state
@@ -52,16 +47,16 @@ Combining the above, we represent an Assume-Guarantee (AG) contract using a set
 of \emph{assumptions}, $A: state \rightarrow inputs \rightarrow bool$,
 and a set of \emph{guarantees} $G$. The latter is further decomposed into two
 distinct subsets $G_I: state \rightarrow bool$ and $G_T: state \rightarrow
-inputs \rightarrow state \rightarrow bool$. $G_I$ defines the set of valid
+inputs \rightarrow state \rightarrow bool$. The $G_I$ defines the set of valid
 initial states, and $G_T$ contains constraints that need to be satisfied in
-every transition between two states. An important note at this point is that we
-do not make any distinction between internal state variables and outputs in the
-formalism. This alone allows us to use state variables to (in some cases)
-simplify the specification of guarantees, since we do not expect a contract
-to be always defined over all variables in the transition system.
+every transition between two states. Importantly, we
+do not make any distinction between the internal state variables and the output variables in the
+formalism. This allows us to use the state variables to (in some cases)
+simplify the specification of guarantees since a contract
+might not be always defined over all variables in the transition system.
 
 Consequently, we can formally define a realizable contract, as one for which any
-preceding state $s$ can take a transition into a new state $s'$ that satisfies
+preceding state $s$ can  transition into a new state $s'$ that satisfies
 the guarantees, assuming valid inputs. For a system to be ever-reactive, these
 new states $s'$ should be further usable as preceeding states in a future
 transition. States like $s$ and $s'$ are called \textit{viable} if
