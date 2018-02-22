@@ -49,7 +49,7 @@
 
 
 Alg.~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:background} and is provided as an input to the algorithm.
-The algorithm maintains formula $F(s)$ which is initially assigned $\mathit{true}$ (line~\ref{alg:init}).
+The algorithm maintains a formula $F(s)$ which is initially assigned $\mathit{true}$ (line~\ref{alg:init}).
 It then attempts to strengthen $F(s)$ until it only contains viable states (recall Eqs.~\ref{eq:viable}
 and~\ref{eq:nonempty}), i.e., a greatest fixpoint is reached.
 We first encode Eq.~\ref{eq:viable} in a formula $\phi$ and then provide it as input to \aeval (line~\ref{alg:val1}) which determines its validity (line~\ref{alg:val2}).
@@ -70,16 +70,17 @@ quantified variables, \aeval provides a \textit{region of validity} $Q(s,i)$
 %an exact subset of $F(s) \land A(s,i)$, namely $Q(s,i)$, which, if plugged in
 % the original left-hand side of $\phi$, makes the resulting formula valid. We will refer to such subsets as \textit{regions of
 %validity}.
-At this point, one might assume that $Q(s,i)$ is sufficient to restrict $F$ towards a solution. This is not the case, however, as $Q(s,i)$ creates a subregion
+At this point, one might assume that $Q(s,i)$ is sufficient to restrict $F$ towards a solution. This is not the case since $Q(s,i)$ creates a subregion
 involving both state and input variables. As such, it may contain constraints
 over the contract's inputs above what are required by $A$, ultimately leading to implementations that only work correctly for a small part of the input domain.
 
 Fortunately, we can again use \aeval's capability of providing regions of validity
-towards removing inputs from $Q$.  Essentially, we want to remove those states from $Q$ if even one input causes them to violate the formula on line~\ref{alg:ae1}.  We denote by $W$ the ``violating region'' of $Q$.  To construct $W$, we ask \aeval to determine
-the validity of the formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
-i. A(s,i) \land \lnot Q(s,i))$ (line~\ref{alg:ae2}). \aeval computes
-a new region of validity and assigns it to $W(s)$. The new region entails
-the existence of unsafe states in $F(s)$ for some input, and this unsafe region is removed from $F(s)$ in line~\ref{alg:rem}.   The loop continues until a greatest fixpoint for $F(s)$ is reached.  %If the system is unrealizable, this fixpoint (which may be the formula `false') does not intersect the set of initial states.
+towards removing inputs from $Q$.  Essentially, we want to remove those states from $Q$ if even one input causes them to violate the formula on line~\ref{alg:ae1}.  We denote by $W$ the ``violating region'' of $Q$.  To construct $W$, \aeval  determines
+the validity of formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
+i. A(s,i) \land \lnot Q(s,i))$ (line~\ref{alg:ae2}) and computes
+a new region of validity. 
+The violating region entails
+the existence of unsafe states in $F(s)$ for some input, and it is removed from $F(s)$ in line~\ref{alg:rem}.   The loop continues until a greatest fixpoint for $F(s)$ is reached.  %If the system is unrealizable, this fixpoint (which may be the formula `false') does not intersect the set of initial states.
 
 %or until $W(s)$ becomes valid, that is, for any assignment of the state variables $s$, we have an input that satisfies the assumptions and violates $Q$.  In this case, every state in $F$ has some failing input and the system is unrealizable, which will lead to a failed check in line~\ref{alg:issat} during the next iteration of the loop.
 
@@ -195,6 +196,7 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Alg.~\ref{alg:syn
 \end{corollary}
 \fi
 
+
 \begin{lemma}
   $\viable \subseteq F$ is an invariant for
   Alg.~\ref{alg:synthesis}.
@@ -211,9 +213,9 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Alg.~\ref{alg:syn
   $\phi'$ on line~\ref{alg:ae2}, we have
   $W(s_0) \land F(s_0) \Rightarrow \exists i. A(s_0, i) \land \neg Q(s_0, i)$
   by Lemma~\ref{lem:aeval}. Given that $W(s_0)$ and $F(s_0)$ hold, let $i_0$
-  be such that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$. Since $Q$ is the
+  be such that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$ hold. Since $Q$ is the
   region of validity for $\phi$ on line~\ref{alg:ae1}, we have
-  $Q(s_0) \land F(s_0) \land A(s_0, i_0) \Leftrightarrow \exists s'. G_T(s, i, s')
+  $Q(s_0, i_0) \land F(s_0) \land A(s_0, i_0) \Leftrightarrow \exists s'. G_T(s, i, s')
   \land F(s')$ by Lemma~\ref{lem:aeval}. Thus, we have
   $\neg \exists s'. G_T(s, i, s') \land F(s')$. We know
   $\viable \subseteq F$ holds prior to line~\ref{alg:rem}, thus

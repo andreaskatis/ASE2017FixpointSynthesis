@@ -1,12 +1,6 @@
 \subsection{Skolem functions and regions of validity}
 \label{sec:aeval}
 
-\begin{figure}[!t]
-\centering
-\includegraphics[scale=0.35]{aeval_invalid}
-\caption{Region of validity computed for an example requiring \aeval to iterate two times.}
-\label{fg:aeval}
-\end{figure}
 
 %\andreas{I believe the section can be a bit longer. I also think that the keyphrase ``region of validity'' needs to stand out more. Finally, a proof for Lemma 1, or at least an outline of it would be greatly appreciated.}
 
@@ -17,22 +11,24 @@ If such an extension is possible, then the input formula is valid, and a relatio
 Otherwise the formula is invalid, and no Skolem function exists.
 We refer the reader to~\cite{KatisFGBGW16} for more details on the Skolem-function generation.
 
-Our approach presented in this paper relies on the fact that during each run, \aeval deals with a set of formulas $\{P_i(x)\}$, such that each $P_i(x) \Rightarrow \exists y \,.\,T (x,y)$.
-Intuitively, each model of each $S(x) \land P_i(x)$ can be extended to a model of $T(x, y)$.
-We say that after $n$ iterations, \aeval establishes a formula $R_n(x) \eqdef \bigvee_{i=1}^n P_i(x)$ which by construction implies $\exists y\,.\,T(x,y)$.
-Fig.~\ref{fg:aeval} shows a Venn diagram for an example of invalid formula where $R_2(x) = T_1(x) \lor T_2(x)$.
-Models of $S(x) \land \neg{R_2(x)}$ cannot be extended to models of $T(x,y)$, thus no formula $T_3(x)$ exists, and \aeval terminates.
+Our approach presented in this paper relies on the fact that during each run, \aeval iteratively creates a set of formulas $\{P_i(x)\}$, such that each $P_i(x)$ has a common model with $S(x)$ and $P_i(x) \Rightarrow \exists y \,.\,T (x,y)$.
+After $n$ iterations, \aeval establishes a formula $R_n(x) \eqdef \bigvee_{i=1}^n P_i(x)$ which by construction implies $\exists y\,.\,T(x,y)$.
+If additionally $S(x)\Rightarrow R_n(x)$, the input formula is valid, and the algorithm terminates.
+%
+Fig.~\ref{fg:aeval} shows a Venn diagram for an example of the opposite scenario: $R_2(x) = T_1(x) \lor T_2(x)$, but the input formula is invalid.
+However, models of each $S(x) \land P_i(x)$ can still be extended to a model of $T(x, y)$.
+%Models of $S(x) \land \neg{R_2(x)}$ cannot be extended to models of $T(x,y)$, thus no formula $T_3(x)$ exists, and \aeval terminates.
 % \john {Because we are are already using $A$ and $G$ to represent meaningful formulas I suggest that we use different symbols here so it is not confusing. Especially because the symbols have different signatures in these locations.}
 
 In general, if after $n$ iterations $S(x) \land T(x,y) \land \neg R_n(x)$ is unsatisfiable,
 then \aeval terminates.
-Note that the formula $\forall x.~ S(x) \land R_n(x) \Rightarrow \exists y .~T(x,y)$ is always valid by construction.
-Thus, a Skolem function can be generated for it.
+Note that the formula $\forall x.~ S(x) \land R_n(x) \Rightarrow \exists y .~T(x,y)$ is valid by construction at any iteration of the algorithm.
+%Thus, a Skolem function can be generated for it.
 %Intuitively, a Skolem function
 %describes how $y$ is computed from $s$ in order to satisfy the
 %previous formula.
 %
-We say that $R_n(x)$ is a \emph{region of validity}, and in this work, we are interested in the \emph{maximal} regions of validity, i.e., the ones produced by disjoining all partitions produced by \aeval before termination and by conjoining it further with $S(x)$.
+We say that $R_n(x)$ is a \emph{region of validity}, and in this work, we are interested in the \emph{maximal} regions of validity, i.e., the ones produced by disjoining all $\{P_i(x)\}$ produced by \aeval before termination and by conjoining it with $S(x)$.
 Throughout the paper, we assume that all regions of validity are maximal.
 % \john{It is a bit strange how we alternate using formulas that have no free variables along with formulas whose free variables are meant to be implicitly existentially quantified. I think we should either stick with a notation or explicitly say that free variables are interpreted to be existentially quantified.}
 
@@ -46,6 +42,13 @@ Throughout the paper, we assume that all regions of validity are maximal.
 % Then $S(x) \land \neg{R_n(x)} \land S(x)$ is satisfiable, and its models are not contained in $R_n(x)$.
 % It contradicts our assumption that \aeval has terminated since otherwise it would proceed for generating $T_{n+1}(x)$ which in turn would enlarge the region of validity.
 % \end{proof}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[scale=0.35]{aeval_invalid}
+\caption{Region of validity computed for an example requiring \aeval to iterate two times.}
+\label{fg:aeval}
+\end{figure}
 
 \begin{lemma}\label{lem:aeval}
   Let $R_n(x)$ be the region of validity returned by \aeval for  formula $\forall

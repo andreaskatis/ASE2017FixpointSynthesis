@@ -26,7 +26,8 @@ The \emph{assumptions} of the contract restrict the possible inputs that the
 environment can provide to the system, while the \emph{guarantees} 
 describe safe reactions of the system to the outside world.
 
-A (conceptually) simple example is shown in Fig.~\ref{fg:agcontract}. The contract describes a possible set of requirements for a specific instance of the Cinderella-Stepmother game that we introduced in Sect.~\ref{sec:example}. Our goal is to synthesize an implementation that describes Cinderella's winning region of the game. Cinderella in this case is the implementation, as shown by the middle box in Fig.~\ref{fg:agcontract}. Cinderella's inputs are five different values $i_k$, $1 \leq k \leq 5$, determined by a random distribution of one unit of water by the Stepmother. During each of her turns Cinderella has to make a choice denoted by the output variable $e$, such that the buckets $b_k$ do not overflow during the next action of her Stepmother. We define the contract using the set of assumptions $A = \{i_k \geq 0, \sum_{k=1}^{5} i_k = 1\}$ and the guarantees $G = \{b_k \leq 2, b_k = ite((e=k \lor e=k+1), 0, (b_k+i_k))\}$. For the particular example, it is possible to construct at least one implementation that satisfies the guarantee constraints, given the input assumptions. The proof of existence of such an implementation is the main concept behind the \emph{realizability} problem, while the automated construction of a witness implementation is the main focus of \emph{program synthesis}.
+A (conceptually) simple example is shown in Fig.~\ref{fg:agcontract}. The contract describes a possible set of requirements for a specific instance of the Cinderella-Stepmother game. % that we introduced in Sect.~\ref{sec:example}.
+Our goal is to synthesize an implementation that describes Cinderella's winning region of the game. Cinderella in this case is the implementation, as shown by the middle box in Fig.~\ref{fg:agcontract}. Cinderella's inputs are five different values $i_k$, $1 \leq k \leq 5$, determined by a random distribution of one unit of water by the Stepmother. During each of her turns Cinderella has to make a choice denoted by the output variable $e$, such that the buckets $b_k$ do not overflow during the next action of her Stepmother. We define the contract using the set of assumptions $A = \{i_k \geq 0, \sum_{k=1}^{5} i_k = 1\}$ and the guarantees $G = \{b_k \leq 2, b_k = ite((e=k \lor e=k+1), 0, (b_k+i_k))\}$. For the particular example, it is possible to construct at least one implementation that satisfies the guarantee constraints, given the input assumptions. The proof of existence of such an implementation is the main concept behind the \emph{realizability} problem, while the automated construction of a witness implementation is the main focus of \emph{program synthesis}.
 
 
 Since the contract in Fig.~\ref{fg:agcontract} is \emph{realizable}, there should exist at least one implementation, and we 
@@ -70,9 +71,9 @@ and only if:
 \end{split}
 \end{align}
 This equation is recursive and we interpret it coinductively, i.e., as a
-greatest fixed-point.
-A necessary condition, finally, is that the set of viable states
-intersects with the set of initial states. As such, to conclude that a contract
+greatest fixpoint.
+A necessary condition, finally, is that the intersection of sets of viable states
+and initial states is non-empty. As such, to conclude that a contract
 is realizable, we require that
 \begin{equation}
 \exists s. G_I(s) \land \viable(s).
