@@ -19,8 +19,8 @@ match a certain shape (the template)~\cite{srivastava2013template}, while {\em i
 A different category is that of \textit{functional synthesis}, in which the goal is to construct functions from pre-defined input/output relations~\cite{kuncak2013functional}.
 
 %\grigory{start this paragraph with the introduction to the \emph{problem} (not the approach) you are solving. Motivate it by saying that there are various industrial projects, and that the handwritten implementations are buggy, and whatever you actually believe in.}
-Our goal is to effectively synthesize programs from safety specifications written in the form of {\em
-Assume-Guarantee} contracts. In prior work, we developed a solution to the synthesis problem which is based on k-induction~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
+Our goal is to effectively synthesize programs from safety specifications written in Lustre~\cite{lustrev6} and structured in the form of {\em
+Assume-Guarantee} contracts, similarly to approaches in Linear Temporal Logic~\cite{ringert2017synthesis}. In prior work, we developed a solution to the synthesis problem which is based on k-induction~\cite{gacek2015towards,katis2016towards,KatisFGBGW16}.
 %\grigory{then, briefly describe it here and mention that it has soundness issues.}
 Despite showing somewhat promising results, the approach suffers from soundness problems with respect to unrealizable results; a contract could be declared as unrealizable, while an actual implementation exists.
 In this work, we propose a novel approach that is a direct improvement over the k-inductive method in two important aspects: performance and generality.  On all models that can be synthesized

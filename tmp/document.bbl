@@ -56,6 +56,13 @@ Fedyukovich, G., Gurfinkel, A., Sharygina, N.: Automated discovery of
   simulation between programs. In: Logic for Programming, Artificial
   Intelligence, and Reasoning. pp. 606--621. Springer (2015)
 
+\bibitem{ringert2017synthesis}
+Firman, E., Maoz, S., Ringert, J.O.: Performance heuristics for gr(1) synthesis
+  and related algorithms. In: Fisman, D., Jacobs, S. (eds.) {\rm Proceedings
+  Sixth Workshop on} Synthesis, {\rm Heidelberg, Germany, 22nd July 2017}.
+  Electronic Proceedings in Theoretical Computer Science, vol. 260, pp. 62--80.
+  Open Publishing Association (2017)
+
 \bibitem{flener2001inductive}
 Flener, P., Partridge, D.: Inductive programming. Automated Software
   Engineering  8(2),  131--137 (2001)
@@ -92,7 +99,8 @@ Katis, A., Fedyukovich, G., Gacek, A., Backes, J.D., Gurfinkel, A., Whalen,
 \bibitem{katis2018tacasartifact}
 Katis, A., Fedyukovich, G., Guo, H., Gacek, A., Backes, J., Gurfinkel, A.,
   Whalen, M.W.: Validity-guided synthesis of reactive systems from
-  assume-guarantee contracts. Figshare  (2018)
+  assume-guarantee contracts. Figshare  (2018),
+  \url{https://doi.org/10.6084/m9.figshare.5904904}
 
 \bibitem{katis2016towards}
 Katis, A., Gacek, A., Whalen, M.W.: Towards synthesis from assume-guarantee
