@@ -215,11 +215,16 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Alg.~\ref{alg:syn
   by Lemma~\ref{lem:aeval}. Given that $W(s_0)$ and $F(s_0)$ hold, let $i_0$
   be such that $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$ hold. Since $Q$ is the
   region of validity for $\phi$ on line~\ref{alg:ae1}, we have
-  $Q(s_0, i_0) \land F(s_0) \land A(s_0, i_0) \Leftrightarrow \exists s'. G_T(s, i, s')
-  \land F(s')$ by Lemma~\ref{lem:aeval}. Thus, we have
-  $\neg \exists s'. G_T(s, i, s') \land F(s')$. We know
+  $F(s_0) \land A(s_0, i_0) \land \exists s'. G_T(s_0, i_0, s') \land F(s') \Rightarrow Q(s_0, i_0)$
+% GF: it used to be this:
+% $Q(s_0, i_0) \land F(s_0) \land A(s_0, i_0) \Leftrightarrow \exists s'. G_T(s_0, i_0, s') \land F(s')$
+  by Lemma~\ref{lem:aeval}.
+  Since $F(s_0)$, $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$ hold, we conclude that
+  $F(s_0) \land \exists s'. G_T(s_0, i_0, s') \land F(s') \Rightarrow \bot$ which
+  gives us $\neg \exists s'. G_T(s_0, i_0, s') \land F(s')$.
+  We know that
   $\viable \subseteq F$ holds prior to line~\ref{alg:rem}, thus
-  $\neg \exists s'. G_T(s, i, s') \land \viable(s')$. But this is a
+  $\neg \exists s'. G_T(s_0, i_0, s') \land \viable(s')$. But this is a
   contradiction since $\viable(s_0)$. Therefore the invariant holds on
   line~\ref{alg:rem}.
 \end{proof}
