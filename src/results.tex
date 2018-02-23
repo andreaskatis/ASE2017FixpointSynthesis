@@ -4,7 +4,7 @@
 We evaluated \jsynvg by synthesizing implementations
 for 124 contracts%
 \footnote{All of the benchmark contracts can be found at
-\url{https://goo.gl/2p4sT9}}
+\url{https://goo.gl/2p4sT9}.}
 originated from a broad variety of contexts:
 \begin{itemize}
 \item 59 contracts correspond to various industrial projects, such as a Quad-Redundant Flight Control System, a Generic Patient Controlled Analgesia infusion pump, as well as a collection of contracts
@@ -98,24 +98,26 @@ into the transition relation, affecting thus the performance of \aeval.
 \caption{Benchmark Statistics}
 \label{tbl:stats}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lll@{}}
-\toprule
- & \jsyn & \jsynvg \\ \midrule
-Problems solved & 113 & \textbf{124} \\
-Performance (avg - seconds) & 5.72 & \textbf{2.78} \\
-Performance (max - seconds) & 352.1 & \textbf{167.55} \\
-Implementation Size (avg - Lines of Code) & 72.88 & \textbf{70.66} \\
-Implementation Size (max - Lines of Code) & 2322 & \textbf{2142} \\
-Implementation Performance (avg - ms) & 57.84 & \textbf{56.32} \\
-Implementation Performance (max - ms) & 485.88 & \textbf{459.95} \\
-\bottomrule
+\begin{tabular}{|l|c|c|}
+%\toprule
+\hline
+ & \jsyn & \jsynvg \\ \hline % \midrule
+Problems solved & 113 & \textbf{124} \\ \hline
+Performance (avg - seconds) & 5.72 & \textbf{2.78} \\ \hline
+Performance (max - seconds) & 352.1 & \textbf{167.55} \\ \hline
+Implementation Size (avg - Lines of Code) & 72.88 & \textbf{70.66} \\ \hline
+Implementation Size (max - Lines of Code) & 2322 & \textbf{2142} \\ \hline
+Implementation Performance (avg - ms) & 57.84 & \textbf{56.32} \\ \hline
+Implementation Performance (max - ms) & 485.88 & \textbf{459.95} \\ \hline
+%\bottomrule
 \end{tabular}
 }
 %\end{table}
 \end{minipage}
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.48\textwidth}
 %\begin{table*}[!t]
 \centering
+\vspace{-.82em}
 \caption{Cinderella-Stepmother results}
 \label{tbl:cindtbl}
 \resizebox{1.1\textwidth}{!}{%

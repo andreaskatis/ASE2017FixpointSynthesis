@@ -50,7 +50,7 @@ language intended for the system's implementation.
 
 The algorithm was implemented as a feature in the \jkind model checker and is based on the general
 concept of extracting a witness that satisfies a $\forall\exists$-formula, using
-the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. While \aeval was mainly used as a query-solving and skolem-extracting tool in our k-inductive approach, in this paper we also take advantage of its capability to generate
+the \aeval Skolemizer~\cite{fedyukovich2015automated,KatisFGBGW16}. While \aeval was mainly used as a tool for solving queries and extracting Skolems in our k-inductive approach, in this paper we also take advantage of its capability to generate
 %do not depend on a k-inductive proof, \grigory{This needs more work. You say that we do not depend on k-induction two times. But you do not say why it is bad.}
 \textit{regions of validity} from invalid formulas to reach a fixpoint of satisfiable assignments to state variables.
 %\grigory{Then, I think the conceptual differences between this work and~\cite{KatisFGBGW16} should be formulated in a separate paragraph and placed \emph{before} you describe inplementation. This is the selling point, and the reviewers should should immediately understand the differences with the prior work.}

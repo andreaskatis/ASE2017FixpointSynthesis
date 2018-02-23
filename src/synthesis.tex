@@ -503,14 +503,13 @@ implement, representing Cinderella's choice at each of her turns.
 
 We make an explicit distinction on which node arguments are the system's inputs, using the \texttt{REALIZABLE} statement towards the end of the contract. The contract's
 assumptions are defined using assertions over the input variables
-\texttt{i1} \ldots \texttt{i5}. We assume that there can be no negative input values, and the
-sum of \texttt{i1} to \texttt{i5} is equal to one unit of water. Using the notation from Section~\ref{sec:background} we have that $A(i_1 \ldots i_5) = (\bigwedge_{k=1}^{5} i_k >= 0.0) \land (\sum_{k=1}^{5} i_{k} = 1.0)$. The specified node
-returns the value of a boolean variable \texttt{guarantee}, which corresponds to
+\texttt{i1}, \ldots, \texttt{i5}. We assume that there can be no negative input values, and the
+sum of \texttt{i1} to \texttt{i5} is equal to one unit of water. Using the notation from Section~\ref{sec:background} we have that $A(i_1, \ldots, i_5) = (\bigwedge_{k=1}^{5} i_k >= 0.0) \land (\sum_{k=1}^{5} i_{k} = 1.0)$. The node \texttt{game} returns the value of a boolean variable \texttt{guarantee}, which corresponds to
 the contract's guarantee, and is explicitly defined to be such using the
 \texttt{PROPERTY} statement. Finally, we define what each bucket's state should be through the entire
 duration of the game, using the local variables \texttt{b1} to \texttt{b5}.
 Initially, each bucket is empty, and with each transition to a new state, the contents depend on
-whether Cinderella chose the specific bucket, or an adjacent one. If so, the value of each \texttt{b}$_k$ at the the next turn becomes equal to the value of the corresponding input variable \texttt{i}$_k$. Formally, for the initial state we have $G_{I}(C, b_1 \ldots b_5) = (\bigwedge_{k=1}^{5} b_k = 0.0) \land (\bigwedge_{k = 1}^{5} b_k <= C)$, while the transitional guarantee is $G_T([C,b_1 \ldots b_5,e], i_1 \ldots i_5, [C',b_{1}' \ldots b_{5}',e']) = (\bigwedge_{k=1}^{5} b_{k}' = ite(e = k \lor e = k_{prev}, i_k, b_k + i_k) \land (\bigwedge_{k=1}^{5} b_{k}' <= C')$, where $k_{prev} = 5$ if $k = 1$, and $k_{prev} = k - 1$ otherwise.
+whether Cinderella chose the specific bucket, or an adjacent one. If so, the value of each \texttt{b}$_k$ at the the next turn becomes equal to the value of the corresponding input variable \texttt{i}$_k$. Formally, for the initial state we have $G_{I}(C, b_1, \ldots, b_5) = (\bigwedge_{k=1}^{5} b_k = 0.0) \land (\bigwedge_{k = 1}^{5} b_k \le C)$, while the transitional guarantee is $G_T([C,b_1, \ldots, b_5, e], i_1, \ldots, i_5, [C',b_{1}', \ldots, b_{5}',e']) = (\bigwedge_{k=1}^{5} b_{k}' = ite(e = k \lor e = k_{prev}, i_k, b_k + i_k) \land (\bigwedge_{k=1}^{5} b_{k}' \le C')$, where $k_{prev} = 5$ if $k = 1$, and $k_{prev} = k - 1$ otherwise.
 
 If the bucket was not covered by Cinderella's choice, then its contents are
 updated by adding Stepmother's distribution to the volume of water that the
