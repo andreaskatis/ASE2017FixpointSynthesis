@@ -25,14 +25,14 @@
 %			\EndIf
 			\State $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists i. A(s,i) \land \lnot
 			Q(s,i))$\label{alg:ae2};
-			\State $\tuple{\mathit{valid}', \subs', \skolems'} \gets \aeval(\phi')$;
+			\State $\tuple{\_, \mathit{invalidRegion}, \_} \gets \aeval(\phi')$;
 %			\State $\tuple{\skolems', \subs'}\gets \aeval(\phi')$;
 %			\If{$(\isValid(\phi'))$}\Comment{If $Q(s,i)$ contains only unsafe states}
 %				\Return $\tuple{\unrealizable, \skolems'}$;
 %			\Else{}\Comment{Extract witnessing cex}
 %			\State $W(s) \gets true$;
 %			\If{$\isInvalid(\aevalres')$}
-				\State $W(s) \gets \subs'$;
+				\State $W(s) \gets \mathit{invalidRegion}$;
 %			\EndIf
 			\State $F(s) \gets F(s) \land \lnot W(s)$\label{alg:rem};\Comment{Refine set of viable states}	
 			
@@ -75,10 +75,10 @@ involving both state and input variables. As such, it may contain constraints
 over the contract's inputs above what are required by $A$, ultimately leading to implementations that only work correctly for a small part of the input domain.
 
 Fortunately, we can again use \aeval's capability of providing regions of validity
-towards removing inputs from $Q$.  Essentially, we want to remove those states from $Q$ if even one input causes them to violate the formula on line~\ref{alg:ae1}.  We denote by $W$ the ``violating region'' of $Q$.  To construct $W$, \aeval  determines
+towards removing inputs from $Q$.  Essentially, we want to remove those states from $Q$ if even one input causes them to violate the formula on line~\ref{alg:ae1}.  We denote by $W$ the {\em violating region} of $Q$.  To construct $W$, \aeval  determines
 the validity of formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
 i. A(s,i) \land \lnot Q(s,i))$ (line~\ref{alg:ae2}) and computes
-a new region of validity. 
+a new region of validity.
 The violating region entails
 the existence of unsafe states in $F(s)$ for some input, and it is removed from $F(s)$ in line~\ref{alg:rem}.   The loop continues until a greatest fixpoint for $F(s)$ is reached.  %If the system is unrealizable, this fixpoint (which may be the formula `false') does not intersect the set of initial states.
 
@@ -286,8 +286,9 @@ terminates or removes at least one state from $F$.
 \begin{proof}
   It suffices to show that at least one state is removed from $F$ on
   line~\ref{alg:rem}. That is, we want to show that $F \cap W \neq \varnothing$ since
-  this intersection is what is removed from $F$ by line~\ref{alg:rem}. \andreas{we might need to make the following explicit in the algorithm} In the case that  $W = \varnothing$, the region of validity is empty, meaning that no viable states exist and thus the algorithm terminates. Suppose
-  towards contradiction that $F \cap W = \varnothing$ and $W \neq \varnothing$. Since $W$ is the
+  this intersection is what is removed from $F$ by line~\ref{alg:rem}. %\andreas{we might need to make the following explicit in the algorithm} In the case that  $W = \varnothing$, the region of validity is empty, meaning that no viable states exist and thus the algorithm terminates.
+  
+  If the query on line~\ref{alg:val1} is valid, then the algorithm terminates.   If not, then there exists a state $s^{*}$ and input $i^{*}$ such that $F(s^{*})$ and $A(s^{*}, i^{*})$ such that there is no state $s'$ where both $G(s^{*}, i^{*}, s')$ and $F(s')$ hold.  Thus, $\lnot Q(s^{*}, i^{*})$, and $s^{*} \in \mathit{invalidRegion}$, so $W \neq \varnothing$.  Next, suppose towards contradiction that $F \cap W = \varnothing$ and $W \neq \varnothing$. Since $W$ is the
   region of validity for $\phi'$ on line~\ref{alg:ae2}, we know that $F$ lies
   completely outside the region of validity and therefore
   $\forall s.~ \neg \exists i. A(s,i) \land \neg Q(s, i)$
@@ -305,7 +306,7 @@ terminates or removes at least one state from $F$.
 For finite models, Alg.~\ref{alg:synthesis} terminates.
 \end{theorem}
 \begin{proof}
-Immediately from Lemma~\ref{lem:progress}.
+Immediately from Lemma~\ref{lem:progress} and the fact that AEval terminates on finite models~\cite{fedyukovich2015automated}.
 \end{proof}
 
 
@@ -529,10 +530,10 @@ guarantees (i.e. she empties buckets in order to prevent overflow in Stepmother'
 ...
 (and ...
  (or (not (<= (+ b2 i2) 2.0)) (<= (+ b2 i2) 2.0) (and (<= (+ b2 i2) 2.0)
-     (not (<= (+ b2 i2) 2.0)) 
-     (or (and (not (>= (+ b1 i1) 2.0)) 
+     (not (<= (+ b2 i2) 2.0))
+     (or (and (not (>= (+ b1 i1) 2.0))
    	          (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2) (* (- 1.0) i2))))
-         (and (not (<= (+ b2 i2) 0.0)) (not (>= (+ b3 i3) 2.0))  (not (>= i4 2.0)) 
+         (and (not (<= (+ b2 i2) 0.0)) (not (>= (+ b3 i3) 2.0))  (not (>= i4 2.0))
               (<= (- 5.0) (+ (* (- 1.0) i5) (* (- 1.0) b2) (* (- 1.0) i2)))))))
  (or (and %init (= i4 0.0)) (not %init))
  (or (and %init (= i5 0.0)) (not %init))
@@ -581,7 +582,7 @@ From this point on, the algorithm reiterates the process following the steps
 explained above. For this particular example, the algorithm terminates after one
 more refinement, at depth 2. At that point, the refined version of
 $\phi$ is valid, and \aeval constructs a witness containing valid reactions to
-environment behavior. 
+environment behavior.
 \iffalse
 Fig.~\ref{fg:witness} provides a snippet of
 that witness, after being translated to a C implementation.
@@ -597,7 +598,7 @@ cases where $1.5 \leq C \leq 3.0$, the problem becomes non-trivial, and their
 work showed how familiarity with the problem can help alleviate this complexity
 through the use of pre-defined templates. Despite this, we were still
 able to synthesize implementations for the Cinderella-Stepmother game for any
-value of $C \geq 2$, using a completely automatic approach\footnote{The region $1.5\leq C < 2$ is a particularly hard problem - no results for this region are presented in Beyene, and our algorithm does not converge given a timeout of seven hours.}. 
+value of $C \geq 2$, using a completely automatic approach\footnote{The region $1.5\leq C < 2$ is a particularly hard problem - no results for this region are presented in Beyene, and our algorithm does not converge given a timeout of seven hours.}.
 \fi
 %This fact alone,
 %provided us with solid foundations regarding the algorithm's effectiveness in

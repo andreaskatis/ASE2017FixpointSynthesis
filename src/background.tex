@@ -23,14 +23,14 @@ while the Stepmother distributes one unit of water over all five buckets. In the
 We focus our interest on a mainstream variation for representing system requirements using an \textit{Assume-Guarantee
 Contract}. Requirements in this format contain two main types of constraints.
 The \emph{assumptions} of the contract restrict the possible inputs that the
-environment can provide to the system, while the \emph{guarantees} 
+environment can provide to the system, while the \emph{guarantees}
 describe safe reactions of the system to the outside world.
 
 A (conceptually) simple example is shown in Fig.~\ref{fg:agcontract}. The contract describes a possible set of requirements for a specific instance of the Cinderella-Stepmother game. % that we introduced in Sect.~\ref{sec:example}.
 Our goal is to synthesize an implementation that describes Cinderella's winning region of the game. Cinderella in this case is the implementation, as shown by the middle box in Fig.~\ref{fg:agcontract}. Cinderella's inputs are five different values $i_k$, $1 \leq k \leq 5$, determined by a random distribution of one unit of water by the Stepmother. During each of her turns Cinderella has to make a choice denoted by the output variable $e$, such that the buckets $b_k$ do not overflow during the next action of her Stepmother. We define the contract using the set of assumptions $A = \{i_k \geq 0, \sum_{k=1}^{5} i_k = 1\}$ and the guarantees $G = \{b_k \leq 2, b_k = ite((e=k \lor e=k+1), 0, (b_k+i_k))\}$. For the particular example, it is possible to construct at least one implementation that satisfies the guarantee constraints, given the input assumptions. The proof of existence of such an implementation is the main concept behind the \emph{realizability} problem, while the automated construction of a witness implementation is the main focus of \emph{program synthesis}.
 
 
-Since the contract in Fig.~\ref{fg:agcontract} is \emph{realizable}, there should exist at least one implementation, and we 
+Since the contract in Fig.~\ref{fg:agcontract} is \emph{realizable}, there should exist at least one implementation, and we
 are seeking for an efficient synthesis procedure that could provide it.
 On the other hand, consider a variation of the example, where $A = \varnothing$. This is a practical case of an
 \emph{unrealizable} contract, as there is no feasible Cinderella implementation that can correctly react to Stepmother's actions. The most apparent counterexample in this case is that the Stepmother is able to pour random amounts of water, and would be capable to overflow at least one bucket during every one of her turns.
@@ -80,7 +80,15 @@ is realizable, we require that
 \label{eq:nonempty}
 \end{equation}
 
+\noindent The synthesis problem is therefore to determine an initial state $s_i$ and function $f(s, i)$ such that $G_I(s_i)$ and $\forall s, i . Viable(s) \implies Viable(f(s, i))$.
+
 The intuition behind our proposed algorithm in this paper relies on the
-discovery of a greatest fixpoint that only contains viable states. In the case where a fixpoint is computed, we proceed by extracting a witnessing collection of reactions that are, by construction, guaranteed to satisfy the specification. To achieve both the fixpoint generation and the witness extraction, we depend on \aeval, a solver for $\forall\exists$-formulas.
+discovery of a fixpoint $F$ that only contains viable states.  A fixpoint can be determined by proving the validity of the following formula:
+\[
+\forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))
+\]
+
+\noindent In the case where a non-empty, greatest fixpoint $F$ is found, we check whether it satisfies $G(i)$ for some initial state.  If so, we proceed by extracting a witnessing initial state and witnessing skolem function $f(s, i)$ to determine $s'$ that is, by construction, guaranteed to satisfy the specification.
+To achieve both the fixpoint generation and the witness extraction, we depend on \aeval, a solver for $\forall\exists$-formulas.
 
 \input{aeval}
