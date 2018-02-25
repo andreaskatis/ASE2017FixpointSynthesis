@@ -20,9 +20,8 @@ while the Stepmother distributes one unit of water over all five buckets. In the
 \label{fg:agcontract}
 \end{figure}
 
-We focus our interest on a mainstream variation for representing system requirements using an \textit{Assume-Guarantee
-Contract}. Requirements in this format contain two main types of constraints.
-The \emph{assumptions} of the contract restrict the possible inputs that the
+We represent the system requirements using an \textit{Assume-Guarantee
+Contract}. The \emph{assumptions} of the contract restrict the possible inputs that the
 environment can provide to the system, while the \emph{guarantees}
 describe safe reactions of the system to the outside world.
 
@@ -33,7 +32,7 @@ Our goal is to synthesize an implementation that describes Cinderella's winning 
 Since the contract in Fig.~\ref{fg:agcontract} is \emph{realizable}, there should exist at least one implementation, and we
 are seeking for an efficient synthesis procedure that could provide it.
 On the other hand, consider a variation of the example, where $A = \varnothing$. This is a practical case of an
-\emph{unrealizable} contract, as there is no feasible Cinderella implementation that can correctly react to Stepmother's actions. The most apparent counterexample in this case is that the Stepmother is able to pour random amounts of water, and would be capable to overflow at least one bucket during every one of her turns.
+\emph{unrealizable} contract, as there is no feasible Cinderella implementation that can correctly react to Stepmother's actions. An example counterexample allows the Stepmother to pour random amounts of water into the buckets, leading to overflow of at least one bucket during each of her turns.
 
 \section{Background}
 \label{sec:background}
@@ -83,12 +82,13 @@ is realizable, we require that
 \noindent The synthesis problem is therefore to determine an initial state $s_i$ and function $f(s, i)$ such that $G_I(s_i)$ and $\forall s, i . Viable(s) \implies Viable(f(s, i))$.
 
 The intuition behind our proposed algorithm in this paper relies on the
-discovery of a fixpoint $F$ that only contains viable states.  A fixpoint can be determined by proving the validity of the following formula:
+discovery of a fixpoint $F$ that only contains viable states.  We can determine whether $F$ is a fixpoint by proving the validity of the following formula:
 \[
 \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))
 \]
 
-\noindent In the case where a non-empty, greatest fixpoint $F$ is found, we check whether it satisfies $G(i)$ for some initial state.  If so, we proceed by extracting a witnessing initial state and witnessing skolem function $f(s, i)$ to determine $s'$ that is, by construction, guaranteed to satisfy the specification.
+\noindent In the case where the greatest fixpoint $F$ is non-empty, we check whether it satisfies $G_{I}$ for some initial state.  If so, we proceed by extracting a witnessing initial state and witnessing skolem function $f(s, i)$ to determine $s'$ that is, by construction, guaranteed to satisfy the specification.
+
 To achieve both the fixpoint generation and the witness extraction, we depend on \aeval, a solver for $\forall\exists$-formulas.
 
 \input{aeval}

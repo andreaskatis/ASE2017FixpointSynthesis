@@ -3,8 +3,8 @@
 
 The implementation of the algorithm has been added to a branch of the  \jkind~\cite{jkind} model checker.  \jkind officially supports synthesis
 %\grigory{Unofficially? We have the Tech Report, it is all official ;)}
-using a k-inductive approach, named \jsyn~\cite{KatisFGBGW16}. For clarity, we named
-our validity-guided technique \jsynvg. \jkind uses Lustre~\cite{lustrev6} as its specification and implementation language.
+using a $k$-inductive approach, named \jsyn~\cite{KatisFGBGW16}. For clarity, we named
+our validity-guided technique \jsynvg (i.e., validity-guided synthesis). \jkind uses Lustre~\cite{lustrev6} as its specification and implementation language.
 \iffalse
 , which functions as an intermediate representation to the Architecture Analysis and Design Language (\textsc{AADL})~\cite{feiler2006architecture}.
 The latter is a high-level specification and analysis language with which
@@ -18,25 +18,25 @@ framework~\cite{NFM2012:CoGaMiWhLaLu}.
 %including our synthesis algorithm is available to download at
 %https://github.com/andrewkatis/jkind-1/tree/synthesis. \aeval needs to be
 %installed separately from https://github.com/grigoryfedyukovich/aeval.}.
-%During the internal process, 
+%During the internal process,
 \jsynvg encodes Lustre specifications in the language of
 linear real and integer arithmetic (LIRA)
-% first order logic 
+% first order logic
 and communicates them to \aeval.
 %f the SMT-LIB language,
 %, with which the $\forall\exists$-formulas, regions of
 %validity, as well as the witnesses are expressed.
 %The underlying solver that is
-%used is the \aeval Skolemizer, 
+%used is the \aeval Skolemizer,
 %which currently supports
-%$\forall\exists$-formulas expressed using 
+%$\forall\exists$-formulas expressed using
 %linear real and integer arithmetic (LIRA).
 %
 %
 %For realizable specifications, and considering Alg.~\ref{alg:synthesis}, we
 %recursively use regions of validity to block out unsafe states from the search
 %space.
-%Eventually, we reach a fixpoint that is sufficient to use in order to extract a 
+%Eventually, we reach a fixpoint that is sufficient to use in order to extract a
 Skolem functions returned by \aeval get then translated %that witnesses the realizability of the specification. Given
 %the generated function, what remains is its translation
 into an efficient and practical implementation. To compare the quality of implementations against \jsyn, we use
@@ -55,4 +55,4 @@ into an efficient and practical implementation. To compare the quality of implem
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "document"
-%%% End:
+%%% End: 

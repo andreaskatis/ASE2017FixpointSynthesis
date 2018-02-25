@@ -16,7 +16,7 @@ Cinderella-Stepmother game, as well as examples that we created.
 \end{itemize}
 All of the synthesized implementations were verified against the original contracts using \jkind.
 
-The goal of this experiment was to determine the performance and generality of the \jsynvg algorithm.  We compared against the existing \jsyn algorithm, and for the Cinderella model, we compared against~\cite{beyene2014constraint} (this was the only synthesis problem in the paper).  We examined the following aspects: 
+The goal of this experiment was to determine the performance and generality of the \jsynvg algorithm.  We compared against the existing \jsyn algorithm, and for the Cinderella model, we compared against~\cite{beyene2014constraint} (this was the only synthesis problem in the paper).  We examined the following aspects:
 \begin{itemize}
     \item Time required to synthesize an implementation
     \item Size of generated implementations (in SLOC)
@@ -24,7 +24,7 @@ The goal of this experiment was to determine the performance and generality of t
     \item Number of contracts that could be synthesized by each approach
 \end{itemize}
 \noindent Since \jkind already supports synthesis through \jsyn, we were able to directly
-compare \jsynvg against \jsyn's k-inductive approach. We
+compare \jsynvg against \jsyn's $k$-inductive approach. We
 ran the experiments using a computer with Intel Core i3-4010U 1.70GHz CPU and
 16GB RAM.
 
@@ -60,7 +60,7 @@ ran the experiments using a computer with Intel Core i3-4010U 1.70GHz CPU and
 % \resizebox{1.1\textwidth}{!}{%
 % \begin{tabular}{|c|c|c|c|c|c|}
 % \hline
-% \multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
+% \multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6}
 %  & \begin{tabular}[c]{@{}c@{}}Impl. Size\\ (LoC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Impl. Performance\\ (ms)\end{tabular} & Time & \begin{tabular}[c]{@{}c@{}}Time\\ (Z3)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Time\\ (Barcelogic)\end{tabular} \\ \hline
 % Cind (C = 3) & 204 & 128.09 & 4.5s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
 % Cind2 (C = 3) & 2081 & 160.87 & 28.7s &  &  \\ \hline
@@ -75,7 +75,7 @@ Fig.~\ref{fg:performance} shows the time allocated by \jsyn and \jsynvg to solve
 outperforming \jsyn for the vast majority of the benchmark suite, often times by a margin greater than
 50\%. Fig.~\ref{fg:size} on the other hand, depicts small differences in the
 overall size between the synthesized implementations. While it would be
-reasonable to conclude that there are no noticable improvements, the big picture is different. The key factor that is not apparent from this figure, is the length of the k-inductive proof. For the majority of the benchmarks in the suite, \jsyn proves their realizability by constructing proofs of length $k=0$, which essentially means that the entire space of states is an inductive invariant. For these cases, both algorithms generate a single Skolem function. In the general case though, the size of \jsyn solutions is directly
+reasonable to conclude that there are no noticable improvements, the big picture is different. The key factor that is not apparent from this figure, is the length of the $k$-inductive proof. For the majority of the benchmarks in the suite, \jsyn proves their realizability by constructing proofs of length $k=0$, which essentially means that the entire space of states is an inductive invariant. For these cases, both algorithms generate a single Skolem function. In the general case though, the size of \jsyn solutions is directly
 dependent on $k$, since each implementation is composed of $k$ Skolem
 functions ($k-1$ to initialize the system, and one last for the inductive step),
 where the equivalent solution from \jsynvg is always just one.
@@ -123,7 +123,7 @@ Implementation Performance (max - ms) & 485.88 & \textbf{459.95} \\ \hline
 \resizebox{1.1\textwidth}{!}{%
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
+\multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6}
  & \begin{tabular}[c]{@{}c@{}}Impl. Size\\ (LoC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Impl. Performance\\ (ms)\end{tabular} & Time & \begin{tabular}[c]{@{}c@{}}Time\\ (Z3)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Time\\ (Barcelogic)\end{tabular} \\ \hline
 Cind (C = 3) & 204 & 128.09 & 4.5s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
 Cind2 (C = 3) & 2081 & 160.87 & 28.7s &  &  \\ \hline
@@ -141,7 +141,7 @@ implementations, which can be seen in Fig.~\ref{fg:implperformance}.
  \smtlibtoc under the same set of options.
  \fi
  According to the figure as well as Table~\ref{tbl:stats}, the differences are minuscule on average.
-\iffalse 
+\iffalse
 while \jsyn implementations are faster, the difference is minuscule on average.
 This small difference may occur due to the fact that \jsyn creates separate skolem functions for the initial evaluation
 (when \%init is true)
@@ -175,7 +175,7 @@ and subsequent evaluations, whereas currently \jsynvg uses a single function for
 
 Fig.~\ref{fg:results} does not cover the entirety of the
 benchmark suite. From the original 124 problems, eleven of them cannot be
-solved by \jsyn's k-inductive approach. 
+solved by \jsyn's $k$-inductive approach.
 %\grigory{ideally, a summary of these observations should be pulled all the way towards the intro. Even more, It should probably be the main motivation of the entire work.}
 Four of these files are variations of
 the Cinderella-Stepmother game using different representations of the game, as well as two different values
@@ -184,10 +184,10 @@ in Fig.~\ref{fg:cex}. Reading through the feedback provided by \jsyn, it is
 apparent that the underlying SMT solver is incapable of choosing the correct
 buckets to empty, leading eventually to a state where an overflow occurs for the
 third bucket. As we already discussed though, a winning strategy exists for the
-cinderella, as long as the bucket capacity \texttt{C} is between 1.5 and 3. This
-provides an excellent demonstration regarding the inherent weakness of \jsyn
-in providing sound ``unrealizable'' results. \jsynvg's validity-guided approach,
-on the other hand, was able to prove the realizability for these contracts, as
+Cinderella game, as long as the bucket capacity \texttt{C} is between 1.5 and 3. This
+provides an excellent demonstration of the inherent weakness of \jsyn
+for determining unrealizability. \jsynvg's validity-guided approach,
+is able to prove the realizability for these contracts, as
 well as synthesize an implementation for each.
 
 \begin{figure}[!t]
@@ -232,7 +232,7 @@ well as synthesize an implementation for each.
 % \resizebox{0.7\textwidth}{!}{%
 % \begin{tabular}{|c|c|c|c|c|c|}
 % \hline
-% \multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6} 
+% \multirow{2}{*}{Game} & \multicolumn{3}{c|}{\jsynvg} & \multicolumn{2}{c|}{\textsc{ConSynth}~\cite{beyene2014constraint}} \\ \cline{2-6}
 %  & \begin{tabular}[c]{@{}c@{}}Impl. Size\\ (LoC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Impl. Performance\\ (ms)\end{tabular} & Time & \begin{tabular}[c]{@{}c@{}}Time\\ (Z3)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Time\\ (Barcelogic)\end{tabular} \\ \hline
 % Cind (C = 3) & 204 & 128.09 & 4.5s & \multirow{2}{*}{3.2s} & \multirow{2}{*}{1.2s} \\ \cline{1-4}
 % Cind2 (C = 3) & 2081 & 160.87 & 28.7s &  &  \\ \hline
@@ -255,10 +255,10 @@ well as synthesize an implementation for each.
 % \end{tabular}
 % \end{table*}
 
-Table~\ref{tbl:cindtbl} shows how \jsynvg performed against the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity  \texttt{C} is equal to 2 and 3. Regarding the synthesized implementations, their size is analogous to the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains at the same levels across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates yields better performance for the case of $C = 3$, but our approach overperforms \textsc{Consynth} when it comes to solving the harder case of $C = 2$. As a final remark, the original paper for \textsc{Consynth} also explores the synthesis of winning strategies for Stepmother using the liveness property that a bucket will eventually overflow. While \jkind does not natively support liveness properties, we were successful at synthesizing an implementation for Stepmother, using a bounded notion of liveness with counters. We leave an evaluation of this category of specifications for future work.
+Table~\ref{tbl:cindtbl} shows how \jsynvg performed on the four contracts describing the Cinderella-Stepmother game. We used two different interpretations for the game, and exercised both for the cases where the bucket capacity  \texttt{C} is equal to 2 and 3. Regarding the synthesized implementations, their size is analogous to the complexity of the program (Cinderella2 contains more local variables and a helper function to empty buckets). Despite this, the implementation performance remains the same across all implementations. Finally for reference, the table contains the results from the template-based approach followed in \textsc{Consynth}~\cite{beyene2014constraint}. From the results, it is apparent that providing templates yields better performance for the case of $C = 3$, but our approach overperforms \textsc{Consynth} when it comes to solving the harder case of $C = 2$. As a final remark, the original paper for \textsc{Consynth} also explores the synthesis of winning strategies for Stepmother using the liveness property that a bucket will eventually overflow. While \jkind does not natively support liveness properties, we successfully synthesized an implementation for Stepmother using a bounded notion of liveness with counters. We leave an evaluation of this category of specifications for future work.
 
 Overall, \jsynvg's validity-guided approach provides significant advantages
-over the k-inductive technique followed in \jsyn, and effectively expands
+over the $k$-inductive technique followed in \jsyn, and effectively expands
 \jkind's solving capabilities regarding specification realizability. On top of that, it provides an efficient ``hands-off'' approach that is capable of solving complex games.
 The most significant contribution, however, is the applicability of this approach, as it is not tied to a specific environment since it can be extended to support more
-theories, as well as categories of specification.
+theories, as well as categories of specification. 

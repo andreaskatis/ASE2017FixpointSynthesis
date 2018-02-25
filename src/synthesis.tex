@@ -48,7 +48,7 @@
 \end{algorithm*}
 
 
-Alg.~\ref{alg:synthesis}, named \jsynvg, shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:background} and is provided as an input to the algorithm.
+Alg.~\ref{alg:synthesis}, named \jsynvg (for {\em validity guided}), shows the validity-guided technique that we use towards the automatic synthesis of implementations. The specification is written using the Assume-Guarantee convention that we described in Section~\ref{sec:background} and is provided as an input to the algorithm.
 The algorithm maintains a formula $F(s)$ which is initially assigned $\mathit{true}$ (line~\ref{alg:init}).
 It then attempts to strengthen $F(s)$ until it only contains viable states (recall Eqs.~\ref{eq:viable}
 and~\ref{eq:nonempty}), i.e., a greatest fixpoint is reached.
@@ -58,7 +58,7 @@ By construction, it contains valid assignments to the existentially quantified v
 In the context of viability, this witness is capable of providing viable states that can be used as a safe
 reaction, given an input that satisfies the assumptions.
 
-With the valid formula $\phi$ at hand, it remains to check that the fixpoint intersects with the initial states, i.e., to find a model of formula in Eq.~\ref{eq:nonempty} by a simple satisfiability check.
+With the valid formula $\phi$ in hand, it remains to check that the fixpoint intersects with the initial states, i.e., to find a model of formula in Eq.~\ref{eq:nonempty} by a simple satisfiability check.
 If a model exists, it is directly combined with the extracted witness and used towards an implementation of the system, and the algorithm terminates (line~\ref{alg:issat}).
 Otherwise, the contract is unrealizable since either the are no states that satisfy the
 initial state guarantees $G_I$, or the set of viable states $F$ is empty.
@@ -306,7 +306,7 @@ terminates or removes at least one state from $F$.
 For finite models, Alg.~\ref{alg:synthesis} terminates.
 \end{theorem}
 \begin{proof}
-Immediately from Lemma~\ref{lem:progress} and the fact that AEval terminates on finite models~\cite{fedyukovich2015automated}.
+Immediately from Lemma~\ref{lem:progress} and the fact that \aeval terminates on finite models~\cite{fedyukovich2015automated}.
 \end{proof}
 
 
@@ -452,7 +452,7 @@ Dually to Theorem~\ref{thm:sndreal} we show that $\forall s. \lnot \viable(s) \R
 Assume a quantifier elimination process that provides exact regions of validity. The process described in Alg.~\ref{alg:synthesis} is sound.
 \end{corollary}
 
-Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases, overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations and the algorithm's performance decreases, since problems might not be solvable as fast as with the use of exact regions. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might cover safe states in their constraints. This makes the algorithm follow a more pessimistic approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be manifested in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on k-induction and is prone to incorrect ``unrealizable'' results. In the context of this paper, and considering Lemma~\ref{lem:subset}, \aeval is able to provide exact regions of validity.
+Notice how the Theorems on the soundness of the results provided by the validity-guided approach assume a quantifier elimination process that computes exact regions of validity. This is a crucial requirement, as it determines the overall effectiveness of the approach. The algorithm is still applicable to cases where the assumption is not met, however its effectiveness on providing sound results is directly affected. Not considering the case of exact regions, we have two other cases, overapproximations and underapproximations. In the former case, the regions of unsafe states (i.e. the negation of a region of validity) would be underapproximations and the algorithm's performance decreases, since problems might not be solvable as fast as with the use of exact regions. On the other hand, if the regions of validity are underapproximations, their negations are overapproximations, and as such, the blocked regions might cover safe states in their constraints. This makes the algorithm follow a more pessimistic approach, where it overconstrains the problem to find a solution. This might lead to cases where an otherwise realizable contract might be declared as unrealizable by the process. We show how the latter can be manifested in practice in Section~\ref{sec:results}, where we compare our approach to a synthesis algorithm that is based on $k$-induction and is prone to incorrect ``unrealizable'' results. In the context of this paper, and considering Lemma~\ref{lem:subset}, \aeval is able to provide exact regions of validity.
 \fi
 
 
@@ -514,10 +514,7 @@ whether Cinderella chose the specific bucket, or an adjacent one. If so, the val
 
 If the bucket was not covered by Cinderella's choice, then its contents are
 updated by adding Stepmother's distribution to the volume of water that the
-bucket already had. The distinction between the initial state of each bucket,
-and every other state is expressed using Lustre's arrow (\texttt{->})
-operator, while variable values in previous states can be accessed using the
-\texttt{pre} operation.
+bucket already had. The arrow (\texttt{->}) operator distinguishes the initial state (on the left) from subsequent states (on the right), and variable values in the previous state can be accessed using the \texttt{pre} operator.
 The specification is fairly simple, as the objective is clear. The contract
 should only be realizable if, assuming valid inputs given by the Stepmother
 (i.e. positive values to input variables that add up to one water unit),
@@ -550,10 +547,9 @@ example}
 \fi
 We initiate our call to the procedure defined in Alg.~\ref{alg:synthesis},
 by providing the contract in Fig.~\ref{fg:cind} as input. The algorithm
-then enters an infinite loop, where it attempts to construct a fixpoint of
-viable states that can use the transition relation to new, viable states,
-while complying to the specification. Initially $F(s) = true$, and we ask \aeval for the validity of the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
-satisfies the formula. As such $\phi$ is not valid, and \aeval provides us with
+then enters a loop, where it attempts to construct a fixpoint of
+viable states that can use the transition relation to new viable states that comply with the specification. Initially $F(s) = true$, and we ask \aeval for the validity of the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
+satisfies the formula. If $\phi$ is not valid, then \aeval provides us with
 a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
 which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
 input variables, it might contain constraints over the inputs, which is an
@@ -578,7 +574,7 @@ $F(s)$ is unsafe, under a specific input that satisfies the contract
 assumptions (since $\lnot Q(s,i)$ holds in this case), and the specification is unrealizable. Since this is not the case,
 however, \aeval computes a region of validity $W(s)$ that describes states that are unsafe under certain valid inputs. As a consequence, a refinement process comes at the next step. in which we derive $F(s) = F(s) \land \lnot W(s)$, thus blocking the unsafe region $W(s)$.
 
-From this point on, the algorithm reiterates the process following the steps
+From this point on, the algorithm continues following the steps
 explained above. For this particular example, the algorithm terminates after one
 more refinement, at depth 2. At that point, the refined version of
 $\phi$ is valid, and \aeval constructs a witness containing valid reactions to
