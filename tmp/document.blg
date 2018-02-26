@@ -1,6 +1,7 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: document.aux
 The style file: splncs03.bst
 Database file #1: document.bib
-Warning--can't use both volume and number fields in beyene2014constraint
-Warning--can't use both volume and number fields in dillig2013inductive
-(There were 2 warnings)
+A bad cross reference---entry "DBLP:journals/corr/Jacobs016"
+refers to entry "DBLP:journals/corr/PiskacD16", which doesn't exist
+Warning--I didn't find a database entry for "DBLP:journals/corr/PiskacD16"
+(There was 1 error message)

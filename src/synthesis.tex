@@ -198,7 +198,7 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Alg.~\ref{alg:syn
 
 
 \begin{lemma}
-  $\viable \subseteq F$ is an invariant for
+  $\viable \implies F$ is an invariant for
   Alg.~\ref{alg:synthesis}.
 \label{lem:alg1-viable}
 \end{lemma}
@@ -206,7 +206,7 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Alg.~\ref{alg:syn
 \begin{proof}
   It suffices to show this invariant holds each time $F$ is assigned.
   On line~\ref{alg:init}, this is trivial. For line~\ref{alg:rem}, we can assume that
-  $\viable \subseteq F$ holds prior to this line. Suppose towards
+  $\viable \implies F$ holds prior to this line. Suppose towards
   contradiction that the assignment on line~\ref{alg:rem} violates the invariant.
   Then there exists $s_0$ such that $F(s_0)$, $W(s_0)$, and
   $\viable(s_0)$ all hold. Since $W$ is the region of validity for
@@ -223,7 +223,7 @@ $s \notin F \implies \lnot \viable(s)$ is a loop invariant for Alg.~\ref{alg:syn
   $F(s_0) \land \exists s'. G_T(s_0, i_0, s') \land F(s') \Rightarrow \bot$ which
   gives us $\neg \exists s'. G_T(s_0, i_0, s') \land F(s')$.
   We know that
-  $\viable \subseteq F$ holds prior to line~\ref{alg:rem}, thus
+  $\viable \implies F$ holds prior to line~\ref{alg:rem}, thus
   $\neg \exists s'. G_T(s_0, i_0, s') \land \viable(s')$. But this is a
   contradiction since $\viable(s_0)$. Therefore the invariant holds on
   line~\ref{alg:rem}.
@@ -268,9 +268,9 @@ Let the function $f$ be defined over state predicates as
   State predicates are equivalent to subsets of the state space and
   form a lattice in the natural way. Moreover, $f$ is monotone on this
   lattice. From Eq.~\ref{eq:F-rewritten} we have
-  $F \subseteq f(F)$. Thus $F$ is a post-fixed point of $f$. In
+  $F \implies f(F)$. Thus $F$ is a post-fixed point of $f$. In
   Eq.~\ref{eq:viable}, $\viable$ is defined as the greatest
-  fixed-point of $f$. Thus $f \subseteq \viable$ by the Knaster-Tarski
+  fixed-point of $f$. Thus $f \implies \viable$ by the Knaster-Tarski
   theorem. Combining this with Lemma~\ref{lem:alg1-viable}, we have
   $F = \viable$. Therefore the check on line~\ref{alg:issat} is equivalent to the
   check in Eq.~\ref{eq:nonempty} for realizability.

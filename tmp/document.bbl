@@ -8,27 +8,25 @@ Barrett, C., Fontaine, P., Tinelli, C.: {The Satisfiability Modulo Theories
 
 \bibitem{beyene2014constraint}
 Beyene, T., Chaudhuri, S., Popeea, C., Rybalchenko, A.: A constraint-based
-  approach to solving games on infinite graphs. In: ACM SIGPLAN Notices.
-  vol.~49, pp. 221--233. ACM (2014)
+  approach to solving games on infinite graphs. In: POPL. pp. 221--233. {ACM}
+  (2014)
 
 \bibitem{bodlaender2012cinderella}
 Bodlaender, M.H.L., Hurkens, C.A., Kusters, V.J., Staals, F., Woeginger, G.J.,
-  Zantema, H.: Cinderella versus the wicked stepmother. In: IFIP International
-  Conference on Theoretical Computer Science. pp. 57--71. Springer (2012)
+  Zantema, H.: Cinderella versus the wicked stepmother. In: {IFIP} {TCS}. LNCS,
+  vol. 7604, pp. 57--71. Springer (2012)
 
 \bibitem{bradley2011sat}
-Bradley, A.R.: Sat-based model checking without unrolling. In: International
-  Workshop on Verification, Model Checking, and Abstract Interpretation. pp.
-  70--87. Springer (2011)
+Bradley, A.R.: {SAT-Based Model Checking without Unrolling}. In: VMCAI. LNCS,
+  vol. 6538, pp. 70--87. Springer (2011)
 
 \bibitem{DBLP:conf/fmcad/CimattiGMT13}
 Cimatti, A., Griggio, A., Mover, S., Tonetta, S.: Parameter synthesis with
   {IC3}. In: {FMCAD}. pp. 165--168. {IEEE} (2013)
 
 \bibitem{cimatti2015hycomp}
-Cimatti, A., Griggio, A., Mover, S., Tonetta, S.: Hycomp: An smt-based model
-  checker for hybrid systems. In: International Conference on Tools and
-  Algorithms for the Construction and Analysis of Systems. pp. 52--67. Springer
+Cimatti, A., Griggio, A., Mover, S., Tonetta, S.: {HyComp: An SMT-based model
+  checker for hybrid systems}. In: TACAS. LNCS, vol. 9035, pp. 52--67. Springer
   (2015)
 
 \bibitem{claessen2012liveness}
@@ -38,53 +36,47 @@ Claessen, K., S{\"o}rensson, N.: A liveness checking algorithm that counts. In:
 
 \bibitem{dillig2013inductive}
 Dillig, I., Dillig, T., Li, B., McMillan, K.: Inductive invariant generation
-  via abductive inference. In: Acm Sigplan Notices. vol.~48, pp. 443--456. ACM
-  (2013)
-
-\bibitem{dillig2014optimal}
-Dillig, T., Dillig, I., Chaudhuri, S.: Optimal guard synthesis for memory
-  safety. In: International Conference on Computer Aided Verification. pp.
-  491--507. Springer (2014)
+  via abductive inference. In: OOPSLA. pp. 443--456. ACM (2013)
 
 \bibitem{een2011efficient}
-Een, N., Mishchenko, A., Brayton, R.: Efficient implementation of property
-  directed reachability. In: Formal Methods in Computer-Aided Design (FMCAD),
-  2011. pp. 125--134. IEEE (2011)
+Een, N., Mishchenko, A., Brayton, R.: {Efficient Implementation of Property
+  Directed Reachability}. In: FMCAD. pp. 125--134. IEEE (2011)
 
 \bibitem{fedyukovich2015automated}
-Fedyukovich, G., Gurfinkel, A., Sharygina, N.: Automated discovery of
-  simulation between programs. In: Logic for Programming, Artificial
-  Intelligence, and Reasoning. pp. 606--621. Springer (2015)
+Fedyukovich, G., Gurfinkel, A., Sharygina, N.: {Automated Discovery of
+  Simulation Between Programs}. In: LPAR. LNCS, vol. 9450, pp. 606--621.
+  Springer (2015)
 
 \bibitem{ringert2017synthesis}
-Firman, E., Maoz, S., Ringert, J.O.: Performance heuristics for gr(1) synthesis
-  and related algorithms. In: Fisman, D., Jacobs, S. (eds.) {\rm Proceedings
-  Sixth Workshop on} Synthesis, {\rm Heidelberg, Germany, 22nd July 2017}.
-  Electronic Proceedings in Theoretical Computer Science, vol. 260, pp. 62--80.
+Firman, E., Maoz, S., Ringert, J.O.: {Performance Heuristics for GR(1)
+  Synthesis and Related Algorithms}. In: SYNT@CAV. EPTCS, vol. 260, pp. 62--80.
   Open Publishing Association (2017)
 
 \bibitem{flener2001inductive}
-Flener, P., Partridge, D.: Inductive programming. Automated Software
-  Engineering  8(2),  131--137 (2001)
+Flener, P., Partridge, D.: Inductive programming. Autom. Softw. Eng.  8(2),
+  131--137 (2001)
 
 \bibitem{jkind}
 Gacek, A.: {JK}ind -- an infinite-state model checker for safety properties in
   {Lustre}. \url{http://loonwerks.com/tools/jkind.html} (2016)
 
 \bibitem{gacek2015towards}
-Gacek, A., Katis, A., Whalen, M.W., Backes, J., Cofer, D.: Towards
-  realizability checking of contracts using theories. In: NASA Formal Methods
-  Symposium. pp. 173--187. Springer (2015)
+Gacek, A., Katis, A., Whalen, M.W., Backes, J., Cofer, D.: {Towards
+  Realizability Checking of Contracts Using Theories}. In: NFM. LNCS, vol.
+  9058, pp. 173--187. Springer (2015)
 
 \bibitem{gulwani2010dimensions}
-Gulwani, S.: Dimensions in program synthesis. In: Proceedings of the 12th
-  international ACM SIGPLAN symposium on Principles and practice of declarative
-  programming. pp. 13--24. ACM (2010)
+Gulwani, S.: Dimensions in program synthesis. In: PPDP. pp. 13--24. ACM (2010)
 
 \bibitem{hagen2008scaling}
-Hagen, G., Tinelli, C.: Scaling up the formal verification of lustre programs
-  with smt-based techniques. In: Formal Methods in Computer-Aided Design, 2008.
-  FMCAD'08. pp. 1--9. IEEE (2008)
+Hagen, G., Tinelli, C.: {Scaling up the formal verification of Lustre programs
+  with SMT-based techniques}. In: FMCAD. pp. 1--9. IEEE (2008)
+
+\bibitem{DBLP:journals/corr/Jacobs016}
+Jacobs, S., Klein, F., Schirmer, S.: A high-level {LTL} synthesis format:
+  {TLSF} v1.1. In: Proceedings Fifth Workshop on Synthesis, SYNT@CAV 2016,
+  Toronto, Canada, July 17-18, 2016. pp. 112--132 (2016),
+  \url{https://doi.org/10.4204/EPTCS.229.10}
 
 \bibitem{lustrev6}
 Jahier, E., Raymond, P., Halbwachs, N.: {The Lustre V6 Reference Manual},
@@ -104,30 +96,25 @@ Katis, A., Fedyukovich, G., Guo, H., Gacek, A., Backes, J., Gurfinkel, A.,
 
 \bibitem{katis2016towards}
 Katis, A., Gacek, A., Whalen, M.W.: Towards synthesis from assume-guarantee
-  contracts involving infinite theories: a preliminary report. In: Formal
-  Methods in Software Engineering (FormaliSE), 2016 IEEE/ACM 4th FME Workshop
-  on. pp. 36--41. IEEE (2016)
+  contracts involving infinite theories: a preliminary report. In: FormaliSE.
+  pp. 36--41. IEEE (2016)
 
 \bibitem{kuncak2013functional}
 Kuncak, V., Mayer, M., Piskac, R., Suter, P.: Functional synthesis for linear
-  arithmetic and sets. International Journal on Software Tools for Technology
-  Transfer  15(5-6),  455--474 (2013)
+  arithmetic and sets. {STTT}  15(5-6),  455--474 (2013)
 
 \bibitem{piterman2006synthesis}
-Piterman, N., Pnueli, A., Sa’ar, Y.: Synthesis of reactive (1) designs. In:
-  International Workshop on Verification, Model Checking, and Abstract
-  Interpretation. pp. 364--380. Springer (2006)
+Piterman, N., Pnueli, A., Sa’ar, Y.: {Synthesis of Reactive(1) Designs}. In:
+  VMCAI. LNCS, vol. 3855, pp. 364--380. Springer (2006)
 
 \bibitem{preiner2017counterexample}
 Preiner, M., Niemetz, A., Biere, A.: Counterexample-guided model synthesis. In:
-  International Conference on Tools and Algorithms for the Construction and
-  Analysis of Systems. pp. 264--280. Springer (2017)
+  TACAS. pp. 264--280. Springer (2017)
 
 \bibitem{reynolds2015counterexample}
 Reynolds, A., Deters, M., Kuncak, V., Tinelli, C., Barrett, C.:
-  Counterexample-guided quantifier instantiation for synthesis in smt. In:
-  International Conference on Computer Aided Verification. pp. 198--216.
-  Springer (2015)
+  Counterexample-guided quantifier instantiation for synthesis in {SMT}. In:
+  CAV, Part {II}. LNCS, vol. 9207, pp. 198--216. Springer (2015)
 
 \bibitem{ryzhyk2016developing}
 Ryzhyk, L., Walker, A.: Developing a practical reactive synthesis tool:
@@ -139,7 +126,6 @@ Ryzhyk, L., Walker, A., Keys, J., Legg, A., Raghunath, A., Stumm, M., Vij, M.:
 
 \bibitem{srivastava2013template}
 Srivastava, S., Gulwani, S., Foster, J.S.: Template-based program verification
-  and program synthesis. International Journal on Software Tools for Technology
-  Transfer  15(5-6),  497--518 (2013)
+  and program synthesis. STTT  15(5-6),  497--518 (2013)
 
 \end{thebibliography}
