@@ -548,10 +548,12 @@ example}
 We initiate our call to the procedure defined in Alg.~\ref{alg:synthesis},
 by providing the contract in Fig.~\ref{fg:cind} as input. The algorithm
 then enters a loop, where it attempts to construct a fixpoint of
-viable states that can use the transition relation to new viable states that comply with the specification. Initially $F(s) = true$, and we ask \aeval for the validity of the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
-satisfies the formula. If $\phi$ is not valid, then \aeval provides us with
+viable states that can use the transition relation to new viable states that comply with the specification.
+
+ Initially $F(s) = true$, and we ask \aeval for the validity of the formula $\phi \gets \forall s,i. \ (F(s) \land A(s,i) \Rightarrow \exists s'.G_{T}(s,i,s') \land F(s'))$. Unfortunately, not every state in $F(s)$
+satisfies the formula. A representative counterexample returned by \aeval in this case is the set of assignments $\textit{cex} = \{\textit{pre}(b_{4}) = 3025, i_{4} = 0.2, b_{4} = 3025.2\}$, where the already overflown bucket $b_4$ receives additional water during the transition to the next state, violating the contract guarantees. Since $\phi$ is not valid, \aeval provides us with
 a region of validity $Q(s,i)$, which is a subset of $F(s) \land A(s,i)$ for
-which the formula $\phi$ is valid. Since $Q(s,i)$ is defined over both state and
+which the formula $\phi$ is valid, blocking thus the inclusion of violating states such as the one described by $cex$. Since $Q(s,i)$ is defined over both state and
 input variables, it might contain constraints over the inputs, which is an
 undesirable side-effect.
 %\footnote{Due to space restrictions, we are unable to show this in full effect}.
@@ -563,16 +565,15 @@ machinery as a flag to indicate whether the current state is initial or not
 (true and false, respectively). While the actual code is hundreds of lines long, looking at the specific snippet shows us how the valid subset may contain constraints over the inputs, that violate the assumptions. The conjunction in Fig.~\ref{fg:snippet} contains the constraints $(<= i4 \ 2.0)$ and $(<= i5 \ 2.0)$. These conjuncts define a region where the contract assumptions are violated, since it is possible to assign values to $i4$ and $i5$ such that $i4 > 1.0$ and $i5 > 1.0$ respectively. This shows that $Q(s,i)$ is not necessarily a region that satisfies the assumptions in a strict manner, and it is imperative to extract a new region, that only provides constraints over the state variables.
 \fi
 
-
 Considering the existence of undesirable constraints in $Q(s,i)$, the next step
 is to extract a region of validity that is only described using state variables.
 As such, we construct the formula $\phi' \gets \forall s. \ (F(s) \Rightarrow \exists
 i. A(s,i) \land \lnot Q(s,i))$, and ask \aeval regarding its validity. According
 to \aeval, $\phi'$ is not valid, an indication that may eventually lead us to a
-proof of the contract's realizability. If $\phi'$ was valid, then every state in
+proof of the contract's realizability. As a counterexample \aeval returns the set of assignments $\textit{cex'} = \{b_1 = b_2 = b_3 = 16/11, b_4 = 17/11, b5 = 12/11\}$, which indicates that there are still non-violating states that may lead to a fixpoint. For the sake of completeness, if $\phi'$ was valid, then every state in
 $F(s)$ is unsafe, under a specific input that satisfies the contract
-assumptions (since $\lnot Q(s,i)$ holds in this case), and the specification is unrealizable. Since this is not the case,
-however, \aeval computes a region of validity $W(s)$ that describes states that are unsafe under certain valid inputs. As a consequence, a refinement process comes at the next step. in which we derive $F(s) = F(s) \land \lnot W(s)$, thus blocking the unsafe region $W(s)$.
+assumptions (since $\lnot Q(s,i)$ holds in this case), and the specification is unrealizable. This is not the case,
+however, and \aeval computes a region of validity $W(s)$ that describes states that are unsafe under certain valid inputs. As a consequence, a refinement process comes at the next step. in which we derive $F(s) = F(s) \land \lnot W(s)$, thus blocking the unsafe region $W(s)$.
 
 From this point on, the algorithm continues following the steps
 explained above. For this particular example, the algorithm terminates after one
