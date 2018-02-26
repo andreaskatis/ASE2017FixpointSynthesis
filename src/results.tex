@@ -5,7 +5,7 @@ We evaluated \jsynvg by synthesizing implementations
 for 124 contracts%
 \footnote{All of the benchmark contracts can be found at
 \url{https://goo.gl/2p4sT9}.}
-originated from a broad variety of contexts. Since we have been unable to find past work that contained benchmarks directly relevant to our approach, we propose a comprehensive collection of contracts that can be used by the research community for future advancements in reactive system synthesis for contracts that rely on infinite theories. Our benchmark collection is composed of the following three categories:
+originated from a broad variety of contexts:
 \begin{itemize}
 \item 59 contracts correspond to various industrial projects, such as a Quad-Redundant Flight Control System, a Generic Patient Controlled Analgesia infusion pump, as well as a collection of contracts
 for a Microwave model, written by graduate students as part of a software
@@ -134,7 +134,7 @@ Cind2 (C = 2) & 1873 & 182.19 & 27.2s &  &  \\ \hline
 \end{minipage}
 \end{table}
 One last statistic that we tracked was the performance of the synthesized C
-implementations in terms of execution time, which can be seen in Fig.~\ref{fg:implperformance}. The performance was computed as the mean of 1000000 iterations of executing each implementation using rando input values.
+implementations, which can be seen in Fig.~\ref{fg:implperformance}.
  \iffalse
   For this purpose, we translated the
  generated witnesses from \jsyn and \jsynvg solutions using
@@ -186,7 +186,7 @@ buckets to empty, leading eventually to a state where an overflow occurs for the
 third bucket. As we already discussed though, a winning strategy exists for the
 Cinderella game, as long as the bucket capacity \texttt{C} is between 1.5 and 3. This
 provides an excellent demonstration of the inherent weakness of \jsyn
-for determining unrealizability. \jsynvg's validity-guided approach,
+for determining unrealizability. \jsynvg's validity-guided approach
 is able to prove the realizability for these contracts, as
 well as synthesize an implementation for each.
 
