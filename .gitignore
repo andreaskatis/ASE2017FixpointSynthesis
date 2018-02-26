@@ -7,3 +7,5 @@ out/document.pdf
 .texlipse
 *.project
 tmp/document.out
+/out/
+/tmp/
