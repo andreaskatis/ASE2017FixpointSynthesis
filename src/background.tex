@@ -16,7 +16,7 @@ while the Stepmother distributes one unit of water over all five buckets. In the
 \begin{figure}[!t]
 \centering
 \includegraphics[scale=0.6]{agcontract.pdf}
-\caption{An Assume-Guarantee Contract.}
+\caption{An Assume-Guarantee contract.}
 \label{fg:agcontract}
 \end{figure}
 
@@ -31,7 +31,7 @@ The proof of existence of such an implementation is the main concept behind the 
 
 Given a proof of realizability of the contract in Fig.~\ref{fg:agcontract}, % is \emph{realizable}, there should exist at least one implementation, and 
 we are seeking for an efficient synthesis procedure that could provide an implementation.
-On the other hand, consider a variation of the example, where $A = \varnothing$. This is a practical case of an
+On the other hand, consider a variation of the example, where $A = \mathit{true}$. This is a practical case of an
 \emph{unrealizable} contract, as there is no feasible Cinderella implementation that can correctly react to Stepmother's actions. An example counterexample allows the Stepmother to pour random amounts of water into the buckets, leading to overflow of at least one bucket during each of her turns.
 
 \section{Background}
@@ -65,7 +65,7 @@ and only if:
 \begin{split}
   \viable(s) &=
   \forall i. (A(s, i) \Rightarrow \exists s'.~ G_T(s, i,s')
-\land \viable(s')).
+\land \viable(s'))
 \label{eq:viable}
 \end{split}
 \end{align}
@@ -75,7 +75,7 @@ A necessary condition, finally, is that the intersection of sets of viable state
 and initial states is non-empty. As such, to conclude that a contract
 is realizable, we require that
 \begin{equation}
-\exists s. G_I(s) \land \viable(s).
+\exists s. G_I(s) \land \viable(s)
 \label{eq:nonempty}
 \end{equation}
 
