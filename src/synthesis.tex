@@ -225,12 +225,11 @@ $s \notin F \Rightarrow \lnot \viable(s)$ is a loop invariant for Alg.~\ref{alg:
 % $Q(s_0, i_0) \land F(s_0) \land A(s_0, i_0) \Leftrightarrow \exists s'. G_T(s_0, i_0, s') \land F(s')$
   by Lemma~\ref{lem:aeval}.
   Since $F(s_0)$, $A(s_0, i_0)$ and $\neg Q(s_0, i_0)$ hold, we conclude that
-  $F(s_0) \land \exists s'. G_T(s_0, i_0, s') \land F(s') \Rightarrow \bot$ which
-  gives us $\neg \exists s'. G_T(s_0, i_0, s') \land F(s')$.
+  $\exists s'. G_T(s_0, i_0, s') \land F(s') \Rightarrow \bot$.
   We know that
   $\viable \Rightarrow F$ holds prior to line~\ref{alg:rem}, thus
-  $\neg \exists s'. G_T(s_0, i_0, s') \land \viable(s')$. But this is a
-  contradiction since $\viable(s_0)$. Therefore the invariant holds on
+  $\exists s'. G_T(s_0, i_0, s') \land \viable(s')\Rightarrow \bot$. But this is a
+  contradiction since $\viable(s_0)$ holds. Therefore the invariant holds on
   line~\ref{alg:rem}.
 \end{proof}
 
@@ -487,7 +486,8 @@ let
 tel;
  \end{Verbatim}
 \vspace{-1em}
-\caption{An Assume-Guarantee contract for the Cinderella-Stepmother game in Lustre}
+\caption{An Assume-Guarantee contract for the Cinderella-Stepmother game in Lustre.}
+
 \label{fg:cind}
 \end{figure}
 
@@ -499,7 +499,7 @@ for the instance of the Cinderella-Stepmother game that we introduced in Sect.~\
 is expressed in Lustre~\cite{lustrev6}, a language
 that has been extensively used for specification as well as implementation of
 safety-critical systems, and is the kernel language in SCADE, a popular tool in
-model-based development. The contract is defined as a Lustre node, with a global
+model-based development. The contract is defined as a Lustre node \texttt{game}, with a global
 constant \texttt{C} denoting the bucket capacity. The node describes the game itself,
 through the problem's input and output variables. The main input is Stepmother's
 distribution of one unit of water over five different input variables,
@@ -507,15 +507,10 @@ distribution of one unit of water over five different input variables,
 namely \texttt{e}, this is in fact used as the output of the system that we want to
 implement, representing Cinderella's choice at each of her turns.
 
-We make an explicit distinction on which node arguments are the system's inputs, using the \texttt{REALIZABLE} statement towards the end of the contract. The contract's
-assumptions are defined using assertions over the input variables
-\texttt{i1}, \ldots, \texttt{i5}. We assume that there can be no negative input values, and the
-sum of \texttt{i1} to \texttt{i5} is equal to one unit of water. Using the notation from Section~\ref{sec:background} we have that $A(i_1, \ldots, i_5) = (\bigwedge_{k=1}^{5} i_k >= 0.0) \land (\sum_{k=1}^{5} i_{k} = 1.0)$. The node \texttt{game} returns the value of a boolean variable \texttt{guarantee}, which corresponds to
-the contract's guarantee, and is explicitly defined to be such using the
-\texttt{PROPERTY} statement. We define what each bucket's state should be through the entire
+We specify the system's inputs \texttt{i1}, \ldots, \texttt{i5} using the \texttt{REALIZABLE} statement and define the contract's assumptions over them: $A(i_1, \ldots, i_5) = (\bigwedge_{k=1}^{5} i_k >= 0.0) \land (\sum_{k=1}^{5} i_{k} = 1.0)$. The assignment to boolean variable \texttt{guarantee} (distinguished via the \texttt{PROPERTY} statement) imposes the guarantee constraints on the buckets' states through the entire
 duration of the game, using the local variables \texttt{b1} to \texttt{b5}.
 Initially, each bucket is empty, and with each transition to a new state, the contents depend on
-whether Cinderella chose the specific bucket, or an adjacent one. If so, the value of each \texttt{b}$_k$ at the the next turn becomes equal to the value of the corresponding input variable \texttt{i}$_k$. Formally, for the initial state we have $G_{I}(C, b_1, \ldots, b_5) = (\bigwedge_{k=1}^{5} b_k = 0.0) \land (\bigwedge_{k = 1}^{5} b_k \le C)$, while the transitional guarantee is $G_T([C,b_1, \ldots, b_5, e], i_1, \ldots, i_5, [C',b_{1}', \ldots, b_{5}',e']) = (\bigwedge_{k=1}^{5} b_{k}' = ite(e = k \lor e = k_{prev}, i_k, b_k + i_k) \land (\bigwedge_{k=1}^{5} b_{k}' \le C')$, where $k_{prev} = 5$ if $k = 1$, and $k_{prev} = k - 1$ otherwise. Notably, the lack of explicit constraints over $e$, i.e. Cinderella's choice permits an interesting side-effect, as any value other than 1 to 5 can be interpreted as Cinderella skipping her current turn, i.e. she does not choose to empty any of the buckets. With the addition of the guarantee $(e = 1) \lor \ldots \lor (e =5)$, the contract is still realizable, and the implementation verifiable, but Cinderella is not allowed to skip her turn anymore.
+whether Cinderella chose the specific bucket, or an adjacent one. If so, the value of each \texttt{b}$_k$ at the the next turn becomes equal to the value of the corresponding input variable \texttt{i}$_k$. Formally, for the initial state, $G_{I}(C, b_1, \ldots, b_5) = (\bigwedge_{k=1}^{5} b_k = 0.0) \land (\bigwedge_{k = 1}^{5} b_k \le C)$, while the transitional guarantee is $G_T([C,b_1, \ldots, b_5, e], i_1, \ldots, i_5, [C',b_{1}', \ldots, b_{5}',e']) = (\bigwedge_{k=1}^{5} b_{k}' = ite(e = k \lor e = k_{prev}, i_k, b_k + i_k) \land (\bigwedge_{k=1}^{5} b_{k}' \le C')$, where $k_{prev} = 5$ if $k = 1$, and $k_{prev} = k - 1$ otherwise. Interestingly, the lack of explicit constraints over $e$, i.e. Cinderella's choice, permits an interesting side-effect, as any value other than 1 to 5 can be interpreted as Cinderella skipping her current turn, i.e. she does not choose to empty any of the buckets. With the addition of the guarantee $(e = 1) \lor \ldots \lor (e =5)$, the contract is still realizable, and the implementation is verifiable, but Cinderella is not allowed to skip her turn anymore.
 
 If the bucket was not covered by Cinderella's choice, then its contents are
 updated by adding Stepmother's distribution to the volume of water that the
@@ -577,9 +572,10 @@ i_1, \ldots, i_5 \,.\, A(i_1, \ldots, i_5) \land \lnot Q(i_1, \ldots, i_5,b_1, \
 %The violating region entails the existence of unsafe states in $F$ for some input, and it is removed from $F$.
 %As a counterexample \aeval returns the set of assignments $\textit{cex'} = \{b_1 = b_2 = b_3 = 16/11, b_4 = 17/11, b_5 = 12/11\}$.
 %
-Formula $W$ describes states that are unsafe under certain valid inputs, and its negation is used to refine $F$.
+%Formula $W$ describes states that are unsafe under certain valid inputs, and its negation is used to refine $F$.
 % As a consequence, a refinement process comes at the next step. in which we derive $F(s) = F(s) \land \lnot W(s)$, thus blocking the unsafe region $W(s)$.
-Precise encoding of $W$ is also too large to be presented in the paper; and intuitively it contains useful constraints (such as $b_k\le 2$) which may eventually lead us to a proof of the contract's realizability. 
+Precise encoding of $W$ is also too large to be presented in the paper; and intuitively it captures certain steps in which Cinderella may not take the optimal action. 
+Blocking them leads us eventually to proving the contract's realizability. 
 
 From this point on, the algorithm continues following the steps
 explained above. 
