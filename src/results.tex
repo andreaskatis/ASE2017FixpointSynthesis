@@ -75,13 +75,16 @@ Fig.~\ref{fg:performance} shows the time allocated by \jsyn and \jsynvg to solve
 outperforming \jsyn for the vast majority of the benchmark suite, often times by a margin greater than
 50\%. Fig.~\ref{fg:size} on the other hand, depicts small differences in the
 overall size between the synthesized implementations. While it would be
-reasonable to conclude that there are no noticable improvements, the big picture is different. The key factor that is not apparent from this figure, is the length of the $k$-inductive proof. For the majority of the benchmarks in the suite, \jsyn proves their realizability by constructing proofs of length $k=0$, which essentially means that the entire space of states is an inductive invariant. For these cases, both algorithms generate a single Skolem function. In the general case though, the size of \jsyn solutions is directly
-dependent on $k$, since each implementation is composed of $k$ Skolem
-functions ($k-1$ to initialize the system, and one last for the inductive step),
-where the equivalent solution from \jsynvg is always just one.
-Fig.~\ref{fg:size} hints towards this intuition, through several spikes
-in \jsyn implementation size. Despite this, we also noticed cases where \jsyn
-implementations are shorter. This provides us with another interesting
+reasonable to conclude that there are no noticeable improvements, the big picture is different:
+solutions by \jsynvg always require just a single Skolem function, but solutions by \jsyn may require several ($k-1$ to initialize the system, and one for the inductive step).
+In our evaluation, \jsyn proved the realizability of the majority of benchmarks by constructing proofs of length $k=0$, which essentially means that the entire space of states is an inductive invariant. 
+%For these cases, both algorithms generate a single Skolem function. 
+%In the general case though, the size of the \jsyn solutions directly depends on $k$ since each implementation is composed of $k$ Skolem
+%functions ($k-1$ to initialize the system, and one for the inductive step),
+%where the equivalent solution from \jsynvg is always just one.
+However, several spikes in Fig.~\ref{fg:size} refer to benchmarks, for which \jsyn constructed a proof of length $k>0$, which was significantly longer that the corresponding proof by \jsynvg.
+Interestingly, we also noticed cases where \jsyn
+implementations are (insignificantly) shorter. This provides us with another 
 observation regarding the formulation of the problem for $k=0$ proofs. In
 these cases, \jsyn proves the existence of viable states, starting from a set
 of \textit{pre-initial} states, where the contract does not need to hold. This
