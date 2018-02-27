@@ -1,7 +1,7 @@
 \section{Implementation and Evaluation}
 \label{sec:impl}
 
-The implementation of the algorithm has been added to a branch of the  \jkind~\cite{jkind} model checker.  \jkind officially supports synthesis
+The implementation of the algorithm has been added to a branch of the  \jkind~\cite{jkind} model checker~\footnote{The \jkind fork with \jsynvg is available at \url{https://goo.gl/WxupTe}}.  \jkind officially supports synthesis
 %\grigory{Unofficially? We have the Tech Report, it is all official ;)}
 using a $k$-inductive approach, named \jsyn~\cite{KatisFGBGW16}. For clarity, we named
 our validity-guided technique \jsynvg (i.e., validity-guided synthesis). \jkind uses Lustre~\cite{lustrev6} as its specification and implementation language.
@@ -22,7 +22,7 @@ framework~\cite{NFM2012:CoGaMiWhLaLu}.
 \jsynvg encodes Lustre specifications in the language of
 linear real and integer arithmetic (LIRA)
 % first order logic
-and communicates them to \aeval.
+and communicates them to \aeval~\footnote{\aeval is available at~\url{https://goo.gl/CbNMVN}}.
 %f the SMT-LIB language,
 %, with which the $\forall\exists$-formulas, regions of
 %validity, as well as the witnesses are expressed.
@@ -41,7 +41,7 @@ Skolem functions returned by \aeval get then translated %that witnesses the real
 %the generated function, what remains is its translation
 into an efficient and practical implementation. To compare the quality of implementations against \jsyn, we use
 \smtlibtoc, a tool that has been specifically developed to translate
-  Skolem functions to C implementations.
+  Skolem functions to C implementations~\footnote{The \smtlibtoc tool is available at \url{https://goo.gl/EvNrAU}}.
 %\grigory{There used to be a rehash of Alg.~\ref{alg:synthesis}; no need to repeat it here.}
 %\grigory{Also, you probably need to refer the reader that more info about implementation is in~\cite{KatisFGBGW16}.}
 
